@@ -6,6 +6,12 @@ import {
   FaComments,
   FaImages,
 } from "react-icons/fa";
+import AdminBooking from "../admin/booking";
+import AdminCategory from "../admin/category";
+import AdminRoom from "../admin/room";
+import AdminUser from "../admin/user";
+import AdminFeedback from "../admin/feedback";
+import AdminGallery from "../admin/gallery";
 
 export default function AdminPage() {
   return (
@@ -55,12 +61,12 @@ export default function AdminPage() {
 
       <div className="w-[80%] max-h-[100vh] overflow-y-scroll  bg-purple-600 ">
         <Routes path="/*">
-          <Route path="/bookings" element={<h1>Bookings</h1>} />
-          <Route path="/categories" element={<h1>Categories</h1>} />
-          <Route path="/rooms" element={<h1>Rooms</h1>} />
-          <Route path="/users" element={<h1>Users</h1>} />
-          <Route path="/feedbacks" element={<h1>Feedback</h1>} />
-          <Route path="/gallery" element={<h1>Gallery Items</h1>} />
+          <Route path="/bookings" element={<AdminBooking/>} />
+          <Route path="/categories" element={<AdminCategory/>} />
+          <Route path="/rooms" element={<AdminRoom/>} />
+          <Route path="/users" element={<AdminUser/>} />
+          <Route path="/feedbacks" element={<AdminFeedback/>} />
+          <Route path="/gallery" element={<AdminGallery/>} />
         </Routes>
       </div>
     </div>
