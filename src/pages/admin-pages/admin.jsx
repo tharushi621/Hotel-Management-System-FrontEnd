@@ -53,14 +53,14 @@ export default function AdminPage() {
         </Link>
       </div>
 
-      <div className="w-[80%] bg-purple-600 ">
+      <div className="w-[80%] max-h-[100vh] overflow-y-scroll  bg-purple-600 ">
         <Routes path="/*">
-          <Route path="/bookings" elements={<h1>Bookings</h1>} />
-          <Route path="/categories" elements={<h1>Categories</h1>} />
-          <Route path="/rooms" elements={<h1>Rooms</h1>} />
-          <Route path="/users" elements={<h1>Users</h1>} />
-          <Route path="/feedbacks" elements={<h1>Feedback</h1>} />
-          <Route path="/gallery-items" elements={<h1>Gallery Items</h1>} />
+          <Route path="/bookings" element={<h1>Bookings</h1>} />
+          <Route path="/categories" element={<h1>Categories</h1>} />
+          <Route path="/rooms" element={<h1>Rooms</h1>} />
+          <Route path="/users" element={<h1>Users</h1>} />
+          <Route path="/feedbacks" element={<h1>Feedback</h1>} />
+          <Route path="/gallery" element={<h1>Gallery Items</h1>} />
         </Routes>
       </div>
     </div>
