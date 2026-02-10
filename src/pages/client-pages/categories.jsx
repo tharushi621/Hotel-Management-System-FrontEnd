@@ -4,6 +4,7 @@ import axios from "axios";
 export default function AdminCategories() {
   const [categories, setCategories] = useState([]);
   const [categoriesIsLoaded, setCategoriesIsLoaded] = useState(false);
+  const [isModalOpen,setIsModalOpen]=useState(false)
 
   useEffect(() => {
     if (!categoriesIsLoaded) {
@@ -20,6 +21,7 @@ export default function AdminCategories() {
   }, [categoriesIsLoaded]);
 
   function deleteItem(name) {
+   
     if (!window.confirm("Are you sure you want to delete this category?")) {
       return;
     }
@@ -31,7 +33,7 @@ export default function AdminCategories() {
           encodeURIComponent(name)
       )
       .then(() => {
-        setCategoriesIsLoaded(false); // reload list
+        setCategoriesIsLoaded(false); 
       })
       .catch((err) => {
         console.error(err);
