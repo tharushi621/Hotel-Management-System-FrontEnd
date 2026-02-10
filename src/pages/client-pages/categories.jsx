@@ -4,7 +4,6 @@ import axios from "axios";
 export default function AdminCategories() {
   const [categories, setCategories] = useState([]);
   const [categoriesIsLoaded, setCategoriesIsLoaded] = useState(false);
-  const [isModalOpen,setIsModalOpen]=useState(false)
 
   useEffect(() => {
     if (!categoriesIsLoaded) {
