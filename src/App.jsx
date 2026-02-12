@@ -4,6 +4,7 @@ import AdminPage from "./pages/admin-pages/admin.jsx";
 import { BrowserRouter,Route,Routes } from "react-router-dom";
 import Loginpage from "./pages/login.jsx";
 import AdminCategories from "./pages/client-pages/categories.jsx";
+import TestPage from "./components/test.jsx";
 
 function App() {
 
@@ -14,7 +15,7 @@ function App() {
     <Route path="/admin/*" element={<AdminPage/>}/>
     <Route path = "/login" element={<Loginpage/>}/>
     <Route path = "/categories" element={<AdminCategories/>}/>
-    <Route path = "/test" element={<testPage/>}/>
+    <Route path = "/test" element={<TestPage/>}/>
     <Route path="/*" element={<HomePage/>}/>
     </Routes>
     </BrowserRouter>
