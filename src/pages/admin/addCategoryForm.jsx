@@ -1,7 +1,36 @@
 import { useState } from "react";
-import uploadMedia from "../../utils/uploadMedia";
 import axios from "axios";
 import toast from "react-hot-toast";
+
+// Cloudinary upload utility
+const uploadMedia = async (file, folderName) => {
+  if (!file) return null;
+
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append(
+    "upload_preset",
+    import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET,
+  );
+
+  // Dynamic folder: categories/<Category Name>
+  formData.append("folder", folderName || "default");
+
+  try {
+    const res = await fetch(
+      `https://api.cloudinary.com/v1_1/dpacwtxcu/upload`,
+      {
+        method: "POST",
+        body: formData,
+      },
+    );
+    const data = await res.json();
+    return data.secure_url; // URL of the uploaded image
+  } catch (error) {
+    console.error("Cloudinary upload failed", error);
+    return null;
+  }
+};
 
 export default function AddCategoryForm() {
   const [name, setName] = useState("");
@@ -10,6 +39,7 @@ export default function AddCategoryForm() {
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [imageUploading, setImageUploading] = useState(false);
 
   const token = localStorage.getItem("token");
   if (!token) window.location.href = "/login";
@@ -19,12 +49,17 @@ export default function AddCategoryForm() {
     setIsLoading(true);
 
     try {
-      const featuresArray = features
-        .split(",")
-        .map((f) => f.trim());
+      if (!image) {
+        toast.error("Please select an image");
+        setIsLoading(false);
+        return;
+      }
 
-      // Upload image
-      const imageUrl = await uploadMedia(image);
+      const featuresArray = features.split(",").map((f) => f.trim());
+
+      setImageUploading(true);
+      const imageUrl = await uploadMedia(image, `categories/${name}`);
+      setImageUploading(false);
 
       if (!imageUrl) {
         toast.error("Image upload failed");
@@ -47,12 +82,12 @@ export default function AddCategoryForm() {
           headers: {
             Authorization: "Bearer " + token,
           },
-        }
+        },
       );
 
       toast.success("Category added successfully");
 
-      // Reset form
+      
       setName("");
       setPrice("");
       setFeatures("");
@@ -72,9 +107,7 @@ export default function AddCategoryForm() {
         onSubmit={handleSubmit}
         className="w-[400px] bg-white p-6 rounded-lg shadow-md space-y-4"
       >
-        <h2 className="text-xl font-semibold text-center">
-          Add Category
-        </h2>
+        <h2 className="text-xl font-semibold text-center">Add Category</h2>
 
         <input
           type="text"
@@ -128,7 +161,7 @@ export default function AddCategoryForm() {
           type="submit"
           className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 flex justify-center"
         >
-          {isLoading ? (
+          {isLoading || imageUploading ? (
             <div className="border-t-2 border-white w-5 h-5 rounded-full animate-spin"></div>
           ) : (
             "Add Category"
