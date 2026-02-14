@@ -34,7 +34,7 @@ export default function AdminCategory() {
   // Delete category
   function handleDelete(name) {
     const confirmDelete = window.confirm(
-      "Are you sure you want to delete this category?"
+      "Are you sure you want to delete this category?",
     );
     if (!confirmDelete) return;
 
@@ -158,17 +158,19 @@ export default function AdminCategory() {
                         </div>
                       </div>
 
-                      {/* Action Buttons */}
                       <div className="flex gap-2">
                         <button
                           onClick={() =>
-                            navigate("/admin/edit-category/" + category.name)
+                            navigate("/admin/update-category", {
+                              state: category,
+                            })
                           }
                           className="bg-emerald-100 hover:bg-emerald-200 text-emerald-700 p-3 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md"
                           title="Edit"
                         >
                           <FaEdit className="text-lg" />
                         </button>
+
                         <button
                           onClick={() => handleDelete(category.name)}
                           className="bg-red-100 hover:bg-red-200 text-red-700 p-3 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md"
