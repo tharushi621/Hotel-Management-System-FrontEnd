@@ -18,42 +18,39 @@ import AdminFeedback from "../admin/feedback";
 import AdminGallery from "../admin/gallery";
 import AddCategoryForm from "../admin/addCategoryForm";
 import UpdateCategoryForm from "../admin/updateCategoryForm";
+import AddGalleryItemForm from "../admin/addGalleryItemForm";
+import UpdateGalleryForm from "../admin/updateGalleryItemForm";
 
-import logo from "../../../public/logo.png"; // ✅ make sure path is correct
+// ✅ Move logo.png to src/assets/logo.png
+import logo from "../../assets/logo.png";
 
 export default function AdminPage() {
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
     return () => clearInterval(timer);
   }, []);
 
-  const formatTime = (date) => {
-    return date.toLocaleTimeString("en-US", {
+  const formatTime = (date) =>
+    date.toLocaleTimeString("en-US", {
       hour: "2-digit",
       minute: "2-digit",
       second: "2-digit",
       hour12: true,
     });
-  };
 
-  const formatDate = (date) => {
-    return date.toLocaleDateString("en-US", {
+  const formatDate = (date) =>
+    date.toLocaleDateString("en-US", {
       weekday: "short",
       month: "short",
       day: "numeric",
     });
-  };
 
   return (
     <div className="w-full h-screen flex bg-gray-100">
-
       {/* ================= SIDEBAR ================= */}
-      <div className="w-[260px] bg-gradient-to-b from-emerald-900 via-green-900 to-emerald-950 h-screen flex flex-col shadow-2xl">
-
+      <div className="w-[260px] bg-gradient-to-b from-emerald-900 via-green-900 to-emerald-950 flex flex-col shadow-2xl">
         {/* Logo Section */}
         <div className="p-6 flex justify-center items-center">
           <img
@@ -65,7 +62,7 @@ export default function AdminPage() {
 
         {/* Navigation Menu */}
         <nav className="flex-1 flex flex-col justify-between px-4 py-4">
-          {/* Nav links */}
+          {/* Top nav links */}
           <div className="space-y-2">
             <Link
               to="/admin/bookings"
@@ -154,6 +151,8 @@ export default function AdminPage() {
           <Route path="/users" element={<AdminUser />} />
           <Route path="/feedbacks" element={<AdminFeedback />} />
           <Route path="/gallery" element={<AdminGallery />} />
+          <Route path="/add-gallery" element={<AddGalleryItemForm/>}/>
+          <Route path="/update-gallery" element={<UpdateGalleryForm/>}/>
         </Routes>
       </div>
     </div>
