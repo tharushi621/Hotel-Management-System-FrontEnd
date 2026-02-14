@@ -1,4 +1,4 @@
-import uploadMedia from "../utils/mediaUpload"
+import uploadMedia from "../utils/uploadMedia"
 import { useState } from "react"
 
 export default function TestPage(){
