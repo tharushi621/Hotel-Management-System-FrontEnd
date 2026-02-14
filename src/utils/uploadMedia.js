@@ -1,15 +1,12 @@
-// utils/uploadMedia.js
-const uploadMedia = async (file) => {
+const uploadMedia = async (file, folderName = "default") => {
   if (!file) return null;
+
+  const safeFolderName = folderName.replace(/[^a-zA-Z0-9-_]/g, "_");
 
   const formData = new FormData();
   formData.append("file", file);
   formData.append("upload_preset", import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET);
-
-  // Optional: specify a folder dynamically (Cloudinary will create it)
-  // e.g., folder by category name or current date
-  const folderName = `categories/${Date.now()}`; // change as needed
-  formData.append("folder", folderName);
+  formData.append("folder", safeFolderName);
 
   try {
     const res = await fetch(
@@ -21,7 +18,13 @@ const uploadMedia = async (file) => {
     );
 
     const data = await res.json();
-    return data.secure_url; // URL of uploaded image
+
+    if (data.error) {
+      console.error("Cloudinary error:", data.error);
+      return null;
+    }
+
+    return data.secure_url;
   } catch (error) {
     console.error("Cloudinary upload failed:", error);
     return null;
