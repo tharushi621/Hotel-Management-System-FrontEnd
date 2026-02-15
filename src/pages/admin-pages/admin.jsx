@@ -20,6 +20,7 @@ import AddCategoryForm from "../admin/addCategoryForm";
 import UpdateCategoryForm from "../admin/updateCategoryForm";
 import AddGalleryItemForm from "../admin/addGalleryItemForm";
 import UpdateGalleryForm from "../admin/updateGalleryItemForm";
+import AddRoomForm from "../admin/addRoomsForm";
 
 // ✅ Move logo.png to src/assets/logo.png
 import logo from "../../assets/logo.png";
@@ -148,6 +149,7 @@ export default function AdminPage() {
           <Route path="/add-category" element={<AddCategoryForm />} />
           <Route path="/update-category" element={<UpdateCategoryForm />} />
           <Route path="/rooms" element={<AdminRoom />} />
+          <Route path="/add-room" element={<AddRoomForm/>}/>
           <Route path="/users" element={<AdminUser />} />
           <Route path="/feedbacks" element={<AdminFeedback />} />
           <Route path="/gallery" element={<AdminGallery />} />
