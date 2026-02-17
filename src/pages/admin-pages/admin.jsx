@@ -9,10 +9,10 @@ import {
   FaClock,
 } from "react-icons/fa";
 import { useState, useEffect } from "react";
-
-import AdminBooking from "../admin/booking";
 import AdminCategory from "../admin/category";
+import AdminBooking from "../admin/booking";
 import AdminRoom from "../admin/room";
+import AddRoomForm from "../admin/addRoomForm";
 import AdminUser from "../admin/user";
 import AdminFeedback from "../admin/feedback";
 import AdminGallery from "../admin/gallery";
@@ -20,9 +20,6 @@ import AddCategoryForm from "../admin/addCategoryForm";
 import UpdateCategoryForm from "../admin/updateCategoryForm";
 import AddGalleryItemForm from "../admin/addGalleryItemForm";
 import UpdateGalleryForm from "../admin/updateGalleryItemForm";
-
-// ✅ Move logo.png to src/assets/logo.png
-import logo from "../../assets/logo.png";
 
 export default function AdminPage() {
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -54,7 +51,7 @@ export default function AdminPage() {
         {/* Logo Section */}
         <div className="p-6 flex justify-center items-center">
           <img
-            src={logo}
+           src="/logo.png" 
             alt="Villa Logo"
             className="h-20 w-auto object-contain rounded-xl shadow-lg"
           />
@@ -148,6 +145,7 @@ export default function AdminPage() {
           <Route path="/add-category" element={<AddCategoryForm />} />
           <Route path="/update-category" element={<UpdateCategoryForm />} />
           <Route path="/rooms" element={<AdminRoom />} />
+          <Route path= "/add-room" element={<AddRoomForm/>}/>
           <Route path="/users" element={<AdminUser />} />
           <Route path="/feedbacks" element={<AdminFeedback />} />
           <Route path="/gallery" element={<AdminGallery />} />
