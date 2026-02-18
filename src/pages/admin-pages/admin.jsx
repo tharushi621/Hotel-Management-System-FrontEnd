@@ -13,6 +13,7 @@ import AdminCategory from "../admin/category";
 import AdminBooking from "../admin/booking";
 import AdminRoom from "../admin/room";
 import AddRoomForm from "../admin/addRoomForm";
+import UpdateRoomForm from "../admin/updateRoomForm";
 import AdminUser from "../admin/user";
 import AdminFeedback from "../admin/feedback";
 import AdminGallery from "../admin/gallery";
@@ -146,6 +147,7 @@ export default function AdminPage() {
           <Route path="/update-category" element={<UpdateCategoryForm />} />
           <Route path="/rooms" element={<AdminRoom />} />
           <Route path= "/add-room" element={<AddRoomForm/>}/>
+          <Route path= "/update-room" element={<UpdateRoomForm/>}/>
           <Route path="/users" element={<AdminUser />} />
           <Route path="/feedbacks" element={<AdminFeedback />} />
           <Route path="/gallery" element={<AdminGallery />} />
