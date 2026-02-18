@@ -312,7 +312,7 @@ export default function CategoriesPage() {
           </div>
 
           <ul className="hidden lg:flex items-center gap-8">
-            {["Home", "Retreats", "Dining", "Gallery", "Contact"].map((item) => (
+            {["Home", "Retreats", "Gallery", "Contact"].map((item) => (
               <li key={item}>
                 <a
                   href={item === "Home" ? "/" : item === "Retreats" ? "/retreats" : `/#${item.toLowerCase()}`}
