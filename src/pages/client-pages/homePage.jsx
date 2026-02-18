@@ -52,7 +52,6 @@ export default function HomePage() {
       description:
         "Rise above the jungle canopy in this elevated retreat. Ancient jak-wood ceilings, hand-beaten copper tubs, and a private rain terrace where the mist rolls in at dawn.",
       image: "/z1.jpg",
-      icon: "🌿",
       tag: "Most Requested",
     },
     {
@@ -61,8 +60,7 @@ export default function HomePage() {
       description:
         "Perched above a singing river, this villa wraps you in the sound of water and birdsong. Step-stone baths, woven rattan terraces, and sunrise over the sacred hills.",
       image:
-        "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=900&q=90",
-      icon: "💧",
+        "/t2.jpg",
       tag: "Romantic Escape",
     },
     {
@@ -71,50 +69,43 @@ export default function HomePage() {
       description:
         "Inspired by the royal pavilions of Kandy — traditional clay walls, Batik draperies, hand-painted murals, and a meditation sala open to the ancient forest.",
       image:
-        "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=900&q=90",
-      icon: "🏛️",
+        "/t3.jpg",
       tag: "Cultural Immersion",
     },
   ];
 
   const experiences = [
     {
-      icon: "🌿",
       title: "Jungle Foraging",
       desc: "Walk with our naturalists through 14 acres of uncharted rainforest, discovering rare flora and ancient herbal traditions.",
       image: "https://images.unsplash.com/photo-1448375240586-882707db888b?w=800&q=85",
       detail: "3–4 hrs · Dawn or Dusk",
     },
     {
-      icon: "🎋",
       title: "Ayurvedic Rituals",
       desc: "Ancient healing ceremonies with resident Ayurveda masters — restoring balance through sacred oils, herbs, and timeless wisdom.",
       image: "https://images.unsplash.com/photo-1600334129128-685c5582fd35?w=800&q=85",
       detail: "2 hrs · By Appointment",
     },
     {
-      icon: "🎨",
       title: "Kandyan Art",
       desc: "Private sessions with award-winning Sinhala artisans — learn the strokes of a 2,000-year-old visual language.",
       image: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=800&q=85",
       detail: "2–3 hrs · Afternoon",
     },
     {
-      icon: "🐘",
       title: "Elephant Dawn",
       desc: "Sacred morning walks with Sri Lanka's wild giants as the mist lifts from the highland valleys at first light.",
       image: "https://images.unsplash.com/photo-1557050543-4d5f4e07ef46?w=800&q=85",
       detail: "4 hrs · Sunrise",
     },
     {
-      icon: "🌊",
       title: "River Ceremonies",
       desc: "Torch-lit river rituals at sunset — a Leonine signature that connects you to the ancient pulse of the land.",
       image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=85",
       detail: "1.5 hrs · Sunset",
     },
     {
-      icon: "🍃",
       title: "Tea Garden Walks",
       desc: "Journey through misty highland tea estates at golden hour, guided by a fifth-generation tea master.",
       image: "https://images.unsplash.com/photo-1566646174759-5d5b0e2e1a6a?w=800&q=85",
@@ -123,12 +114,11 @@ export default function HomePage() {
   ];
 
   const galleryImages = [
-    { src: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=600&q=85", label: "Pool Terrace" },
-    { src: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=600&q=85", label: "Jungle Views" },
-    { src: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600&q=85", label: "Heritage Suite" },
-    { src: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=600&q=85", label: "Villa Exterior" },
-    { src: "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=600&q=85", label: "Spa Garden" },
-    { src: "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=600&q=85", label: "Sunset Dining" },
+    { src: "/g2.jpg", label: "Musical Nights" },
+    { src: "/2.jpg", label: "Jungle Views" },
+    { src: "/c1.jpg", label: "Heritage Suite" },
+    { src: "/c2.jpg", label: "Calm Eve" },
+    { src: "/n1.jpg", label: "Aeasthetic Vibe" }
   ];
 
   // FIX #2: Removed "Heritage" nav item
@@ -136,7 +126,6 @@ export default function HomePage() {
   const navItems = [
     { label: "Home",     href: "/",          action: () => navigate("/") },
     { label: "Retreats", href: "/retreats",   action: () => navigate("/retreats") },
-    { label: "Experiences", href: "/experiences",   action: () => navigate("/experiences") },
     { label: "Gallery",  href: "/gallery",    action: () => navigate("/gallery") },
     { label: "Contact",  href: "#contact",    action: () => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" }) },
   ];
@@ -473,7 +462,7 @@ export default function HomePage() {
           </div>
 
           <div className="anim-hero-5 mt-14 flex flex-wrap items-center justify-start gap-6 opacity-75">
-            {["World's Best Eco Villa 2024","Condé Nast Traveller Pick","UNESCO Heritage Partner"].map((award) => (
+            {["World's Best Eco Villa 2024","Traveller Pick","UNESCO Heritage Partner"].map((award) => (
               <div key={award} className="flex items-center gap-2">
                 <span className="text-yellow-500 text-xs">★</span>
                 <span className="font-body text-xs tracking-wider text-stone-300 uppercase">{award}</span>
@@ -530,30 +519,82 @@ export default function HomePage() {
               </p>
 
               <div className="grid grid-cols-2 gap-4">
-                {[
-                  { icon: "🏛️", label: "Architecture", title: "Kandyan Architecture", desc: "Royal building traditions, reborn in every carved pillar and ceremonial arch." },
-                  { icon: "🌿", label: "Sustainability", title: "Zero Carbon Footprint", desc: "100% solar & rainwater systems — luxury that leaves no trace on the earth." },
-                  { icon: "🦋", label: "Nature",         title: "Biodiversity Reserve",  desc: "14 acres of protected jungle habitat teeming with rare endemic species." },
-                  { icon: "🎋", label: "Culture",        title: "Living Culture",         desc: "Resident artisans and Ayurveda masters keep ancient wisdom alive daily." },
-                ].map((f) => (
-                  <div key={f.title} className="heritage-feat">
-                    <div className="heritage-feat-icon">{f.icon}</div>
-                    <span className="font-body text-[10px] tracking-[0.25em] uppercase text-yellow-600/55 block mb-1.5">{f.label}</span>
-                    <div className="font-display text-[0.95rem] text-amber-100 font-medium leading-snug mb-2">{f.title}</div>
-                    <div className="font-body text-xs text-stone-400 leading-relaxed">{f.desc}</div>
-                    <div className="heritage-feat-glow"></div>
-                  </div>
-                ))}
-              </div>
+  {[
+    {
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+          <path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 10v11M16 10v11M12 10v11"/>
+        </svg>
+      ),
+      label: "Architecture", title: "Kandyan Architecture",
+      desc: "Royal building traditions, reborn in every carved pillar and ceremonial arch."
+    },
+    {
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+          <path d="M12 2a10 10 0 0 1 0 20A10 10 0 0 1 12 2z"/><path d="M12 6v6l3 3"/><path d="M6 12c0-1.5.5-3 1.5-4.2"/><path d="M18 12a6 6 0 0 1-6 6"/>
+          <circle cx="12" cy="12" r="2"/>
+        </svg>
+      ),
+      label: "Sustainability", title: "Zero Carbon Footprint",
+      desc: "100% solar & rainwater systems — luxury that leaves no trace on the earth."
+    },
+    {
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+          <path d="M12 22V12"/><path d="M8 7c0 2.2 1.8 4 4 4s4-1.8 4-4-1.8-4-4-4c-1 0-2 .4-2.8 1"/><path d="M4 14c0 3.3 3.6 6 8 6s8-2.7 8-6"/>
+        </svg>
+      ),
+      label: "Nature", title: "Biodiversity Reserve",
+      desc: "14 acres of protected jungle habitat teeming with rare endemic species."
+    },
+    {
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+        </svg>
+      ),
+      label: "Culture", title: "Living Culture",
+      desc: "Resident artisans and Ayurveda masters keep ancient wisdom alive daily."
+    },
+  ].map((f) => (
+    <div key={f.title} className="heritage-feat group relative overflow-hidden">
+      {/* Top accent line */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-yellow-600/40 to-transparent" />
+
+      {/* Icon + Label row */}
+      <div className="flex items-center gap-2.5 mb-3">
+        <div className="text-yellow-600/70 shrink-0 transition-colors duration-300 group-hover:text-yellow-500/90">
+          {f.icon}
+        </div>
+        <span className="font-body text-[9px] tracking-[0.3em] uppercase text-yellow-600/50 group-hover:text-yellow-600/70 transition-colors duration-300">
+          {f.label}
+        </span>
+      </div>
+
+      <div className="font-display text-[0.92rem] text-amber-100/90 font-medium leading-snug mb-2 group-hover:text-amber-100 transition-colors duration-300">
+        {f.title}
+      </div>
+      <div className="font-body text-xs text-stone-400/80 leading-relaxed group-hover:text-stone-300/80 transition-colors duration-300">
+        {f.desc}
+      </div>
+
+      {/* Bottom fade glow on hover */}
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-gradient-to-t from-yellow-900/10 to-transparent rounded-inherit" />
+      <div className="heritage-feat-glow" />
+    </div>
+  ))}
+</div>
+
             </div>
 
             <div className="relative h-[600px] hidden lg:block">
               <div className="absolute top-0 right-0 w-72 h-80 rounded-2xl overflow-hidden" style={{ border: "1px solid rgba(201,168,76,0.2)", boxShadow: "0 30px 60px rgba(0,0,0,0.5)" }}>
-                <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600&q=90" alt="Heritage" className="w-full h-full object-cover" />
+                <img src="/h2.jpg" alt="Heritage" className="w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-stone-950/60 to-transparent"></div>
               </div>
               <div className="absolute bottom-0 left-0 w-80 h-96 rounded-2xl overflow-hidden" style={{ border: "1px solid rgba(201,168,76,0.25)", boxShadow: "0 40px 80px rgba(0,0,0,0.6)" }}>
-                <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=600&q=90" alt="Villa" className="w-full h-full object-cover" />
+                <img src="/c5.jpg" alt="Villa" className="w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-stone-950/50 to-transparent"></div>
               </div>
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 anim-float z-10">
@@ -722,7 +763,7 @@ export default function HomePage() {
             ))}
           </div>
           <div className="mt-16 flex flex-wrap items-center justify-center gap-8 opacity-40">
-            {["Condé Nast","Travel + Leisure","Architectural Digest","National Geographic","Forbes"].map((pub) => (
+            {["Travel + Leisure","Architectural Digest","National Geographic","Forbes"].map((pub) => (
               <span key={pub} className="font-display text-stone-600 text-sm italic">{pub}</span>
             ))}
           </div>
