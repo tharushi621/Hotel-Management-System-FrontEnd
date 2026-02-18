@@ -23,8 +23,10 @@ export default function Loginpage() {
         password,
       })
       .then((res) => {
+        // Save token
         localStorage.setItem("token", res.data.token);
-        if (res.data.user.type === "admin") {
+        
+        if (res.data.user && res.data.user.type === "admin") {
           navigate("/admin");
         } else {
           navigate("/");
@@ -415,7 +417,6 @@ export default function Loginpage() {
         }
         .stamp-corner .stamp-lion { font-size: 14px; line-height: 1; }
 
-        /* Back to home link */
         .back-home {
           position: absolute;
           top: 20px; left: 20px;
@@ -434,7 +435,6 @@ export default function Loginpage() {
       `}</style>
 
       <div className="login-page-bg">
-        {/* Back to home */}
         <button className="back-home" onClick={() => navigate("/")}>
           ← Return to Estate
         </button>
@@ -526,7 +526,6 @@ export default function Loginpage() {
 
             <div className="letter-ps">
               <em>P.S.</em> — A first-time visitor to our estate?{" "}
-              {/* ── KEY CHANGE: navigate to /signup ── */}
               <button onClick={() => navigate("/signup")}>
                 Inscribe your name in our guest register
               </button>
