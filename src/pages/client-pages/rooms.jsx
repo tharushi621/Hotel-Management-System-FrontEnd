@@ -1,14 +1,6 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
-
-// ─── FIXES APPLIED ───────────────────────────────────────────────────────────
-// 1. Old code called GET /api/rooms?category=<categoryId> but the backend
-//    getRooms() ignored query params. Backend roomController is now fixed to
-//    honour req.query.category.  This file keeps the same call — it now works.
-//
-// 2. Fallback demo rooms kept as-is for offline/error state.
-// ─────────────────────────────────────────────────────────────────────────────
 
 export default function RoomsPage() {
   const navigate  = useNavigate();
@@ -22,10 +14,11 @@ export default function RoomsPage() {
   const [scrolled, setScrolled] = useState(false);
   const [scrollY, setScrollY]   = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [activeRoom, setActiveRoom]   = useState(null);
+  // ✅ imgIndexes keyed by room.roomId (Number) instead of room._id
+  const [imgIndexes, setImgIndexes] = useState({});
   const [lightboxImg, setLightboxImg] = useState(null);
+  const [activeRoom, setActiveRoom]   = useState(null);
 
-  // ── derive hero image from category name ───────────────────────────────────
   const heroImages = {
     treetop:   "https://images.unsplash.com/photo-1615460549969-36fa19521a4f?w=1800&q=90",
     waterside: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=1800&q=90",
@@ -40,27 +33,14 @@ export default function RoomsPage() {
     return "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=1800&q=90";
   };
 
-  // ── fallback room images ───────────────────────────────────────────────────
-  const fallbackImages = [
+  // Fallback photos when room.photos is empty
+  const fallbackPhotos = [
     "https://images.unsplash.com/photo-1615460549969-36fa19521a4f?w=900&q=90",
     "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=900&q=90",
     "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=900&q=90",
     "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=900&q=90",
     "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=900&q=90",
   ];
-
-  // ── amenity icon map ───────────────────────────────────────────────────────
-  const amenityIcons = {
-    pool: "🏊", bath: "🛁", shower: "🚿", terrace: "🌿", balcony: "🪟",
-    butler: "🛎️", wifi: "📶", breakfast: "☕", spa: "💆", gym: "💪",
-    view: "🌄", kitchen: "🍳", bar: "🍹", fireplace: "🔥", garden: "🌸",
-    yoga: "🧘", boat: "⛵", stargazing: "⭐", meditation: "🎋", temple: "🏛️",
-  };
-  const getAmenityIcon = (feature = "") => {
-    const lower = feature.toLowerCase();
-    for (const [k, v] of Object.entries(amenityIcons)) if (lower.includes(k)) return v;
-    return "✦";
-  };
 
   useEffect(() => {
     const handleScroll = () => { setScrolled(window.scrollY > 60); setScrollY(window.scrollY); };
@@ -71,7 +51,7 @@ export default function RoomsPage() {
   useEffect(() => {
     window.scrollTo({ top: 0 });
 
-    // FIX #1: GET /api/rooms?category=<categoryId> — backend now supports this
+    // ✅ GET /api/rooms?category=<categoryId> — matches backend getRooms with filter
     const url = categoryId
       ? `${import.meta.env.VITE_BACKEND_URL}/api/rooms?category=${categoryId}`
       : `${import.meta.env.VITE_BACKEND_URL}/api/rooms`;
@@ -79,58 +59,16 @@ export default function RoomsPage() {
     axios
       .get(url)
       .then((res) => {
-        const data = res.data.rooms || res.data.list || res.data || [];
+        const data = res.data.rooms || [];
         setRooms(Array.isArray(data) ? data : []);
         setLoading(false);
       })
       .catch(() => {
-        // Fallback demo rooms
-        setRooms([
-          {
-            _id: "r1",
-            name: "The King's Canopy Suite",
-            price: 52000,
-            description:
-              "Perched at the highest point of the estate, the King's Canopy Suite rises above the jungle in a symphony of jak-wood and hand-beaten copper. Wake to the dawn chorus of 140 bird species, sink into a rain bath open to the sky, and retire to a bed draped in hand-loomed Dumbara textiles.",
-            features: ["Private Plunge Pool", "Open-Air Rain Bath", "Forest Terrace", "Stargazing Deck", "Butler Service", "Organic Minibar"],
-            images: [fallbackImages[0], fallbackImages[3], fallbackImages[4]],
-            capacity: 2,
-            size: "120 m²",
-            view: "Jungle Canopy",
-            tag: "Most Requested",
-          },
-          {
-            _id: "r2",
-            name: "The Jade Forest Villa",
-            price: 46000,
-            description:
-              "Hidden among a grove of ancient jak and breadfruit trees, the Jade Forest Villa is a testament to slow living. Rammed-earth walls absorb the heat of the day; by night, the forest breathes cool air through open louvers.",
-            features: ["Plunge Pool", "Outdoor Shower", "Forest Garden", "Dumbara Textiles", "Tea Ceremony Set", "Ayurvedic Minibar"],
-            images: [fallbackImages[1], fallbackImages[0], fallbackImages[2]],
-            capacity: 2,
-            size: "95 m²",
-            view: "Forest Floor",
-            tag: "Forest Hideaway",
-          },
-          {
-            _id: "r3",
-            name: "The Kandyan Pavilion",
-            price: 41000,
-            description:
-              "Modelled on the royal rest-pavilions that once lined the processional route to the Kandyan Tooth Temple, every element here is a love letter to Sinhala craftsmanship.",
-            features: ["Meditation Sala", "Hand-Carved Screens", "Batik Draperies", "Heritage Library", "Private Courtyard", "Incense Ritual Kit"],
-            images: [fallbackImages[2], fallbackImages[4], fallbackImages[1]],
-            capacity: 2,
-            size: "85 m²",
-            view: "Garden Courtyard",
-            tag: "Cultural Gem",
-          },
-        ]);
+        setRooms([]);
         setLoading(false);
       });
   }, [categoryId]);
 
-  const [imgIndexes, setImgIndexes] = useState({});
   const cycleImg = (roomId, total, dir) => {
     setImgIndexes((prev) => {
       const cur = prev[roomId] || 0;
@@ -164,11 +102,6 @@ export default function RoomsPage() {
         .slider-btn { background: rgba(10,22,12,0.7); border: 1px solid rgba(201,168,76,0.25); backdrop-filter: blur(10px); transition: all 0.3s; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
         .slider-btn:hover { background: rgba(201,168,76,0.2); border-color: rgba(201,168,76,0.6); }
         .price-badge { background: linear-gradient(135deg, rgba(10,22,12,0.95), rgba(26,58,30,0.95)); border: 1px solid rgba(201,168,76,0.3); backdrop-filter: blur(20px); }
-        .feature-tag { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); transition: all 0.3s; }
-        .feature-tag:hover { background: rgba(201,168,76,0.1); border-color: rgba(201,168,76,0.3); }
-        .expand-panel { overflow: hidden; transition: max-height 0.7s cubic-bezier(0.23,1,0.32,1), opacity 0.5s ease; }
-        .expand-panel.open { max-height: 600px; opacity: 1; }
-        .expand-panel.closed { max-height: 0; opacity: 0; }
         .meta-chip { background: rgba(201,168,76,0.07); border: 1px solid rgba(201,168,76,0.15); border-radius: 999px; padding: 4px 14px; font-family: 'Jost', sans-serif; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: #c9a84c; }
         .lightbox { position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.92); backdrop-filter: blur(12px); display: flex; align-items: center; justify-content: center; animation: fadeIn 0.3s ease; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -183,7 +116,7 @@ export default function RoomsPage() {
         .hero-text-mask { background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(245,235,210,0.9)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
       `}</style>
 
-      {/* ── LIGHTBOX ── */}
+      {/* LIGHTBOX */}
       {lightboxImg && (
         <div className="lightbox" onClick={() => setLightboxImg(null)}>
           <div className="relative max-w-5xl max-h-[90vh] mx-4">
@@ -193,7 +126,7 @@ export default function RoomsPage() {
         </div>
       )}
 
-      {/* ── NAVIGATION ── */}
+      {/* NAVIGATION */}
       <nav className={`fixed top-0 w-full z-50 transition-all duration-700 ${scrolled ? "nav-carved py-3" : "py-5 bg-transparent"}`}>
         <div className="max-w-screen-xl mx-auto px-6 flex items-center justify-between">
           <div className="flex flex-col items-start cursor-pointer" onClick={() => navigate("/")}>
@@ -247,7 +180,7 @@ export default function RoomsPage() {
         )}
       </nav>
 
-      {/* ── HERO ── */}
+      {/* HERO */}
       <section className="relative h-[65vh] min-h-[480px] flex items-end overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img src={getHero()} alt={categoryName} className="w-full h-full object-cover" style={{ transform: `translateY(${scrollY * 0.2}px)`, transformOrigin: "center top" }} />
@@ -284,7 +217,7 @@ export default function RoomsPage() {
         </div>
       </section>
 
-      {/* ── ROOMS LIST ── */}
+      {/* ROOMS LIST */}
       <main style={{ background: "linear-gradient(180deg, #0a160c, #0d1a10)" }} className="relative py-16">
         <div className="batik-bg absolute inset-0 pointer-events-none"></div>
 
@@ -316,47 +249,48 @@ export default function RoomsPage() {
 
         {/* Rooms */}
         {!loading && rooms.map((room, index) => {
-          const imgs  = room.images?.length ? room.images : fallbackImages.slice(0, 3);
-          const curImg = imgIndexes[room._id] || 0;
-          const isOpen = activeRoom === room._id;
+          // ✅ FIX: use room.photos (schema field) instead of room.images
+          const imgs   = room.photos?.length ? room.photos : fallbackPhotos.slice(0, 3);
+          // ✅ FIX: key by room.roomId (schema field) instead of room._id
+          const curImg = imgIndexes[room.roomId] || 0;
+          const isOpen = activeRoom === room.roomId;
 
           return (
-            <article key={room._id} className="max-w-screen-xl mx-auto px-6 mb-10">
+            <article key={room.roomId} className="max-w-screen-xl mx-auto px-6 mb-10">
               <div className="room-card rounded-3xl overflow-hidden" style={{ boxShadow: "0 20px 60px rgba(0,0,0,0.4)" }}>
                 <div className="grid lg:grid-cols-2">
 
                   {/* Image Slider */}
                   <div className="relative h-80 lg:h-auto min-h-[380px] overflow-hidden">
                     {imgs.map((src, si) => (
-                      <img key={si} src={src} alt={`${room.name} — view ${si + 1}`}
+                      <img key={si} src={src} alt={`Room ${room.roomId} — view ${si + 1}`}
                         className="img-slide absolute inset-0 w-full h-full object-cover cursor-zoom-in"
                         style={{ opacity: curImg === si ? 1 : 0, transition: "opacity 0.6s ease" }}
                         onClick={() => setLightboxImg(src)}
-                        onError={(e) => { e.currentTarget.src = fallbackImages[si % fallbackImages.length]; }}
+                        onError={(e) => { e.currentTarget.src = fallbackPhotos[si % fallbackPhotos.length]; }}
                       />
                     ))}
                     <div className="absolute inset-0 bg-gradient-to-t from-stone-950/60 to-transparent pointer-events-none"></div>
+
+                    {/* Room tag: Room #ID */}
                     <div className="absolute top-5 left-5">
                       <span className="font-body text-xs tracking-widest uppercase px-4 py-2 rounded-full text-stone-900 font-medium" style={{ background: "linear-gradient(135deg, #c9a84c, #f0d080)" }}>
-                        {room.tag || `Room ${String(index + 1).padStart(2, "0")}`}
+                        Room #{room.roomId}
                       </span>
                     </div>
-                    <div className="absolute top-5 right-5 price-badge rounded-xl px-4 py-2.5 text-right">
-                      <div className="font-body text-xs text-stone-500 uppercase tracking-wider">From</div>
-                      <div className="font-display text-xl font-bold anim-shimmer">Rs. {room.price?.toLocaleString() || "—"}</div>
-                      <div className="font-body text-xs text-stone-500">/ night</div>
-                    </div>
+
                     {imgs.length > 1 && (
                       <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex items-center gap-3">
-                        <button className="slider-btn text-stone-300 hover:text-yellow-400" onClick={() => cycleImg(room._id, imgs.length, -1)}>‹</button>
+                        {/* ✅ FIX: cycle by room.roomId */}
+                        <button className="slider-btn text-stone-300 hover:text-yellow-400" onClick={() => cycleImg(room.roomId, imgs.length, -1)}>‹</button>
                         <div className="flex gap-1.5">
                           {imgs.map((_, di) => (
-                            <button key={di} onClick={() => setImgIndexes((p) => ({ ...p, [room._id]: di }))}
+                            <button key={di} onClick={() => setImgIndexes((p) => ({ ...p, [room.roomId]: di }))}
                               className={`rounded-full transition-all duration-300 ${curImg === di ? "w-5 h-1.5 bg-yellow-500" : "w-1.5 h-1.5 bg-stone-500 hover:bg-stone-300"}`}>
                             </button>
                           ))}
                         </div>
-                        <button className="slider-btn text-stone-300 hover:text-yellow-400" onClick={() => cycleImg(room._id, imgs.length, 1)}>›</button>
+                        <button className="slider-btn text-stone-300 hover:text-yellow-400" onClick={() => cycleImg(room.roomId, imgs.length, 1)}>›</button>
                       </div>
                     )}
                   </div>
@@ -366,51 +300,56 @@ export default function RoomsPage() {
                     <div>
                       <div className="flex items-center gap-3 mb-3">
                         <div style={{ height: "1px", width: "28px", background: "linear-gradient(90deg, #c9a84c, #d4891a)" }}></div>
-                        <span className="font-body text-xs tracking-[0.35em] uppercase text-yellow-600/80">{categoryName}</span>
+                        {/* ✅ FIX: use room.category (schema field) */}
+                        <span className="font-body text-xs tracking-[0.35em] uppercase text-yellow-600/80">{room.category}</span>
                       </div>
-                      <h2 className="font-display text-3xl md:text-4xl text-amber-50 font-medium mb-3 leading-snug">{room.name}</h2>
+
+                      {/* ✅ FIX: Title is Room #ID since schema has no name field */}
+                      <h2 className="font-display text-3xl md:text-4xl text-amber-50 font-medium mb-3 leading-snug">
+                        Room <span className="anim-shimmer">#{room.roomId}</span>
+                      </h2>
+
+                      {/* ✅ FIX: meta chips use actual schema fields: maxGuests, available */}
                       <div className="flex flex-wrap gap-2 mb-5">
-                        {room.capacity && <span className="meta-chip">👥 {room.capacity} Guests</span>}
-                        {room.size     && <span className="meta-chip">📐 {room.size}</span>}
-                        {room.view     && <span className="meta-chip">🌿 {room.view}</span>}
+                        <span className="meta-chip">👥 Max {room.maxGuests} Guests</span>
+                        <span className="meta-chip">
+                          {room.available ? "✅ Available" : "❌ Unavailable"}
+                        </span>
+                        {room.photos?.length > 0 && (
+                          <span className="meta-chip">📸 {room.photos.length} Photos</span>
+                        )}
                       </div>
-                      <p className="font-serif-light text-lg text-stone-400 italic font-light leading-relaxed mb-6">
-                        {room.description || "A living sanctuary where luxury and nature exist in perfect harmony."}
-                      </p>
-                      {room.features?.length > 0 && (
-                        <div className="flex flex-wrap gap-2 mb-6">
-                          {room.features.slice(0, 6).map((f, fi) => (
-                            <span key={fi} className="feature-tag font-body text-xs text-stone-400 px-3 py-1.5 rounded-full flex items-center gap-1.5">
-                              <span>{getAmenityIcon(f)}</span> {f}
-                            </span>
-                          ))}
-                          {room.features.length > 6 && (
-                            <button className="feature-tag font-body text-xs text-yellow-600 px-3 py-1.5 rounded-full hover:text-yellow-400" onClick={() => setActiveRoom(isOpen ? null : room._id)}>
-                              +{room.features.length - 6} more
-                            </button>
-                          )}
+
+                      {/* ✅ FIX: use room.specialDescription (schema field) instead of room.description */}
+                      {room.specialDescription && (
+                        <p className="font-serif-light text-lg text-stone-400 italic font-light leading-relaxed mb-6">
+                          {room.specialDescription}
+                        </p>
+                      )}
+
+                      {/* ✅ FIX: use room.notes (schema field) instead of room.features */}
+                      {room.notes && (
+                        <div
+                          className="rounded-xl p-4 mb-6"
+                          style={{ background: "rgba(201,168,76,0.04)", border: "1px solid rgba(201,168,76,0.1)" }}
+                        >
+                          <div className="font-body text-xs tracking-widest uppercase text-stone-500 mb-1">Notes</div>
+                          <p className="font-body text-sm text-stone-400">{room.notes}</p>
                         </div>
                       )}
-                      <div className={`expand-panel ${isOpen ? "open" : "closed"}`}>
-                        <div className="pt-2 pb-4 border-t border-stone-800/60">
-                          <h4 className="font-display text-sm text-amber-200 tracking-wider uppercase mb-4 mt-4">All Amenities</h4>
-                          <div className="grid grid-cols-2 gap-2">
-                            {room.features?.map((f, fi) => (
-                              <div key={fi} className="flex items-center gap-2 font-body text-sm text-stone-400">
-                                <span className="text-yellow-600 text-xs">{getAmenityIcon(f)}</span>{f}
-                              </div>
-                            ))}
-                          </div>
+
+                      {/* Availability notice if unavailable */}
+                      {!room.available && (
+                        <div className="rounded-xl p-4 mb-6" style={{ background: "rgba(239,68,68,0.06)", border: "1px solid rgba(239,68,68,0.2)" }}>
+                          <p className="font-body text-sm text-red-400">
+                            ⚠ This room is currently unavailable. Please check back later or contact us.
+                          </p>
                         </div>
-                      </div>
-                      {room.features?.length > 6 && (
-                        <button onClick={() => setActiveRoom(isOpen ? null : room._id)} className="font-body text-xs tracking-wider uppercase text-stone-500 hover:text-yellow-500 transition-colors mb-6 flex items-center gap-2">
-                          {isOpen ? "▴ Show less" : "▾ View all amenities"}
-                        </button>
                       )}
                     </div>
 
                     <div>
+                      {/* Every stay includes */}
                       <div className="rounded-xl p-4 mb-6" style={{ background: "rgba(201,168,76,0.04)", border: "1px solid rgba(201,168,76,0.1)" }}>
                         <div className="font-body text-xs tracking-widest uppercase text-stone-500 mb-2">Every stay includes</div>
                         <div className="flex flex-wrap gap-x-4 gap-y-1">
@@ -421,12 +360,20 @@ export default function RoomsPage() {
                           ))}
                         </div>
                       </div>
+
                       <div className="flex flex-col sm:flex-row gap-3">
+                        {/* ✅ FIX: booking URL uses room.roomId (schema field) */}
                         <button
                           className="btn-gold flex-1 font-body text-xs tracking-widest uppercase py-4 rounded-full text-stone-900 font-medium text-center"
-                          onClick={() => navigate(`/booking?room=${room._id}&roomName=${encodeURIComponent(room.name || "")}&category=${encodeURIComponent(categoryName)}`)}
+                          disabled={!room.available}
+                          onClick={() =>
+                            navigate(
+                              `/booking?room=${room.roomId}&category=${encodeURIComponent(room.category)}`
+                            )
+                          }
+                          style={!room.available ? { opacity: 0.5, cursor: "not-allowed" } : {}}
                         >
-                          Book This Room →
+                          {room.available ? "Book This Room →" : "Currently Unavailable"}
                         </button>
                         <button
                           className="btn-outline flex-1 font-body text-xs tracking-widest uppercase py-4 rounded-full text-center"
@@ -467,7 +414,7 @@ export default function RoomsPage() {
         )}
       </main>
 
-      {/* ── BOOKING CTA ── */}
+      {/* BOOKING CTA */}
       <section className="py-24 px-6 relative overflow-hidden" style={{ background: "linear-gradient(135deg, #0d1f0f, #1a3a1e, #0d1a10)" }}>
         <div className="batik-bg absolute inset-0 pointer-events-none"></div>
         <div className="max-w-3xl mx-auto text-center">
@@ -488,7 +435,7 @@ export default function RoomsPage() {
         </div>
       </section>
 
-      {/* ── FOOTER ── */}
+      {/* FOOTER */}
       <footer className="pt-16 pb-8 px-6" style={{ background: "#060e07", borderTop: "1px solid rgba(201,168,76,0.12)" }}>
         <div className="max-w-screen-xl mx-auto">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-8">
