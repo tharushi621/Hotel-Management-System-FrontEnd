@@ -4,13 +4,6 @@ import toast from "react-hot-toast";
 import { FaPlus, FaEdit, FaTrash, FaImage, FaTags } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
-// ─── FIXES APPLIED ───────────────────────────────────────────────────────────
-// 1. DELETE now calls DELETE /api/categories/${cat._id}  (MongoDB _id)
-//    Backend was using :name param before — now fixed on both ends to use :id.
-// 2. getCategories response is { list: result } — reads res.data.list first.
-// 3. Navigate to update uses _id consistently.
-// ─────────────────────────────────────────────────────────────────────────────
-
 export default function AdminCategory() {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
@@ -18,172 +11,188 @@ export default function AdminCategory() {
   const [categories, setCategories] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // Redirect if not logged in
   useEffect(() => {
-    if (!token) navigate("/login");
+    if (!token || token === "null") navigate("/login");
   }, [token, navigate]);
 
-  // Fetch categories
   useEffect(() => {
-    if (!isLoaded) {
+    if (!isLoaded && token && token !== "null") {
       axios
         .get(`${import.meta.env.VITE_BACKEND_URL}/api/categories`)
         .then((res) => {
-          // FIX #2: backend now returns { list: [...] }
           setCategories(res.data.list || res.data.categories || []);
           setIsLoaded(true);
         })
-        .catch(() => toast.error("Failed to load categories"));
+        .catch((err) => {
+          if (err.response?.status === 401 || err.response?.status === 403) {
+            toast.error("Session expired or access denied.");
+            localStorage.removeItem("token");
+            navigate("/login");
+          } else {
+            toast.error("Failed to load categories.");
+          }
+          setIsLoaded(true);
+        });
     }
   }, [isLoaded]);
 
-  // FIX #1: Delete by MongoDB _id
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this category?")) return;
-
+    if (!window.confirm("Delete this category? This cannot be undone.")) return;
     try {
       await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/categories/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-
-      toast.success("Category deleted successfully");
+      toast.success("Category deleted.");
       setCategories((prev) => prev.filter((cat) => cat._id !== id));
-    } catch (err) {
-      console.error(err);
-      toast.error("Error deleting category");
+    } catch {
+      toast.error("Error deleting category.");
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 p-6">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-slate-50 flex flex-col" style={{ fontFamily: "'Inter', sans-serif" }}>
 
-        {/* Header */}
-        <div className="mb-8 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl shadow-xl p-8">
-          <h1 className="text-4xl font-bold text-white flex items-center gap-3">
-            <span className="bg-white/20 p-3 rounded-lg">🏷️</span>
-            Category Management
-          </h1>
-          <p className="text-indigo-100 mt-2 text-lg">
-            Manage your product categories
-          </p>
-        </div>
-
-        {/* Stats */}
-        <div className="mb-6 bg-white rounded-xl shadow-md p-6 border-l-4 border-indigo-500">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-600 text-sm font-medium">Total Categories</p>
-              <p className="text-3xl font-bold text-indigo-600">
-                {categories.length}
-              </p>
-            </div>
-            <div className="bg-indigo-100 p-4 rounded-full">
-              <FaTags className="text-indigo-600 w-8 h-8" />
-            </div>
+      {/* Header */}
+      <div className="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between gap-4 flex-wrap">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-xl bg-teal-500 flex items-center justify-center shadow-sm">
+            <FaTags className="text-white text-sm" />
+          </div>
+          <div>
+            <h1 className="text-base font-bold text-slate-800 leading-tight">Category Management</h1>
+            <p className="text-xs text-slate-400">Manage room categories and pricing</p>
           </div>
         </div>
 
-        {/* Category List */}
-        <div className="grid grid-cols-1 gap-6 pb-24">
-          {categories.length === 0 ? (
-            <div className="bg-white rounded-2xl shadow-lg p-16 text-center">
-              <FaTags className="text-indigo-400 text-6xl mx-auto mb-4" />
-              <h3 className="text-2xl font-bold text-gray-800 mb-2">
-                No Categories Found
-              </h3>
-              <button
-                onClick={() => navigate("/admin/add-category")}
-                className="bg-indigo-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-indigo-700"
-              >
-                Add Category
-              </button>
+        <div className="flex items-center gap-3 ml-auto">
+          <div className="flex items-center gap-2 bg-teal-50 border border-teal-100 rounded-xl px-4 py-2">
+            <span className="text-xs text-teal-600 font-medium">Total</span>
+            <span className="text-xl font-black text-teal-700 leading-none">{categories.length}</span>
+          </div>
+          <button
+            onClick={() => navigate("/admin/add-category")}
+            className="flex items-center gap-2 bg-teal-500 hover:bg-teal-600 text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition-all shadow-sm"
+          >
+            <FaPlus style={{ fontSize: 10 }} /> Add Category
+          </button>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="flex-1 overflow-auto px-4 py-3">
+
+        {/* Loading */}
+        {!isLoaded && (
+          <div className="bg-white rounded-xl border border-slate-200 p-16 text-center">
+            <div className="w-7 h-7 border-2 border-teal-400 border-t-transparent rounded-full animate-spin mx-auto" />
+            <p className="text-slate-400 text-xs mt-2">Loading categories…</p>
+          </div>
+        )}
+
+        {/* Empty */}
+        {isLoaded && categories.length === 0 && (
+          <div className="bg-white rounded-xl border border-slate-200 p-16 text-center">
+            <div className="w-16 h-16 bg-teal-50 border border-teal-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <FaTags className="text-teal-400 text-2xl" />
             </div>
-          ) : (
-            categories.map((cat, index) => (
+            <h3 className="text-sm font-semibold text-slate-700 mb-1">No categories yet</h3>
+            <p className="text-xs text-slate-400 mb-4">Add your first category to get started.</p>
+            <button
+              onClick={() => navigate("/admin/add-category")}
+              className="inline-flex items-center gap-2 bg-teal-500 hover:bg-teal-600 text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition-all"
+            >
+              <FaPlus style={{ fontSize: 10 }} /> Add Category
+            </button>
+          </div>
+        )}
+
+        {/* List */}
+        {isLoaded && categories.length > 0 && (
+          <div className="flex flex-col gap-3 pb-4">
+            {categories.map((cat, index) => (
               <div
                 key={cat._id}
-                className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition overflow-hidden"
+                className="bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md hover:border-slate-300 transition-all overflow-hidden"
               >
                 <div className="flex flex-col md:flex-row">
 
                   {/* Image */}
-                  <div className="md:w-1/4 p-6 bg-indigo-100">
+                  <div className="md:w-48 shrink-0 bg-slate-100 flex items-center justify-center">
                     {cat.image ? (
                       <img
                         src={cat.image}
                         alt={cat.name}
-                        className="w-full h-48 object-cover rounded-xl"
+                        className="w-full h-40 md:h-full object-cover"
+                        onError={(e) => {
+                          e.target.src = "https://via.placeholder.com/400x300?text=Not+Found";
+                        }}
                       />
                     ) : (
-                      <div className="h-48 flex items-center justify-center bg-indigo-200 rounded-xl">
-                        <FaImage className="text-indigo-400 text-5xl" />
+                      <div className="w-full h-40 flex items-center justify-center">
+                        <FaImage className="text-slate-300 text-3xl" />
                       </div>
                     )}
                   </div>
 
                   {/* Content */}
-                  <div className="md:w-3/4 p-6">
-                    <div className="flex justify-between items-start mb-3">
-                      <div>
-                        <h2 className="text-2xl font-bold text-gray-800">
-                          {index + 1}. {cat.name}
-                        </h2>
-                        <p className="text-indigo-600 font-semibold">
-                          Price: Rs. {cat.price}
-                        </p>
-                      </div>
-
-                      <div className="flex gap-2">
-                        {/* FIX #3: pass full cat object for editing */}
-                        <button
-                          onClick={() =>
-                            navigate("/admin/update-category", { state: cat })
-                          }
-                          className="bg-indigo-100 p-3 rounded-lg text-indigo-700"
-                        >
-                          <FaEdit />
-                        </button>
-                        {/* FIX #1: delete by _id */}
-                        <button
-                          onClick={() => handleDelete(cat._id)}
-                          className="bg-red-100 p-3 rounded-lg text-red-700"
-                        >
-                          <FaTrash />
-                        </button>
-                      </div>
-                    </div>
-
-                    {/* Description */}
-                    <p className="text-gray-600 mb-3">{cat.description}</p>
-
-                    {/* Features */}
-                    {cat.features?.length > 0 && (
-                      <div className="flex flex-wrap gap-2">
-                        {cat.features.map((f, i) => (
-                          <span
-                            key={i}
-                            className="bg-indigo-50 text-indigo-600 px-3 py-1 rounded-full text-sm"
-                          >
-                            {f}
+                  <div className="flex-1 p-5 flex flex-col justify-between">
+                    <div>
+                      <div className="flex items-start justify-between gap-3 mb-2">
+                        <div className="flex items-center gap-3">
+                          <span className="text-slate-400 font-mono text-xs">
+                            {String(index + 1).padStart(3, "0")}
                           </span>
-                        ))}
+                          <div>
+                            <h2 className="text-sm font-semibold text-slate-800">{cat.name}</h2>
+                            <span className="inline-block mt-1 text-xs font-semibold text-teal-700 bg-teal-50 border border-teal-100 px-2 py-0.5 rounded-full">
+                              Rs. {cat.price}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Actions */}
+                        <div className="flex items-center gap-1 shrink-0">
+                          <button
+                            onClick={() => navigate("/admin/update-category", { state: cat })}
+                            title="Edit category"
+                            className="w-7 h-7 flex items-center justify-center rounded-lg bg-sky-50 text-sky-500 hover:bg-sky-100 border border-sky-100 transition-all text-xs"
+                          >
+                            <FaEdit />
+                          </button>
+                          <button
+                            onClick={() => handleDelete(cat._id)}
+                            title="Delete category"
+                            className="w-7 h-7 flex items-center justify-center rounded-lg bg-red-50 text-red-400 hover:bg-red-100 border border-red-100 transition-all text-xs"
+                          >
+                            <FaTrash />
+                          </button>
+                        </div>
                       </div>
-                    )}
+
+                      <p className="text-xs text-slate-500 leading-relaxed line-clamp-2 mb-3">
+                        {cat.description}
+                      </p>
+
+                      {/* Features */}
+                      {cat.features?.length > 0 && (
+                        <div className="flex flex-wrap gap-1.5">
+                          {cat.features.map((f, i) => (
+                            <span
+                              key={i}
+                              className="text-xs text-slate-600 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-full"
+                            >
+                              {f}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
-            ))
-          )}
-        </div>
-
-        {/* Floating Button */}
-        <button
-          onClick={() => navigate("/admin/add-category")}
-          className="fixed bottom-8 right-8 bg-indigo-600 text-white w-16 h-16 rounded-full shadow-xl flex items-center justify-center text-2xl hover:scale-110"
-        >
-          <FaPlus />
-        </button>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
