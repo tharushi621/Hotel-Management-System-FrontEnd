@@ -670,10 +670,10 @@ export default function HomePage() {
               <p className="font-body text-sm text-stone-500 leading-relaxed mb-8">Leonine Villa rests in Sri Lanka's Central Province, just 45 minutes from Kandy — the ancient capital of the Kandyan Kingdom.</p>
               <div className="space-y-4 mb-8">
                 {[
-                  { icon: "📍", label: "Address", val: "Heerassagala, Kandy, Sri Lanka" },
-                  { icon: "✈️", label: "Nearest Airport", val: "Bandaranaike International (2.5 hrs)" },
-                  { icon: "🚂", label: "Scenic Train Route", val: "Colombo → Kandy (2.5 hrs)" },
-                  { icon: "📞", label: "Direct Line", val: "+94 81 220 4455" },
+                  {label: "Address", val: "Heerassagala, Kandy, Sri Lanka" },
+                  {label: "Nearest Airport", val: "Bandaranaike International (2.5 hrs)" },
+                  {label: "Scenic Train Route", val: "Colombo → Kandy (2.5 hrs)" },
+                  {label: "Direct Line", val: "+94 81 220 4455" },
                 ].map((item) => (
                   <div key={item.label} className="flex items-start gap-4 p-4 rounded-xl bg-stone-100/80 border border-stone-200 hover:border-yellow-400/30 hover:bg-amber-50/30 transition-all duration-300">
                     <span className="text-xl mt-0.5">{item.icon}</span>
@@ -689,13 +689,13 @@ export default function HomePage() {
                 onClick={handleGetDirections}>Get Directions</button>
             </div>
             <div className="relative h-96 lg:h-[500px] rounded-3xl overflow-hidden" style={{ border: "1px solid rgba(201,168,76,0.2)", boxShadow: "0 30px 70px rgba(0,0,0,0.15)" }}>
-              <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?w=900&q=90" alt="Sri Lanka Landscape" className="w-full h-full object-cover" />
+              <img src="/n1.jpg" alt="Sri Lanka Landscape" className="w-full h-full object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-stone-900/50 to-transparent"></div>
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
                 <div className="relative flex flex-col items-center">
                   <div className="ping-slow absolute w-12 h-12 rounded-full bg-yellow-500/30"></div>
                   <div className="w-12 h-12 rounded-full flex items-center justify-center z-10" style={{ background: "linear-gradient(135deg, #c9a84c, #d4891a)", boxShadow: "0 4px 20px rgba(0,0,0,0.4)" }}>
-                    <span className="text-stone-900 text-lg">🦁</span>
+                    <img src="/logo.png"/>
                   </div>
                   <div className="mt-2 px-3 py-1 rounded-full text-xs font-body font-medium tracking-wider uppercase text-stone-900" style={{ background: "linear-gradient(135deg, #c9a84c, #f0d080)" }}>Leonine Villa</div>
                 </div>
