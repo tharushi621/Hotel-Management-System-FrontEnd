@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -6,10 +6,11 @@ export default function GalleryPage() {
   const navigate = useNavigate();
   const [galleryItems, setGalleryItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [scrollY, setScrollY] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [lightbox, setLightbox] = useState(null); // index of open image
+  const [lightbox, setLightbox] = useState(null);
   const [filter, setFilter] = useState("All");
 
   useEffect(() => {
@@ -39,8 +40,11 @@ export default function GalleryPage() {
     return () => { document.body.style.overflow = ""; };
   }, [lightbox]);
 
+  // Fetch gallery items from backend ONLY
   useEffect(() => {
     window.scrollTo({ top: 0 });
+    setLoading(true);
+    setError(false);
     axios
       .get(`${import.meta.env.VITE_BACKEND_URL}/api/gallery`)
       .then((res) => {
@@ -49,35 +53,33 @@ export default function GalleryPage() {
         setLoading(false);
       })
       .catch(() => {
-        // Fallback demo data while backend is unavailable
-        setGalleryItems([
-          { _id: "1", name: "Pool Terrace", description: "The infinity pool at golden hour", image: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=900&q=90", category: "Spaces" },
-          { _id: "2", name: "Jungle Canopy", description: "Morning mist through the treetops", image: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=900&q=90", category: "Nature" },
-          { _id: "3", name: "Heritage Suite", description: "Hand-carved jak wood interiors", image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=900&q=90", category: "Spaces" },
-          { _id: "4", name: "Villa Exterior", description: "The main villa at dusk", image: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=900&q=90", category: "Spaces" },
-          { _id: "5", name: "Spa Garden", description: "Ayurvedic herb garden", image: "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=900&q=90", category: "Wellness" },
-          { _id: "6", name: "Sunset Dining", description: "Alfresco dining as the sun sets", image: "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=900&q=90", category: "Dining" },
-          { _id: "7", name: "Forest Path", description: "Ancient trails through the jungle", image: "https://images.unsplash.com/photo-1448375240586-882707db888b?w=900&q=90", category: "Nature" },
-          { _id: "8", name: "Ayurveda Ritual", description: "Sacred healing ceremony", image: "https://images.unsplash.com/photo-1600334129128-685c5582fd35?w=900&q=90", category: "Wellness" },
-          { _id: "9", name: "Kandyan Art", description: "Living artisan traditions", image: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=900&q=90", category: "Culture" },
-          { _id: "10", name: "River Dawn", description: "First light over the river", image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=900&q=90", category: "Nature" },
-          { _id: "11", name: "Tea Estate", description: "Rolling hills of highland tea", image: "https://images.unsplash.com/photo-1566646174759-5d5b0e2e1a6a?w=900&q=90", category: "Culture" },
-          { _id: "12", name: "Bedroom Sanctuary", description: "The canopy suite at night", image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=900&q=90", category: "Spaces" },
-        ]);
+        setError(true);
+        setGalleryItems([]);
         setLoading(false);
       });
   }, []);
 
   // Derive unique filter tags from the data
-  const allCategories = ["All", ...Array.from(new Set(galleryItems.map((i) => i.category).filter(Boolean)))];
-  const filteredItems = filter === "All" ? galleryItems : galleryItems.filter((i) => i.category === filter);
+  const allCategories = [
+    "All",
+    ...Array.from(new Set(galleryItems.map((i) => i.category).filter(Boolean))),
+  ];
+  const filteredItems =
+    filter === "All"
+      ? galleryItems
+      : galleryItems.filter((i) => i.category === filter);
 
   const navItems = [
     { label: "Home",     action: () => navigate("/") },
     { label: "Retreats", action: () => navigate("/retreats") },
-    { label: "Dining",   action: () => navigate("/dining") },
     { label: "Gallery",  action: () => navigate("/gallery") },
-    { label: "Contact",  action: () => { navigate("/"); setTimeout(() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" }), 100); } },
+    {
+      label: "Contact",
+      action: () => {
+        navigate("/");
+        setTimeout(() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" }), 100);
+      },
+    },
   ];
 
   const handleNavClick = (e, item) => {
@@ -122,143 +124,76 @@ export default function GalleryPage() {
         .btn-gold:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 16px 48px rgba(201,168,76,0.5); }
 
         /* ── Masonry grid ── */
-        .masonry-grid {
-          columns: 1;
-          column-gap: 16px;
-        }
+        .masonry-grid { columns: 1; column-gap: 16px; }
         @media (min-width: 640px)  { .masonry-grid { columns: 2; } }
         @media (min-width: 1024px) { .masonry-grid { columns: 3; } }
         @media (min-width: 1280px) { .masonry-grid { columns: 4; } }
-
-        .masonry-item {
-          break-inside: avoid;
-          margin-bottom: 16px;
-        }
+        .masonry-item { break-inside: avoid; margin-bottom: 16px; }
 
         /* ── Gallery card ── */
         .gallery-card {
-          position: relative;
-          border-radius: 16px;
-          overflow: hidden;
-          cursor: pointer;
-          border: 1px solid rgba(201,168,76,0.08);
-          display: block;
-          width: 100%;
+          position: relative; border-radius: 16px; overflow: hidden;
+          cursor: pointer; border: 1px solid rgba(201,168,76,0.08);
+          display: block; width: 100%;
         }
         .gallery-card img {
-          width: 100%;
-          display: block;
+          width: 100%; display: block;
           transition: transform 0.7s cubic-bezier(0.4,0,0.2,1), filter 0.5s ease;
           filter: brightness(0.9) saturate(1.05);
         }
-        .gallery-card:hover img {
-          transform: scale(1.05);
-          filter: brightness(1) saturate(1.2);
-        }
+        .gallery-card:hover img { transform: scale(1.05); filter: brightness(1) saturate(1.2); }
         .gallery-card-overlay {
-          position: absolute;
-          inset: 0;
+          position: absolute; inset: 0;
           background: linear-gradient(to top, rgba(5,10,6,0.88) 0%, rgba(5,10,6,0.3) 45%, transparent 75%);
-          opacity: 0;
-          transition: opacity 0.45s ease;
-          display: flex;
-          flex-direction: column;
-          justify-content: flex-end;
-          padding: 1.25rem;
+          opacity: 0; transition: opacity 0.45s ease;
+          display: flex; flex-direction: column; justify-content: flex-end; padding: 1.25rem;
         }
         .gallery-card:hover .gallery-card-overlay { opacity: 1; }
         .gallery-card-zoom-icon {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%) scale(0.6);
-          opacity: 0;
+          position: absolute; top: 50%; left: 50%;
+          transform: translate(-50%, -50%) scale(0.6); opacity: 0;
           transition: all 0.35s cubic-bezier(0.23,1,0.32,1);
-          width: 48px;
-          height: 48px;
-          border-radius: 50%;
-          background: rgba(201,168,76,0.2);
-          border: 1px solid rgba(201,168,76,0.6);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          backdrop-filter: blur(8px);
+          width: 48px; height: 48px; border-radius: 50%;
+          background: rgba(201,168,76,0.2); border: 1px solid rgba(201,168,76,0.6);
+          display: flex; align-items: center; justify-content: center; backdrop-filter: blur(8px);
         }
-        .gallery-card:hover .gallery-card-zoom-icon {
-          opacity: 1;
-          transform: translate(-50%, -50%) scale(1);
-        }
+        .gallery-card:hover .gallery-card-zoom-icon { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 
         /* ── Lightbox ── */
         .lightbox-backdrop {
-          position: fixed;
-          inset: 0;
-          z-index: 1000;
-          background: rgba(3,6,4,0.96);
-          backdrop-filter: blur(24px);
-          display: flex;
-          align-items: center;
-          justify-content: center;
+          position: fixed; inset: 0; z-index: 1000;
+          background: rgba(3,6,4,0.96); backdrop-filter: blur(24px);
+          display: flex; align-items: center; justify-content: center;
           animation: lb-in 0.3s ease both;
         }
         @keyframes lb-in { from { opacity: 0; } to { opacity: 1; } }
         .lightbox-img {
-          max-width: min(90vw, 1100px);
-          max-height: 80vh;
-          object-fit: contain;
-          border-radius: 12px;
-          box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+          max-width: min(90vw, 1100px); max-height: 80vh; object-fit: contain;
+          border-radius: 12px; box-shadow: 0 40px 100px rgba(0,0,0,0.8);
           border: 1px solid rgba(201,168,76,0.15);
           animation: lb-img-in 0.35s cubic-bezier(0.16,1,0.3,1) both;
         }
         @keyframes lb-img-in { from { opacity: 0; transform: scale(0.93); } to { opacity: 1; transform: scale(1); } }
         .lb-nav-btn {
-          position: absolute;
-          top: 50%;
-          transform: translateY(-50%);
-          width: 52px;
-          height: 52px;
-          border-radius: 50%;
-          background: rgba(201,168,76,0.12);
-          border: 1px solid rgba(201,168,76,0.3);
-          color: #c9a84c;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          transition: all 0.25s ease;
-          font-size: 1.2rem;
-          backdrop-filter: blur(10px);
+          position: absolute; top: 50%; transform: translateY(-50%);
+          width: 52px; height: 52px; border-radius: 50%;
+          background: rgba(201,168,76,0.12); border: 1px solid rgba(201,168,76,0.3);
+          color: #c9a84c; display: flex; align-items: center; justify-content: center;
+          cursor: pointer; transition: all 0.25s ease; font-size: 1.2rem; backdrop-filter: blur(10px);
         }
-        .lb-nav-btn:hover {
-          background: rgba(201,168,76,0.25);
-          border-color: rgba(201,168,76,0.7);
-        }
+        .lb-nav-btn:hover { background: rgba(201,168,76,0.25); border-color: rgba(201,168,76,0.7); }
 
         /* ── Filter pills ── */
         .filter-pill {
-          font-family: 'Jost', sans-serif;
-          font-size: 0.65rem;
-          letter-spacing: 0.2em;
-          text-transform: uppercase;
-          padding: 0.45rem 1.1rem;
-          border-radius: 999px;
-          border: 1px solid rgba(201,168,76,0.25);
-          color: rgba(214,204,185,0.65);
-          background: transparent;
-          cursor: pointer;
-          transition: all 0.25s ease;
-          white-space: nowrap;
+          font-family: 'Jost', sans-serif; font-size: 0.65rem; letter-spacing: 0.2em;
+          text-transform: uppercase; padding: 0.45rem 1.1rem; border-radius: 999px;
+          border: 1px solid rgba(201,168,76,0.25); color: rgba(214,204,185,0.65);
+          background: transparent; cursor: pointer; transition: all 0.25s ease; white-space: nowrap;
         }
-        .filter-pill:hover {
-          border-color: rgba(201,168,76,0.5);
-          color: #c9a84c;
-        }
+        .filter-pill:hover { border-color: rgba(201,168,76,0.5); color: #c9a84c; }
         .filter-pill.active {
           background: linear-gradient(135deg, #c9a84c, #f0d080, #d4891a);
-          border-color: transparent;
-          color: #1a1200;
-          font-weight: 500;
+          border-color: transparent; color: #1a1200; font-weight: 500;
           box-shadow: 0 4px 16px rgba(201,168,76,0.35);
         }
 
@@ -277,23 +212,17 @@ export default function GalleryPage() {
         .anim-shimmer {
           background: linear-gradient(90deg, #c9a84c 0%, #f0d080 40%, #d4891a 60%, #c9a84c 100%);
           background-size: 200% auto;
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-          animation: shimmer 4s linear infinite;
+          -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+          background-clip: text; animation: shimmer 4s linear infinite;
         }
-        .anim-float { animation: float 6s ease-in-out infinite; }
         .loading-dot { animation: pulse-dot 1.4s ease-in-out infinite; }
         .loading-dot:nth-child(2) { animation-delay: 0.2s; }
         .loading-dot:nth-child(3) { animation-delay: 0.4s; }
 
         .hero-text-mask {
           background: linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(245,235,210,0.9) 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
+          -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
         }
-
         .batik-pattern {
           background-image: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23c9a84c' fill-opacity='0.04'%3E%3Cpath d='M40 0C17.9 0 0 17.9 0 40s17.9 40 40 40 40-17.9 40-40S62.1 0 40 0zm0 70C23.4 70 10 56.6 10 40S23.4 10 40 10s30 13.4 30 30-13.4 30-30 30z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
         }
@@ -354,7 +283,10 @@ export default function GalleryPage() {
                 {item.label}
               </a>
             ))}
-            <button className="mt-4 w-full btn-gold font-body text-xs tracking-widest uppercase px-6 py-3 rounded-full text-stone-900 font-medium" onClick={() => { setMenuOpen(false); navigate("/booking"); }}>
+            <button
+              className="mt-4 w-full btn-gold font-body text-xs tracking-widest uppercase px-6 py-3 rounded-full text-stone-900 font-medium"
+              onClick={() => { setMenuOpen(false); navigate("/booking"); }}
+            >
               Reserve Now
             </button>
           </div>
@@ -365,20 +297,13 @@ export default function GalleryPage() {
       <section className="relative h-[70vh] min-h-[520px] flex items-end overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img
-            src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1800&q=90"
+            src="/n2.jpg"
             alt="Leonine Gallery"
             className="w-full h-full object-cover"
             style={{ transform: `translateY(${scrollY * 0.22}px)`, transformOrigin: "center top" }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/45 to-stone-950/20"></div>
           <div className="absolute inset-0 bg-gradient-to-r from-stone-950/30 to-transparent"></div>
-        </div>
-
-        {/* Leaf ornament */}
-        <div className="absolute top-28 right-16 opacity-12 anim-float hidden xl:block pointer-events-none">
-          <svg width="140" height="220" viewBox="0 0 200 300" fill="none">
-            <path d="M100 280 Q90 200 70 160 Q30 130 10 145 Q40 120 65 140 Q55 100 30 70 Q60 95 68 130 Q72 90 50 55 Q80 82 76 125 Q82 88 100 50 Q96 90 78 122 Q88 100 115 85 Q104 115 80 128 Q95 140 120 132 Q108 148 82 144 Q92 210 100 280Z" fill="#4a7c52"/>
-          </svg>
         </div>
 
         <div className="relative z-10 w-full max-w-screen-xl mx-auto px-6 pb-20">
@@ -402,30 +327,35 @@ export default function GalleryPage() {
         </div>
       </section>
 
-      {/* ── FILTER BAR ── */}
-      <section style={{ background: "linear-gradient(135deg, #060e07 0%, #0d1a10 100%)" }} className="sticky top-[56px] z-40 py-5 px-6 border-b border-yellow-900/20">
-        <div className="max-w-screen-xl mx-auto flex items-center gap-3 overflow-x-auto pb-1 scrollbar-hide">
-          <span className="font-body text-xs tracking-[0.3em] uppercase text-stone-500 whitespace-nowrap mr-2">Filter</span>
-          {allCategories.map((cat) => (
-            <button
-              key={cat}
-              className={`filter-pill ${filter === cat ? "active" : ""}`}
-              onClick={() => { setFilter(cat); setLightbox(null); }}
-            >
-              {cat}
-            </button>
-          ))}
-          <span className="ml-auto font-body text-xs text-stone-600 whitespace-nowrap tracking-wider">
-            {filteredItems.length} {filteredItems.length === 1 ? "image" : "images"}
-          </span>
-        </div>
-      </section>
+      {/* ── FILTER BAR — only shown when items exist ── */}
+      {!loading && !error && galleryItems.length > 0 && (
+        <section
+          style={{ background: "linear-gradient(135deg, #060e07 0%, #0d1a10 100%)" }}
+          className="sticky top-[56px] z-40 py-5 px-6 border-b border-yellow-900/20"
+        >
+          <div className="max-w-screen-xl mx-auto flex items-center gap-3 overflow-x-auto pb-1">
+            <span className="font-body text-xs tracking-[0.3em] uppercase text-stone-500 whitespace-nowrap mr-2">Filter</span>
+            {allCategories.map((cat) => (
+              <button
+                key={cat}
+                className={`filter-pill ${filter === cat ? "active" : ""}`}
+                onClick={() => { setFilter(cat); setLightbox(null); }}
+              >
+                {cat}
+              </button>
+            ))}
+            <span className="ml-auto font-body text-xs text-stone-600 whitespace-nowrap tracking-wider">
+              {filteredItems.length} {filteredItems.length === 1 ? "image" : "images"}
+            </span>
+          </div>
+        </section>
+      )}
 
       {/* ── GALLERY GRID ── */}
       <main style={{ background: "linear-gradient(180deg, #060e07 0%, #0a160c 100%)" }} className="relative min-h-screen">
         <div className="batik-pattern absolute inset-0 pointer-events-none opacity-40"></div>
 
-        {/* Loading */}
+        {/* Loading state */}
         {loading && (
           <div className="flex flex-col items-center justify-center py-48 gap-6">
             <div className="flex gap-3">
@@ -437,26 +367,53 @@ export default function GalleryPage() {
           </div>
         )}
 
-        {/* Empty state */}
-        {!loading && filteredItems.length === 0 && (
+        {/* Error state */}
+        {!loading && error && (
           <div className="max-w-xl mx-auto px-6 py-40 text-center">
             <div className="text-5xl mb-6">🌿</div>
-            <h3 className="font-display text-3xl text-amber-100 mb-3">No Images Yet</h3>
-            <p className="font-serif-light text-lg italic text-stone-400">
-              {filter === "All"
-                ? "The gallery is being curated. Please check back soon."
-                : `No images in the "${filter}" collection yet.`}
+            <h3 className="font-display text-3xl text-amber-100 mb-3">Gallery Unavailable</h3>
+            <p className="font-serif-light text-lg italic text-stone-400 mb-6">
+              We couldn't reach the gallery right now. Please try again shortly.
             </p>
-            {filter !== "All" && (
-              <button onClick={() => setFilter("All")} className="mt-6 font-body text-xs tracking-widest uppercase text-yellow-500 border border-yellow-700/40 px-6 py-3 rounded-full hover:bg-yellow-900/10 transition-all">
-                View All
-              </button>
-            )}
+            <button
+              onClick={() => { setError(false); setLoading(true); axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/gallery`).then((res) => { setGalleryItems(res.data.list || res.data || []); setLoading(false); }).catch(() => { setError(true); setLoading(false); }); }}
+              className="font-body text-xs tracking-widest uppercase text-yellow-500 border border-yellow-700/40 px-6 py-3 rounded-full hover:bg-yellow-900/10 transition-all"
+            >
+              Try Again
+            </button>
+          </div>
+        )}
+
+        {/* Empty state — backend responded but no items */}
+        {!loading && !error && galleryItems.length === 0 && (
+          <div className="max-w-xl mx-auto px-6 py-40 text-center">
+            <div className="text-5xl mb-6">🌿</div>
+            <h3 className="font-display text-3xl text-amber-100 mb-3">Gallery Coming Soon</h3>
+            <p className="font-serif-light text-lg italic text-stone-400">
+              Our curators are preparing something beautiful. Please check back soon.
+            </p>
+          </div>
+        )}
+
+        {/* Empty state — items exist but filter yields nothing */}
+        {!loading && !error && galleryItems.length > 0 && filteredItems.length === 0 && (
+          <div className="max-w-xl mx-auto px-6 py-40 text-center">
+            <div className="text-5xl mb-6">🌿</div>
+            <h3 className="font-display text-3xl text-amber-100 mb-3">No Images Found</h3>
+            <p className="font-serif-light text-lg italic text-stone-400">
+              No images in the "{filter}" collection yet.
+            </p>
+            <button
+              onClick={() => setFilter("All")}
+              className="mt-6 font-body text-xs tracking-widest uppercase text-yellow-500 border border-yellow-700/40 px-6 py-3 rounded-full hover:bg-yellow-900/10 transition-all"
+            >
+              View All
+            </button>
           </div>
         )}
 
         {/* Masonry gallery */}
-        {!loading && filteredItems.length > 0 && (
+        {!loading && !error && filteredItems.length > 0 && (
           <div className="relative z-10 max-w-screen-xl mx-auto px-6 py-12">
             <div className="masonry-grid">
               {filteredItems.map((item, index) => (
@@ -470,7 +427,9 @@ export default function GalleryPage() {
                       src={item.image}
                       alt={item.name}
                       loading="lazy"
-                      onError={(e) => { e.target.src = "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=600&q=80"; }}
+                      onError={(e) => {
+                        e.target.src = "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=600&q=80";
+                      }}
                     />
 
                     {/* Zoom icon */}
@@ -483,7 +442,9 @@ export default function GalleryPage() {
                     {/* Hover overlay */}
                     <div className="gallery-card-overlay">
                       {item.category && (
-                        <span className="font-body text-[10px] tracking-[0.22em] uppercase text-yellow-500/70 mb-1">{item.category}</span>
+                        <span className="font-body text-[10px] tracking-[0.22em] uppercase text-yellow-500/70 mb-1">
+                          {item.category}
+                        </span>
                       )}
                       <h3 className="font-display text-base text-amber-100 font-medium leading-tight">{item.name}</h3>
                       {item.description && (
@@ -526,7 +487,9 @@ export default function GalleryPage() {
             />
             <div className="text-center">
               {filteredItems[lightbox].category && (
-                <span className="font-body text-xs tracking-[0.25em] uppercase text-yellow-600/70 block mb-1">{filteredItems[lightbox].category}</span>
+                <span className="font-body text-xs tracking-[0.25em] uppercase text-yellow-600/70 block mb-1">
+                  {filteredItems[lightbox].category}
+                </span>
               )}
               <h3 className="font-display text-xl text-amber-100">{filteredItems[lightbox].name}</h3>
               {filteredItems[lightbox].description && (
