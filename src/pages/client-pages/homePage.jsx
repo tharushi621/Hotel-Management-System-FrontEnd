@@ -59,8 +59,7 @@ export default function HomePage() {
       subtitle: "Waterside Retreat",
       description:
         "Perched above a singing river, this villa wraps you in the sound of water and birdsong. Step-stone baths, woven rattan terraces, and sunrise over the sacred hills.",
-      image:
-        "/t2.jpg",
+      image: "/t2.jpg",
       tag: "Romantic Escape",
     },
     {
@@ -68,8 +67,7 @@ export default function HomePage() {
       subtitle: "Cultural Sanctuary",
       description:
         "Inspired by the royal pavilions of Kandy — traditional clay walls, Batik draperies, hand-painted murals, and a meditation sala open to the ancient forest.",
-      image:
-        "/t3.jpg",
+      image: "/t3.jpg",
       tag: "Cultural Immersion",
     },
   ];
@@ -118,36 +116,19 @@ export default function HomePage() {
     { src: "/2.jpg", label: "Jungle Views" },
     { src: "/c1.jpg", label: "Heritage Suite" },
     { src: "/c2.jpg", label: "Calm Eve" },
-    { src: "/n1.jpg", label: "Aeasthetic Vibe" }
+    { src: "/n1.jpg", label: "Aesthetic Vibe" },
   ];
 
-  // FIX #2: Removed "Heritage" nav item
-  // FIX #13/#14/#15: All nav items now use navigate() for SPA routing, Contact scrolls to footer
   const navItems = [
-    { label: "Home",     href: "/",          action: () => navigate("/") },
-    { label: "Retreats", href: "/retreats",   action: () => navigate("/retreats") },
-    { label: "Gallery",  href: "/gallery",    action: () => navigate("/gallery") },
-    { label: "Contact",  href: "#contact",    action: () => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" }) },
+    { label: "Home",     href: "/",         action: () => navigate("/") },
+    { label: "Retreats", href: "/retreats",  action: () => navigate("/retreats") },
+    { label: "Gallery",  href: "/gallery",   action: () => navigate("/gallery") },
+    { label: "Contact",  href: "#contact",   action: () => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" }) },
   ];
 
-  const handleCallCurator = () => {
-    window.location.href = "tel:+94812204455";
-  };
-
-  const handleGetDirections = () => {
-    window.open(
-      "https://www.google.com/maps/search/?api=1&query=Heerassagala+Kandy+Sri+Lanka",
-      "_blank",
-      "noopener noreferrer"
-    );
-  };
-
-  // FIX #1: SPA navigation — prevent full page reload
-  const handleNavClick = (e, item) => {
-    e.preventDefault();
-    item.action();
-    setMenuOpen(false);
-  };
+  const handleCallCurator = () => { window.location.href = "tel:+94812204455"; };
+  const handleGetDirections = () => { window.open("https://www.google.com/maps/search/?api=1&query=Heerassagala+Kandy+Sri+Lanka", "_blank", "noopener noreferrer"); };
+  const handleNavClick = (e, item) => { e.preventDefault(); item.action(); setMenuOpen(false); };
 
   return (
     <div className="font-body bg-stone-950 overflow-x-hidden">
@@ -182,10 +163,7 @@ export default function HomePage() {
         }
         .gold-line { height: 1px; background: linear-gradient(90deg, transparent, var(--gold), var(--saffron), var(--gold), transparent); }
         .text-glow { text-shadow: 0 0 80px rgba(201,168,76,0.3), 0 2px 40px rgba(0,0,0,0.6); }
-        .room-card-3d {
-          transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.6s ease;
-          transform-style: preserve-3d;
-        }
+        .room-card-3d { transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.6s ease; transform-style: preserve-3d; }
         .room-card-3d:hover { transform: translateY(-12px) rotateX(2deg); box-shadow: 0 40px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(201,168,76,0.2); }
         .btn-ripple { position: relative; overflow: hidden; }
         .btn-ripple::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%); opacity: 0; transition: opacity 0.3s; }
@@ -199,7 +177,6 @@ export default function HomePage() {
         @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes pulse-glow { 0%, 100% { box-shadow: 0 0 20px rgba(201,168,76,0.3); } 50% { box-shadow: 0 0 50px rgba(201,168,76,0.6); } }
         @keyframes ping-slow { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(2.5); opacity: 0; } }
-        @keyframes reveal-up { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 
         .anim-float { animation: float-slow 8s ease-in-out infinite; }
         .anim-float-2 { animation: float-medium 6s ease-in-out infinite 1s; }
@@ -217,13 +194,7 @@ export default function HomePage() {
         .nav-link:hover::before { width: 100%; }
         .testimonial-slide { transition: opacity 0.8s ease, transform 0.8s ease; }
 
-        /* FIX #17: Gallery — compact, consistent masonry grid */
-        .gallery-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          grid-template-rows: 200px 200px;
-          gap: 12px;
-        }
+        .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: 200px 200px; gap: 12px; }
         .gallery-item { position: relative; border-radius: 16px; overflow: hidden; cursor: pointer; border: 1px solid rgba(201,168,76,0.1); }
         .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s cubic-bezier(0.4,0,0.2,1); }
         .gallery-item:hover img { transform: scale(1.06); }
@@ -236,104 +207,77 @@ export default function HomePage() {
         .booking-glass { background: rgba(10, 22, 12, 0.55); backdrop-filter: blur(30px) saturate(150%); border: 1px solid rgba(201,168,76,0.2); }
         .bg-linen { background-color: #f5f0e8; background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='turbulence' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E"); }
 
-        /* Heritage Feature Cards */
-        .heritage-feat {
-          position: relative; padding: 1.5rem; border-radius: 1rem;
-          border: 1px solid rgba(201,168,76,0.15);
-          background: linear-gradient(135deg, rgba(26,58,30,0.65) 0%, rgba(13,26,16,0.85) 100%);
-          overflow: hidden; transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); cursor: default;
-        }
+        .heritage-feat { position: relative; padding: 1.5rem; border-radius: 1rem; border: 1px solid rgba(201,168,76,0.15); background: linear-gradient(135deg, rgba(26,58,30,0.65) 0%, rgba(13,26,16,0.85) 100%); overflow: hidden; transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); cursor: default; }
         .heritage-feat::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(201,168,76,0.07) 0%, transparent 60%); opacity: 0; transition: opacity 0.4s ease; }
         .heritage-feat:hover { border-color: rgba(201,168,76,0.4); transform: translateY(-5px); box-shadow: 0 20px 50px rgba(0,0,0,0.4), 0 0 0 1px rgba(201,168,76,0.1); }
         .heritage-feat:hover::before { opacity: 1; }
-        .heritage-feat-icon { width: 46px; height: 46px; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, rgba(201,168,76,0.15), rgba(212,137,26,0.1)); border: 1px solid rgba(201,168,76,0.22); margin-bottom: 1rem; font-size: 1.35rem; transition: all 0.3s ease; }
-        .heritage-feat:hover .heritage-feat-icon { background: linear-gradient(135deg, rgba(201,168,76,0.28), rgba(212,137,26,0.2)); border-color: rgba(201,168,76,0.45); transform: scale(1.08); }
         .heritage-feat-glow { position: absolute; bottom: -30px; right: -30px; width: 90px; height: 90px; background: radial-gradient(circle, rgba(201,168,76,0.07) 0%, transparent 70%); border-radius: 50%; pointer-events: none; }
 
-        /* FIX #16: Refined Experience Cards — horizontal layout with elegant reveal */
-        .exp-card {
-          position: relative;
-          border-radius: 1.25rem;
-          overflow: hidden;
-          cursor: pointer;
-          border: 1px solid rgba(201,168,76,0.08);
-          background: rgba(13,26,16,0.7);
-          transition: all 0.45s cubic-bezier(0.23, 1, 0.32, 1);
-          display: flex;
-          flex-direction: column;
-        }
-        .exp-card:hover {
-          border-color: rgba(201,168,76,0.3);
-          transform: translateY(-6px);
-          box-shadow: 0 24px 60px rgba(0,0,0,0.55), 0 0 0 1px rgba(201,168,76,0.18);
-        }
-        .exp-card-img {
-          height: 200px;
-          overflow: hidden;
-          position: relative;
-        }
-        .exp-card-img img {
-          width: 100%; height: 100%; object-fit: cover;
-          transition: transform 0.65s cubic-bezier(0.4,0,0.2,1);
-          filter: brightness(0.85) saturate(1.1);
-        }
+        .exp-card { position: relative; border-radius: 1.25rem; overflow: hidden; cursor: pointer; border: 1px solid rgba(201,168,76,0.08); background: rgba(13,26,16,0.7); transition: all 0.45s cubic-bezier(0.23, 1, 0.32, 1); display: flex; flex-direction: column; }
+        .exp-card:hover { border-color: rgba(201,168,76,0.3); transform: translateY(-6px); box-shadow: 0 24px 60px rgba(0,0,0,0.55), 0 0 0 1px rgba(201,168,76,0.18); }
+        .exp-card-img { height: 200px; overflow: hidden; position: relative; }
+        .exp-card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.65s cubic-bezier(0.4,0,0.2,1); filter: brightness(0.85) saturate(1.1); }
         .exp-card:hover .exp-card-img img { transform: scale(1.07); filter: brightness(0.95) saturate(1.2); }
-        .exp-card-img-overlay {
-          position: absolute; inset: 0;
-          background: linear-gradient(to bottom, transparent 40%, rgba(8,18,9,0.85) 100%);
-        }
-        .exp-card-body {
-          padding: 1.25rem 1.4rem 1.4rem;
-          display: flex; flex-direction: column; flex: 1;
-        }
-        .exp-card-icon {
-          display: inline-flex; align-items: center; justify-content: center;
-          width: 36px; height: 36px; border-radius: 50%;
-          background: rgba(201,168,76,0.12);
-          border: 1px solid rgba(201,168,76,0.3);
-          font-size: 1rem; margin-bottom: 0.75rem;
-          transition: all 0.3s ease;
-        }
-        .exp-card:hover .exp-card-icon { background: rgba(201,168,76,0.22); border-color: rgba(201,168,76,0.6); }
-        .exp-card-title {
-          font-family: 'Playfair Display', serif;
-          font-size: 1.1rem; font-weight: 500;
-          color: #fef3c7; line-height: 1.3; margin-bottom: 0.5rem;
-        }
-        .exp-card-detail {
-          font-family: 'Jost', sans-serif;
-          font-size: 0.65rem; letter-spacing: 0.2em;
-          text-transform: uppercase; color: rgba(201,168,76,0.65);
-          margin-bottom: 0.6rem;
-        }
-        .exp-card-desc {
-          font-family: 'Jost', sans-serif;
-          font-size: 0.78rem; color: rgba(200,190,175,0.75);
-          line-height: 1.65; flex: 1;
-        }
-        .exp-card-cta {
-          display: inline-flex; align-items: center; gap: 5px;
-          font-family: 'Jost', sans-serif; font-size: 0.65rem;
-          letter-spacing: 0.18em; text-transform: uppercase;
-          color: rgba(201,168,76,0.55); margin-top: 1rem;
-          transition: color 0.25s ease, gap 0.25s ease;
-        }
+        .exp-card-img-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 40%, rgba(8,18,9,0.85) 100%); }
+        .exp-card-body { padding: 1.25rem 1.4rem 1.4rem; display: flex; flex-direction: column; flex: 1; }
+        .exp-card-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 500; color: #fef3c7; line-height: 1.3; margin-bottom: 0.5rem; }
+        .exp-card-detail { font-family: 'Jost', sans-serif; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(201,168,76,0.65); margin-bottom: 0.6rem; }
+        .exp-card-desc { font-family: 'Jost', sans-serif; font-size: 0.78rem; color: rgba(200,190,175,0.75); line-height: 1.65; flex: 1; }
+        .exp-card-cta { display: inline-flex; align-items: center; gap: 5px; font-family: 'Jost', sans-serif; font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(201,168,76,0.55); margin-top: 1rem; transition: color 0.25s ease, gap 0.25s ease; }
         .exp-card:hover .exp-card-cta { color: #c9a84c; gap: 8px; }
-        .exp-card-top-badge {
-          position: absolute; top: 0.75rem; right: 0.75rem;
-          background: rgba(5,10,6,0.7); backdrop-filter: blur(8px);
-          border: 1px solid rgba(201,168,76,0.2); border-radius: 999px;
-          padding: 0.18rem 0.65rem;
-          font-family: 'Jost', sans-serif; font-size: 0.58rem;
-          letter-spacing: 0.2em; text-transform: uppercase;
-          color: rgba(201,168,76,0.8);
+        .exp-card-top-badge { position: absolute; top: 0.75rem; right: 0.75rem; background: rgba(5,10,6,0.7); backdrop-filter: blur(8px); border: 1px solid rgba(201,168,76,0.2); border-radius: 999px; padding: 0.18rem 0.65rem; font-family: 'Jost', sans-serif; font-size: 0.58rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(201,168,76,0.8); }
+
+        /* ── FLOATING FEEDBACK BUTTON ── */
+        .fb-float {
+          position: fixed; bottom: 36px; right: 36px; z-index: 9999;
+          display: flex; align-items: center; gap: 9px;
+          padding: 11px 22px;
+          border: 1px solid rgba(201,168,76,0.45);
+          border-radius: 999px; cursor: pointer;
+          background: linear-gradient(135deg, rgba(13,26,16,0.94) 0%, rgba(26,58,30,0.97) 100%);
+          backdrop-filter: blur(16px);
+          color: #c9a84c;
+          font-family: 'Jost', sans-serif; font-size: 0.65rem;
+          letter-spacing: 0.22em; text-transform: uppercase;
+          box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(201,168,76,0.08) inset;
+          transition: transform 0.22s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.22s ease, border-color 0.22s ease;
+          animation: fbFloatIn 0.8s cubic-bezier(0.16,1,0.3,1) 1.5s both;
+        }
+        .fb-float:hover {
+          transform: translateY(-4px) scale(1.04);
+          border-color: rgba(201,168,76,0.8);
+          box-shadow: 0 16px 44px rgba(0,0,0,0.55), 0 0 24px rgba(201,168,76,0.18);
+        }
+        .fb-float:active { transform: translateY(-1px) scale(0.99); }
+        .fb-float-star {
+          font-size: 0.9rem; color: #c9a84c;
+          filter: drop-shadow(0 0 4px rgba(201,168,76,0.55));
+          animation: fbStarPulse 3s ease-in-out 2.5s infinite;
+          flex-shrink: 0;
+        }
+        @keyframes fbFloatIn {
+          from { opacity: 0; transform: translateY(28px) scale(0.88); }
+          to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes fbStarPulse {
+          0%,100% { filter: drop-shadow(0 0 2px rgba(201,168,76,0.4)); }
+          50%      { filter: drop-shadow(0 0 8px rgba(201,168,76,0.9)); }
+        }
+        .fb-float::after {
+          content: ''; position: absolute; inset: -5px; border-radius: 999px;
+          border: 1px solid rgba(201,168,76,0.18);
+          animation: fbHalo 4s ease-in-out 3s infinite; pointer-events: none;
+        }
+        @keyframes fbHalo {
+          0%,100% { opacity: 0; transform: scale(1); }
+          45%      { opacity: 1; transform: scale(1.06); }
+          80%      { opacity: 0; transform: scale(1.1); }
         }
       `}</style>
 
-      {/* NAVIGATION — FIX #1 #2 #10 #13 #14 #15 */}
+      {/* NAVIGATION */}
       <nav className={`fixed top-0 w-full z-50 transition-all duration-700 ${scrolled ? "nav-carved py-3" : "py-5 bg-transparent"}`}>
         <div className="max-w-screen-xl mx-auto px-6 flex items-center justify-between">
-          {/* FIX #10: Use logo.png */}
           <div className="flex flex-col items-start group cursor-pointer" onClick={() => navigate("/")}>
             <div className="flex items-center gap-2">
               <img src="/logo.png" alt="Leonine Logo" className="w-[50px] h-[50px]" />
@@ -342,16 +286,11 @@ export default function HomePage() {
             <span className="font-body text-xs tracking-[0.4em] text-yellow-600/70 ml-14 uppercase">Villa & Sanctuary</span>
           </div>
 
-          {/* FIX #1: All nav links use onClick with navigate (SPA) + e.preventDefault() */}
-          {/* FIX #2: Heritage removed. #13 Dining → /dining. #14 Gallery → /gallery. #15 Contact → scroll */}
           <ul className="hidden lg:flex items-center gap-8">
             {navItems.map((item) => (
               <li key={item.label}>
-                <a
-                  href={item.href}
-                  onClick={(e) => handleNavClick(e, item)}
-                  className="nav-link font-body text-xs tracking-widest uppercase text-stone-300 hover:text-yellow-400 transition-colors duration-300"
-                >
+                <a href={item.href} onClick={(e) => handleNavClick(e, item)}
+                  className="nav-link font-body text-xs tracking-widest uppercase text-stone-300 hover:text-yellow-400 transition-colors duration-300">
                   {item.label}
                 </a>
               </li>
@@ -359,18 +298,8 @@ export default function HomePage() {
           </ul>
 
           <div className="hidden lg:flex items-center gap-3">
-            <button
-              className="font-body text-xs tracking-widest uppercase text-stone-300 hover:text-yellow-400 transition-colors duration-300 px-4 py-2"
-              onClick={() => navigate("/login")}
-            >
-              Sign In
-            </button>
-            <button
-              className="btn-ripple font-body text-xs tracking-widest uppercase px-6 py-3 rounded-full border border-yellow-600/50 text-yellow-400 hover:bg-yellow-600/10 hover:border-yellow-500 transition-all duration-300 anim-pulse-glow"
-              onClick={() => navigate("/booking")}
-            >
-              Reserve Now
-            </button>
+            <button className="font-body text-xs tracking-widest uppercase text-stone-300 hover:text-yellow-400 transition-colors duration-300 px-4 py-2" onClick={() => navigate("/login")}>Sign In</button>
+            <button className="btn-ripple font-body text-xs tracking-widest uppercase px-6 py-3 rounded-full border border-yellow-600/50 text-yellow-400 hover:bg-yellow-600/10 hover:border-yellow-500 transition-all duration-300 anim-pulse-glow" onClick={() => navigate("/booking")}>Reserve Now</button>
           </div>
 
           <button className="lg:hidden text-stone-300 hover:text-yellow-400 transition-colors" onClick={() => setMenuOpen(!menuOpen)}>
@@ -382,18 +311,10 @@ export default function HomePage() {
           </button>
         </div>
 
-        {/* Mobile nav */}
         {menuOpen && (
           <div className="lg:hidden nav-carved border-t border-yellow-900/30 py-6 px-6">
             {navItems.map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                className="block font-body text-xs tracking-widest uppercase text-stone-300 hover:text-yellow-400 py-3 border-b border-stone-800/50 transition-colors"
-                onClick={(e) => handleNavClick(e, item)}
-              >
-                {item.label}
-              </a>
+              <a key={item.label} href={item.href} className="block font-body text-xs tracking-widest uppercase text-stone-300 hover:text-yellow-400 py-3 border-b border-stone-800/50 transition-colors" onClick={(e) => handleNavClick(e, item)}>{item.label}</a>
             ))}
             <button className="mt-3 w-full font-body text-xs tracking-widest uppercase py-3 text-stone-300 hover:text-yellow-400 transition-colors border-b border-stone-800/50" onClick={() => { setMenuOpen(false); navigate("/login"); }}>Sign In</button>
             <button className="mt-4 w-full font-body text-xs tracking-widest uppercase px-6 py-3 rounded-full border border-yellow-600/50 text-yellow-400 hover:bg-yellow-600/10 transition-all" onClick={() => { setMenuOpen(false); navigate("/booking"); }}>Reserve Now</button>
@@ -401,7 +322,7 @@ export default function HomePage() {
         )}
       </nav>
 
-      {/* HERO SECTION */}
+      {/* HERO */}
       <section id="home" ref={heroRef} className="hero-grain relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img src="/h1.jpg" alt="Leonine Villa" className="w-full h-full object-cover" style={{ transform: `translateY(${scrollY * 0.3}px)` }} />
@@ -428,39 +349,29 @@ export default function HomePage() {
             <span className="font-body text-xs tracking-[0.4em] uppercase text-yellow-400/90">Sri Lanka · Est. 2019</span>
             <div className="gold-line w-16"></div>
           </div>
-
           <h1 className="font-display text-glow mb-4 anim-hero-2 text-left">
             <span className="block text-6xl md:text-8xl xl:text-9xl font-medium text-white leading-none tracking-wide">Leonine</span>
             <span className="block text-3xl md:text-4xl xl:text-5xl font-light italic text-yellow-400/95 mt-2 tracking-widest">Villa & Sanctuary</span>
           </h1>
-
           <div className="anim-hero-3 flex items-center gap-4 my-6">
             <div className="gold-line w-20"></div>
             <div className="text-yellow-500 text-lg">❋</div>
             <div className="gold-line w-20"></div>
           </div>
-
           <p className="anim-hero-4 font-serif-light text-xl md:text-2xl text-stone-200 leading-relaxed max-w-lg font-light italic mb-10 text-left">
             Where Sri Lanka's ancient soul breathes through every leaf, every carved pillar, every firefly-lit evening in the heart of the jungle.
           </p>
-
           <div className="anim-hero-5 flex flex-col sm:flex-row gap-4 justify-start">
-            <button
-              className="btn-ripple group font-body text-sm tracking-widest uppercase px-10 py-4 rounded-full text-stone-900 font-medium transition-all duration-500 hover:scale-105"
+            <button className="btn-ripple group font-body text-sm tracking-widest uppercase px-10 py-4 rounded-full text-stone-900 font-medium transition-all duration-500 hover:scale-105"
               style={{ background: "linear-gradient(135deg, #c9a84c 0%, #f0d080 50%, #d4891a 100%)", boxShadow: "0 8px 32px rgba(201,168,76,0.4)" }}
-              onClick={() => navigate("/booking")}
-            >
-              Book Your Sanctuary
-              <span className="ml-2 group-hover:ml-4 transition-all duration-300">→</span>
+              onClick={() => navigate("/booking")}>
+              Book Your Sanctuary <span className="ml-2 group-hover:ml-4 transition-all duration-300">→</span>
             </button>
-            <button
-              className="btn-ripple font-body text-sm tracking-widest uppercase px-10 py-4 rounded-full text-amber-100 border border-yellow-600/50 hover:border-yellow-400/80 hover:bg-yellow-900/15 transition-all duration-300"
-              onClick={() => document.getElementById("heritage")?.scrollIntoView({ behavior: "smooth" })}
-            >
+            <button className="btn-ripple font-body text-sm tracking-widest uppercase px-10 py-4 rounded-full text-amber-100 border border-yellow-600/50 hover:border-yellow-400/80 hover:bg-yellow-900/15 transition-all duration-300"
+              onClick={() => document.getElementById("heritage")?.scrollIntoView({ behavior: "smooth" })}>
               Discover the Story
             </button>
           </div>
-
           <div className="anim-hero-5 mt-14 flex flex-wrap items-center justify-start gap-6 opacity-75">
             {["World's Best Eco Villa 2024","Traveller Pick","UNESCO Heritage Partner"].map((award) => (
               <div key={award} className="flex items-center gap-2">
@@ -491,7 +402,6 @@ export default function HomePage() {
           <span className="font-body text-xs tracking-[0.3em] text-stone-300 uppercase">Scroll</span>
           <div className="w-px h-12 bg-gradient-to-b from-yellow-500/60 to-transparent animate-pulse"></div>
         </div>
-
         <div className="wave-separator z-10">
           <svg viewBox="0 0 1440 60" preserveAspectRatio="none" className="w-full h-12">
             <path d="M0,0 C360,60 1080,0 1440,50 L1440,60 L0,60 Z" fill="#0d1f0f"/>
@@ -499,7 +409,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* HERITAGE SECTION */}
+      {/* HERITAGE */}
       <section id="heritage" className="relative py-24 px-6" style={{ background: "linear-gradient(135deg, #0d1f0f 0%, #1a3a1e 50%, #0d1a10 100%)" }}>
         <div className="batik-pattern absolute inset-0 pointer-events-none"></div>
         <div className="max-w-screen-xl mx-auto">
@@ -519,73 +429,41 @@ export default function HomePage() {
               </p>
 
               <div className="grid grid-cols-2 gap-4">
-  {[
-    {
-      icon: (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
-          <path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 10v11M16 10v11M12 10v11"/>
-        </svg>
-      ),
-      label: "Architecture", title: "Kandyan Architecture",
-      desc: "Royal building traditions, reborn in every carved pillar and ceremonial arch."
-    },
-    {
-      icon: (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
-          <path d="M12 2a10 10 0 0 1 0 20A10 10 0 0 1 12 2z"/><path d="M12 6v6l3 3"/><path d="M6 12c0-1.5.5-3 1.5-4.2"/><path d="M18 12a6 6 0 0 1-6 6"/>
-          <circle cx="12" cy="12" r="2"/>
-        </svg>
-      ),
-      label: "Sustainability", title: "Zero Carbon Footprint",
-      desc: "100% solar & rainwater systems — luxury that leaves no trace on the earth."
-    },
-    {
-      icon: (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
-          <path d="M12 22V12"/><path d="M8 7c0 2.2 1.8 4 4 4s4-1.8 4-4-1.8-4-4-4c-1 0-2 .4-2.8 1"/><path d="M4 14c0 3.3 3.6 6 8 6s8-2.7 8-6"/>
-        </svg>
-      ),
-      label: "Nature", title: "Biodiversity Reserve",
-      desc: "14 acres of protected jungle habitat teeming with rare endemic species."
-    },
-    {
-      icon: (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
-          <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
-        </svg>
-      ),
-      label: "Culture", title: "Living Culture",
-      desc: "Resident artisans and Ayurveda masters keep ancient wisdom alive daily."
-    },
-  ].map((f) => (
-    <div key={f.title} className="heritage-feat group relative overflow-hidden">
-      {/* Top accent line */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-yellow-600/40 to-transparent" />
-
-      {/* Icon + Label row */}
-      <div className="flex items-center gap-2.5 mb-3">
-        <div className="text-yellow-600/70 shrink-0 transition-colors duration-300 group-hover:text-yellow-500/90">
-          {f.icon}
-        </div>
-        <span className="font-body text-[9px] tracking-[0.3em] uppercase text-yellow-600/50 group-hover:text-yellow-600/70 transition-colors duration-300">
-          {f.label}
-        </span>
-      </div>
-
-      <div className="font-display text-[0.92rem] text-amber-100/90 font-medium leading-snug mb-2 group-hover:text-amber-100 transition-colors duration-300">
-        {f.title}
-      </div>
-      <div className="font-body text-xs text-stone-400/80 leading-relaxed group-hover:text-stone-300/80 transition-colors duration-300">
-        {f.desc}
-      </div>
-
-      {/* Bottom fade glow on hover */}
-      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-gradient-to-t from-yellow-900/10 to-transparent rounded-inherit" />
-      <div className="heritage-feat-glow" />
-    </div>
-  ))}
-</div>
-
+                {[
+                  {
+                    icon: (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 10v11M16 10v11M12 10v11"/></svg>),
+                    label: "Architecture", title: "Kandyan Architecture",
+                    desc: "Royal building traditions, reborn in every carved pillar and ceremonial arch."
+                  },
+                  {
+                    icon: (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><path d="M12 2a10 10 0 0 1 0 20A10 10 0 0 1 12 2z"/><path d="M12 6v6l3 3"/><path d="M6 12c0-1.5.5-3 1.5-4.2"/><path d="M18 12a6 6 0 0 1-6 6"/><circle cx="12" cy="12" r="2"/></svg>),
+                    label: "Sustainability", title: "Zero Carbon Footprint",
+                    desc: "100% solar & rainwater systems — luxury that leaves no trace on the earth."
+                  },
+                  {
+                    icon: (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><path d="M12 22V12"/><path d="M8 7c0 2.2 1.8 4 4 4s4-1.8 4-4-1.8-4-4-4c-1 0-2 .4-2.8 1"/><path d="M4 14c0 3.3 3.6 6 8 6s8-2.7 8-6"/></svg>),
+                    label: "Nature", title: "Biodiversity Reserve",
+                    desc: "14 acres of protected jungle habitat teeming with rare endemic species."
+                  },
+                  {
+                    icon: (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>),
+                    label: "Culture", title: "Living Culture",
+                    desc: "Resident artisans and Ayurveda masters keep ancient wisdom alive daily."
+                  },
+                ].map((f) => (
+                  <div key={f.title} className="heritage-feat group relative overflow-hidden">
+                    <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-yellow-600/40 to-transparent" />
+                    <div className="flex items-center gap-2.5 mb-3">
+                      <div className="text-yellow-600/70 shrink-0 transition-colors duration-300 group-hover:text-yellow-500/90">{f.icon}</div>
+                      <span className="font-body text-[9px] tracking-[0.3em] uppercase text-yellow-600/50 group-hover:text-yellow-600/70 transition-colors duration-300">{f.label}</span>
+                    </div>
+                    <div className="font-display text-[0.92rem] text-amber-100/90 font-medium leading-snug mb-2 group-hover:text-amber-100 transition-colors duration-300">{f.title}</div>
+                    <div className="font-body text-xs text-stone-400/80 leading-relaxed group-hover:text-stone-300/80 transition-colors duration-300">{f.desc}</div>
+                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-gradient-to-t from-yellow-900/10 to-transparent" />
+                    <div className="heritage-feat-glow" />
+                  </div>
+                ))}
+              </div>
             </div>
 
             <div className="relative h-[600px] hidden lg:block">
@@ -608,7 +486,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ROOMS SECTION — FIX #3: removed image overlay; rooms/categories data come from admin */}
+      {/* ROOMS */}
       <section id="retreats" className="py-24 bg-linen relative overflow-hidden">
         <div className="absolute top-0 left-0 w-full overflow-hidden" style={{ height: "60px" }}>
           <svg viewBox="0 0 1440 60" preserveAspectRatio="none" className="w-full h-full">
@@ -631,7 +509,7 @@ export default function HomePage() {
               <button key={i} onClick={() => setActiveRoom(i)}
                 className={`font-body text-xs tracking-widest uppercase px-6 py-3 rounded-full transition-all duration-300 ${activeRoom === i ? "text-stone-900 font-medium" : "border border-stone-300 text-stone-500 hover:border-stone-400"}`}
                 style={activeRoom === i ? { background: "linear-gradient(135deg, #c9a84c, #f0d080, #d4891a)", boxShadow: "0 4px 20px rgba(201,168,76,0.4)" } : {}}>
-                {r.icon} {r.subtitle}
+                {r.subtitle}
               </button>
             ))}
           </div>
@@ -640,10 +518,8 @@ export default function HomePage() {
             <div key={i} style={{ display: activeRoom === i ? "block" : "none" }}
               className={`transition-all duration-700 ${activeRoom === i ? "opacity-100" : "opacity-0"}`}>
               <div className="grid lg:grid-cols-2 gap-12 items-center">
-                {/* FIX #3: Removed ugly overlay — clean image with subtle bottom vignette only */}
                 <div className="room-card-3d rounded-3xl overflow-hidden relative" style={{ height: "500px", boxShadow: "0 30px 70px rgba(0,0,0,0.2)" }}>
                   <img src={room.image} alt={room.title} className="w-full h-full object-cover" />
-                  {/* Only a subtle bottom vignette for the tag readability, no heavy overlay */}
                   <div className="absolute bottom-0 left-0 right-0 h-32" style={{ background: "linear-gradient(to top, rgba(0,0,0,0.45) 0%, transparent 100%)" }}></div>
                   <div className="absolute top-6 left-6 font-body text-xs tracking-widest uppercase px-4 py-2 rounded-full text-stone-900 font-medium" style={{ background: "linear-gradient(135deg, #c9a84c, #f0d080)" }}>{room.tag}</div>
                   <div className="absolute bottom-6 right-6 font-display text-6xl font-bold text-white/10">0{i + 1}</div>
@@ -661,19 +537,10 @@ export default function HomePage() {
                     ))}
                   </div>
                   <div className="flex items-center gap-4">
-                    <button
-                      className="btn-ripple font-body text-xs tracking-widest uppercase px-8 py-4 rounded-full text-stone-900 font-medium transition-all hover:scale-105"
+                    <button className="btn-ripple font-body text-xs tracking-widest uppercase px-8 py-4 rounded-full text-stone-900 font-medium transition-all hover:scale-105"
                       style={{ background: "linear-gradient(135deg, #c9a84c, #f0d080, #d4891a)", boxShadow: "0 6px 24px rgba(201,168,76,0.4)" }}
-                      onClick={() => navigate("/booking")}
-                    >
-                      Reserve This Retreat
-                    </button>
-                    <button
-                      className="font-body text-xs tracking-widest uppercase text-stone-500 hover:text-yellow-700 transition-colors duration-300 flex items-center gap-2"
-                      onClick={() => navigate("/rooms")}
-                    >
-                      Full Details <span className="ml-1">→</span>
-                    </button>
+                      onClick={() => navigate("/booking")}>Reserve This Retreat</button>
+                    <button className="font-body text-xs tracking-widest uppercase text-stone-500 hover:text-yellow-700 transition-colors duration-300 flex items-center gap-2" onClick={() => navigate("/rooms")}>Full Details <span className="ml-1">→</span></button>
                   </div>
                 </div>
               </div>
@@ -688,7 +555,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* EXPERIENCES — FIX #16: Elegant card design with image + body layout */}
+      {/* EXPERIENCES */}
       <section className="py-24 px-6 relative overflow-hidden" style={{ background: "linear-gradient(135deg, #0d1f0f 0%, #162b18 50%, #0d1f0f 100%)" }}>
         <div className="batik-pattern absolute inset-0 pointer-events-none"></div>
         <div className="max-w-screen-xl mx-auto">
@@ -703,7 +570,6 @@ export default function HomePage() {
               <span className="block font-light italic mt-1" style={{ background: "linear-gradient(135deg, #c9a84c, #f0d080)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Rewrite the Soul</span>
             </h2>
           </div>
-
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {experiences.map((exp, i) => (
               <div key={i} className="exp-card">
@@ -713,7 +579,6 @@ export default function HomePage() {
                   <div className="exp-card-top-badge">Leonine Exclusive</div>
                 </div>
                 <div className="exp-card-body">
-                  <div className="exp-card-icon">{exp.icon}</div>
                   <div className="exp-card-detail">{exp.detail}</div>
                   <div className="exp-card-title">{exp.title}</div>
                   <div className="exp-card-desc">{exp.desc}</div>
@@ -722,12 +587,8 @@ export default function HomePage() {
               </div>
             ))}
           </div>
-
           <div className="text-center mt-14">
-            <button
-              className="btn-ripple font-body text-xs tracking-widest uppercase px-12 py-5 rounded-full border border-yellow-600/40 text-yellow-400 hover:bg-yellow-900/10 hover:border-yellow-500 transition-all duration-300"
-              onClick={() => navigate("/experiences")}
-            >
+            <button className="btn-ripple font-body text-xs tracking-widest uppercase px-12 py-5 rounded-full border border-yellow-600/40 text-yellow-400 hover:bg-yellow-900/10 hover:border-yellow-500 transition-all duration-300">
               Explore All Experiences
             </button>
           </div>
@@ -770,7 +631,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* GALLERY — FIX #17 #18: compact grid, "Full Gallery" → navigate("/gallery") */}
+      {/* GALLERY */}
       <section id="gallery" className="py-24 px-6 relative" style={{ background: "linear-gradient(135deg, #0d1f0f 0%, #1a3a1e 50%, #0d1a10 100%)" }}>
         <div className="max-w-screen-xl mx-auto">
           <div className="flex items-end justify-between mb-12 flex-wrap gap-4">
@@ -781,16 +642,8 @@ export default function HomePage() {
               </div>
               <h2 className="font-display text-5xl text-amber-50 font-medium">Moments<br/><span className="font-light italic" style={{ color: "#c9a84c" }}>Captured</span></h2>
             </div>
-            {/* FIX #18: Full Gallery → navigate to /gallery */}
-            <button
-              className="font-body text-xs tracking-widest uppercase px-8 py-3 rounded-full border border-yellow-700/40 text-yellow-500 hover:border-yellow-500 hover:bg-yellow-900/10 transition-all"
-              onClick={() => navigate("/gallery")}
-            >
-              Full Gallery →
-            </button>
+            <button className="font-body text-xs tracking-widest uppercase px-8 py-3 rounded-full border border-yellow-700/40 text-yellow-500 hover:border-yellow-500 hover:bg-yellow-900/10 transition-all" onClick={() => navigate("/gallery")}>Full Gallery →</button>
           </div>
-
-          {/* FIX #17: Compact, consistent masonry grid */}
           <div className="gallery-grid">
             {galleryImages.map((img, i) => (
               <div key={i} className="gallery-item">
@@ -831,13 +684,9 @@ export default function HomePage() {
                   </div>
                 ))}
               </div>
-              <button
-                className="btn-ripple font-body text-xs tracking-widest uppercase px-10 py-4 rounded-full text-stone-900 font-medium hover:scale-105 transition-transform"
+              <button className="btn-ripple font-body text-xs tracking-widest uppercase px-10 py-4 rounded-full text-stone-900 font-medium hover:scale-105 transition-transform"
                 style={{ background: "linear-gradient(135deg, #c9a84c, #f0d080, #d4891a)", boxShadow: "0 6px 24px rgba(201,168,76,0.4)" }}
-                onClick={handleGetDirections}
-              >
-                Get Directions
-              </button>
+                onClick={handleGetDirections}>Get Directions</button>
             </div>
             <div className="relative h-96 lg:h-[500px] rounded-3xl overflow-hidden" style={{ border: "1px solid rgba(201,168,76,0.2)", boxShadow: "0 30px 70px rgba(0,0,0,0.15)" }}>
               <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?w=900&q=90" alt="Sri Lanka Landscape" className="w-full h-full object-cover" />
@@ -856,13 +705,12 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* BOOKING CTA — FIX #19: logo.png replaces lion emoji */}
+      {/* BOOKING CTA */}
       <section className="py-24 px-6 relative overflow-hidden" style={{ background: "linear-gradient(135deg, #0d1f0f 0%, #1a3a1e 50%, #0d1a10 100%)" }}>
         <div className="batik-pattern absolute inset-0 pointer-events-none"></div>
         <div className="max-w-4xl mx-auto text-center">
           <div className="flex items-center justify-center gap-4 mb-6">
             <div className="gold-line w-16"></div>
-            {/* FIX #19: Use logo.png instead of emoji */}
             <img src="/logo.png" alt="Leonine" className="w-12 h-12 object-contain" style={{ filter: "drop-shadow(0 0 12px rgba(201,168,76,0.4))" }} />
             <div className="gold-line w-16"></div>
           </div>
@@ -870,19 +718,10 @@ export default function HomePage() {
           <h2 className="font-display text-5xl md:text-7xl font-light italic mb-8" style={{ background: "linear-gradient(135deg, #c9a84c, #f0d080, #d4891a)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Awaits</h2>
           <p className="font-serif-light text-xl text-stone-300 italic font-light max-w-xl mx-auto mb-12 leading-relaxed">Only 6 retreats available at any time. Each stay is crafted individually. Your journey into the soul of Sri Lanka begins with one conversation.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button
-              className="btn-ripple group font-body text-sm tracking-widest uppercase px-12 py-5 rounded-full text-stone-900 font-medium transition-all hover:scale-105"
+            <button className="btn-ripple group font-body text-sm tracking-widest uppercase px-12 py-5 rounded-full text-stone-900 font-medium transition-all hover:scale-105"
               style={{ background: "linear-gradient(135deg, #c9a84c 0%, #f0d080 50%, #d4891a 100%)", boxShadow: "0 10px 40px rgba(201,168,76,0.5)" }}
-              onClick={() => navigate("/booking")}
-            >
-              Begin Your Journey →
-            </button>
-            <button
-              className="btn-ripple font-body text-sm tracking-widest uppercase px-12 py-5 rounded-full text-amber-200 border border-yellow-700/40 hover:bg-yellow-900/10 hover:border-yellow-500 transition-all"
-              onClick={handleCallCurator}
-            >
-              Speak to a Curator
-            </button>
+              onClick={() => navigate("/booking")}>Begin Your Journey →</button>
+            <button className="btn-ripple font-body text-sm tracking-widest uppercase px-12 py-5 rounded-full text-amber-200 border border-yellow-700/40 hover:bg-yellow-900/10 hover:border-yellow-500 transition-all" onClick={handleCallCurator}>Speak to a Curator</button>
           </div>
           <div className="mt-10 flex flex-wrap justify-center gap-6 text-stone-500">
             {["Free Cancellation","Instant Confirmation","No Hidden Fees","Private Transfer Included"].map((t) => (
@@ -892,13 +731,12 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* FOOTER — id="contact" for scroll target (FIX #15) */}
+      {/* FOOTER */}
       <footer id="contact" className="pt-20 pb-8 px-6 relative" style={{ background: "#060e07", borderTop: "1px solid rgba(201,168,76,0.15)" }}>
         <div className="max-w-screen-xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-16">
             <div className="lg:col-span-2">
               <div className="flex items-center gap-3 mb-4">
-                {/* FIX #10: logo.png in footer too */}
                 <img src="/logo.png" alt="Leonine" className="w-10 h-10 object-contain" />
                 <div>
                   <div className="font-display text-2xl text-amber-100 tracking-widest">LEONINE</div>
@@ -941,6 +779,15 @@ export default function HomePage() {
           </div>
         </div>
       </footer>
+<button
+        className="fb-float"
+        onClick={() => navigate("/feedback")}
+        title="Share your experience at Leonine"
+      >
+        <span className="fb-float-star">★</span>
+        Share Your Experience
+      </button>
+
     </div>
   );
 }
