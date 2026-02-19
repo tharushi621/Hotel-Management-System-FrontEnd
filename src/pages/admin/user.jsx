@@ -173,7 +173,7 @@ export default function AdminUser() {
                     value={t}
                     checked={selectedType === t}
                     onChange={() => setSelectedType(t)}
-                    className="accent-teal-500"
+                    className="accent-[#1e2d16]"
                   />
                   <span className="capitalize text-sm font-medium text-slate-700">{t}</span>
                 </label>
@@ -202,7 +202,7 @@ export default function AdminUser() {
         {/* Header — compact, no wasted space */}
         <div className="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between gap-4 flex-wrap">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-teal-500 flex items-center justify-center shadow-sm">
+            <div className="w-9 h-9 rounded-xl bg-[#1e2d16] flex items-center justify-center shadow-sm">
               <FaUsers className="text-white text-sm" />
             </div>
             <div>
@@ -226,8 +226,8 @@ export default function AdminUser() {
 
             {/* Stats pill */}
             <div className="flex items-center gap-2 bg-teal-50 border border-teal-100 rounded-xl px-4 py-2">
-              <span className="text-xs text-teal-600 font-medium">Total</span>
-              <span className="text-xl font-black text-teal-700 leading-none">{totalUsers}</span>
+              <span className="text-xs text-[#1e2d16] font-medium">Total</span>
+              <span className="text-xl font-black text-[#1e2d16] leading-none">{totalUsers}</span>
             </div>
           </div>
         </div>
@@ -254,7 +254,7 @@ export default function AdminUser() {
                   {loading ? (
                     <tr>
                       <td colSpan={9} className="text-center py-16">
-                        <div className="w-7 h-7 border-3 border-teal-400 border-t-transparent rounded-full animate-spin mx-auto" style={{ borderWidth: 3 }} />
+                        <div className="w-7 h-7 border-3 border-[#1e2d16] border-t-transparent rounded-full animate-spin mx-auto" style={{ borderWidth: 3 }} />
                         <p className="text-slate-400 text-xs mt-2">Loading users…</p>
                       </td>
                     </tr>
@@ -328,8 +328,8 @@ export default function AdminUser() {
                         {/* Status */}
                         <td className="px-4 py-3 text-center">
                           {user.disabled
-                            ? <span className="text-xs font-semibold text-red-500 bg-red-50 px-2 py-0.5 rounded-full border border-red-100">Disabled</span>
-                            : <span className="text-xs font-semibold text-teal-600 bg-teal-50 px-2 py-0.5 rounded-full border border-teal-100">Active</span>
+                            ? <span className="text-xs font-semibold text-red-700 bg-red-50 px-2 py-0.5 rounded-full border border-red-100">Disabled</span>
+                            : <span className="text-xs font-semibold text-[#1e2d16] bg-teal-50 px-2 py-0.5 rounded-full border border-teal-100">Active</span>
                           }
                         </td>
 
@@ -341,7 +341,7 @@ export default function AdminUser() {
                               title={user.disabled ? "Enable user" : "Disable user"}
                               className={`w-7 h-7 flex items-center justify-center rounded-lg transition-all text-xs
                                 ${user.disabled
-                                  ? "bg-teal-50 text-teal-500 hover:bg-teal-100 border border-teal-100"
+                                  ? "bg-teal-50 text-[#1e2d16] hover:bg-teal-100 border border-teal-100"
                                   : "bg-amber-50 text-amber-500 hover:bg-amber-100 border border-amber-100"}`}
                             >
                               {user.disabled ? <FaCheckCircle /> : <FaBan />}
@@ -349,14 +349,14 @@ export default function AdminUser() {
                             <button
                               onClick={() => openTypeModal(user)}
                               title="Change role"
-                              className="w-7 h-7 flex items-center justify-center rounded-lg bg-violet-50 text-violet-500 hover:bg-violet-100 border border-violet-100 transition-all text-xs"
+                              className="w-7 h-7 flex items-center justify-center rounded-lg bg-violet-50 text-[#1e2d16] hover:bg-violet-100 border border-violet-100 transition-all text-xs"
                             >
                               <FaUserCog />
                             </button>
                             <button
                               onClick={() => handleDelete(user._id, `${user.firstName} ${user.lastName}`)}
                               title="Delete user"
-                              className="w-7 h-7 flex items-center justify-center rounded-lg bg-red-50 text-red-400 hover:bg-red-100 border border-red-100 transition-all text-xs"
+                              className="w-7 h-7 flex items-center justify-center rounded-lg bg-red-50 text-red-700 hover:bg-red-100 border border-red-100 transition-all text-xs"
                             >
                               <FaTrash />
                             </button>
