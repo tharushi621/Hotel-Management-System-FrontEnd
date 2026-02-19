@@ -470,14 +470,14 @@ export default function Loginpage() {
             <div className="postmark">
               <div className="postmark-inner">
                 <span>Leonine Villa</span>
-                <span className="year">2025</span>
+                <span className="year">2026</span>
                 <span>Sri Lanka</span>
               </div>
             </div>
 
             <div className="stamp-corner">
-              <div className="stamp-inner">
-                <span className="stamp-lion">🦁</span>
+              <div className="stamp-inner"><img src="/logo.png" alt="Logo" className="stamp-lion" />
+
                 <span>LVN</span>
               </div>
             </div>
