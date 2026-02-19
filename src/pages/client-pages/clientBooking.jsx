@@ -2,9 +2,6 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-// FIX: category values now match exact DB room category strings
-// Previously "canopy", "ganga", "heritage" — matched nothing in Room collection
-// Now matches actual Room documents: "TREETOP LUXURY", "WATERSIDE RETREAT", "CULTURAL SANCTUARY"
 const ROOMS = [
   { id: "treetop",   category: "TREETOP LUXURY",    label: "Treetop Luxury Suite",     icon: "🌿", price: "from $480 / night" },
   { id: "waterside", category: "WATERSIDE RETREAT",  label: "Waterside Retreat Villa",  icon: "💧", price: "from $380 / night" },
@@ -15,6 +12,7 @@ const GUESTS = ["1 Guest", "2 Guests", "3 Guests", "4 Guests", "5+ Guests"];
 
 export default function BookingPage() {
   const navigate = useNavigate();
+
   const [form, setForm] = useState({
     name: "", email: "", phone: "",
     checkIn: "", checkOut: "",
@@ -33,6 +31,12 @@ export default function BookingPage() {
 
   function handleSubmit() {
     setError("");
+
+    const token = localStorage.getItem("token");
+    if (!token || token === "null" || token.trim() === "") {
+      navigate("/login", { state: { from: "/booking" } });
+      return;
+    }
 
     const required = ["name", "email", "checkIn", "checkOut", "room", "guests"];
     for (const key of required) {
@@ -68,11 +72,7 @@ export default function BookingPage() {
             form.requests ? `Requests: ${form.requests}` : null,
           ].filter(Boolean).join(" | "),
         },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       )
       .then((res) => {
         setBookingRef(res.data.result);
@@ -86,7 +86,8 @@ export default function BookingPage() {
         if (status === 409) {
           setError("No rooms are available for your selected dates in this sanctuary. Please try different dates or choose another.");
         } else if (status === 401 || status === 403) {
-          setError("Your session has expired — pray sign in once more.");
+          setError("Your session has expired — please sign in once more.");
+          setTimeout(() => navigate("/login", { state: { from: "/booking" } }), 1500);
         } else {
           setError(msg || "The courier has faltered — please try again presently.");
         }
@@ -319,6 +320,7 @@ export default function BookingPage() {
             </div>
 
             {success ? (
+              /* ── SUCCESS STATE ── */
               <div className="b-welcome">
                 <span className="b-welcome-icon">🌿</span>
                 <div className="b-welcome-title">Your Sanctuary Awaits</div>
@@ -375,7 +377,9 @@ export default function BookingPage() {
                   ✦ &nbsp; Return to the Estate &nbsp; ✦
                 </button>
               </div>
+
             ) : (
+              /* ── BOOKING FORM ── */
               <>
                 <p className="b-intro">
                   Dear Honoured Guest, pray inscribe your details in the form below
@@ -487,8 +491,6 @@ export default function BookingPage() {
                 <div className="b-back">
                   Changed your mind?{" "}
                   <button onClick={() => navigate("/")}>Return to the estate</button>
-                  {" "}or{" "}
-                  <button onClick={() => navigate("/login")}>sign in to your account</button>
                 </div>
               </>
             )}
