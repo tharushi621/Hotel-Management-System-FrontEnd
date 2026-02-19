@@ -418,7 +418,6 @@ export default function RoomsPage() {
       <section className="py-24 px-6 relative overflow-hidden" style={{background:"linear-gradient(135deg,#0d1f0f,#1a3a1e,#0d1a10)"}}>
         <div className="batik-bg absolute inset-0 pointer-events-none"></div>
         <div className="max-w-3xl mx-auto text-center">
-          <div className="anim-float text-4xl mb-6">🦁</div>
           <h2 className="font-display text-5xl md:text-6xl text-amber-50 font-medium mb-3">Your Room</h2>
           <h2 className="font-display text-5xl md:text-6xl font-light italic mb-8 anim-shimmer">Awaits You</h2>
           <p className="font-serif-light text-xl italic text-stone-400 font-light mb-12 max-w-xl mx-auto leading-relaxed">Only 6 retreats available at any one time. Each stay is personally curated.</p>
