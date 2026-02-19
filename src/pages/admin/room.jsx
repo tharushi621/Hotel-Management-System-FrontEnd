@@ -92,7 +92,7 @@ export default function AdminRoom() {
       {/* Header */}
       <div className="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between gap-4 flex-wrap">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-emerald-600 flex items-center justify-center shadow-sm">
+          <div className="w-9 h-9 rounded-xl bg-[#1e2d16] flex items-center justify-center shadow-sm">
             <FaBed className="text-white text-sm" />
           </div>
           <div>
@@ -103,8 +103,8 @@ export default function AdminRoom() {
 
         {/* Stats pill */}
         <div className="flex items-center gap-2 bg-emerald-50 border border-emerald-100 rounded-xl px-4 py-2 ml-auto">
-          <span className="text-xs text-emerald-600 font-medium">Total</span>
-          <span className="text-xl font-black text-emerald-700 leading-none">{rooms.length}</span>
+          <span className="text-xs text-[#1e2d16] font-medium">Total</span>
+          <span className="text-xl font-black text-[#1e2d16] leading-none">{rooms.length}</span>
         </div>
       </div>
 
@@ -115,7 +115,7 @@ export default function AdminRoom() {
             onClick={() => handleFilterChange("all")}
             className={`text-xs px-3 py-1.5 rounded-lg font-semibold transition-all
               ${filterCat === "all"
-                ? "bg-emerald-600 text-white shadow-sm"
+                ? "bg-[#1e2d16] text-white shadow-sm"
                 : "bg-slate-100 text-slate-500 hover:bg-slate-200"}`}
           >
             All Rooms
@@ -126,7 +126,7 @@ export default function AdminRoom() {
               onClick={() => handleFilterChange(cat)}
               className={`text-xs px-3 py-1.5 rounded-lg font-semibold transition-all capitalize
                 ${filterCat === cat
-                  ? "bg-emerald-600 text-white shadow-sm"
+                  ? "bg-[#1e2d16] text-white shadow-sm"
                   : "bg-slate-100 text-slate-500 hover:bg-slate-200"}`}
             >
               {cat}
@@ -157,7 +157,7 @@ export default function AdminRoom() {
                 {!isLoaded ? (
                   <tr>
                     <td colSpan={9} className="text-center py-16">
-                      <div className="w-7 h-7 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin mx-auto" />
+                      <div className="w-7 h-7 border-2 border-[#1e2d16] border-t-transparent rounded-full animate-spin mx-auto" />
                       <p className="text-slate-400 text-xs mt-2">Loading rooms…</p>
                     </td>
                   </tr>
@@ -168,7 +168,7 @@ export default function AdminRoom() {
                       <p className="text-sm">No rooms found</p>
                       <button
                         onClick={() => navigate("/admin/add-room")}
-                        className="mt-4 bg-emerald-600 text-white px-5 py-2 rounded-lg text-xs font-semibold hover:bg-emerald-700 transition-colors"
+                        className="mt-4 bg-[#1e2d16] text-white px-5 py-2 rounded-lg text-xs font-semibold hover:bg-[#1e2d16] transition-colors"
                       >
                         Add First Room
                       </button>
@@ -202,7 +202,7 @@ export default function AdminRoom() {
 
                       {/* Room ID */}
                       <td className="px-4 py-3">
-                        <span className="font-mono font-bold text-emerald-700 text-sm bg-emerald-50 border border-emerald-100 px-2 py-1 rounded-lg">
+                        <span className="font-mono font-bold text-[#1e2d16] text-sm bg-emerald-50 border border-emerald-100 px-2 py-1 rounded-lg">
                           #{room.roomId}
                         </span>
                       </td>
@@ -225,11 +225,11 @@ export default function AdminRoom() {
                       {/* Available */}
                       <td className="px-4 py-3 text-center">
                         {room.available ? (
-                          <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">
+                          <span className="inline-flex items-center gap-1 text-xs font-semibold text-[#1e2d16] bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">
                             <FaCheckCircle style={{ fontSize: 9 }} /> Available
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 text-xs font-semibold text-red-500 bg-red-50 px-2 py-0.5 rounded-full border border-red-100">
+                          <span className="inline-flex items-center gap-1 text-xs font-semibold text-red-700 bg-red-50 px-2 py-0.5 rounded-full border border-red-100">
                             <FaTimesCircle style={{ fontSize: 9 }} /> Unavailable
                           </span>
                         )}
@@ -255,7 +255,7 @@ export default function AdminRoom() {
                           <button
                             onClick={() => navigate("/admin/update-room", { state: room })}
                             title="Edit room"
-                            className="w-7 h-7 flex items-center justify-center rounded-lg bg-teal-50 text-teal-600 hover:bg-teal-100 border border-teal-100 transition-all text-xs"
+                            className="w-7 h-7 flex items-center justify-center rounded-lg bg-teal-50 text-[#1e2d16] hover:bg-teal-100 border border-[#1e2d16] transition-all text-xs"
                           >
                             <FaEdit />
                           </button>
@@ -297,7 +297,7 @@ export default function AdminRoom() {
                 onClick={() => setCurrentPage(pg)}
                 className={`w-8 h-8 rounded-lg font-semibold transition-all text-xs
                   ${pg === currentPage
-                    ? "bg-emerald-600 text-white shadow-sm"
+                    ? "bg-[#1e2d16] text-white shadow-sm"
                     : "bg-slate-50 text-slate-500 hover:bg-slate-100 border border-slate-200"}`}
               >
                 {pg}
@@ -317,7 +317,7 @@ export default function AdminRoom() {
       {/* Floating Add Button */}
       <button
         onClick={() => navigate("/admin/add-room")}
-        className="fixed bottom-8 right-8 bg-emerald-600 hover:bg-emerald-500 text-white w-14 h-14 rounded-full shadow-xl flex items-center justify-center hover:scale-110 transition-all"
+        className="fixed bottom-8 right-8 bg-[#1e2d16] hover:bg-[#1e2d16] text-white w-14 h-14 rounded-full shadow-xl flex items-center justify-center hover:scale-110 transition-all"
         title="Add new room"
       >
         <FaPlus className="text-lg" />
