@@ -16,6 +16,8 @@ export default function SignupPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [inkFocus, setInkFocus] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
 
   function handleChange(e) {
@@ -25,7 +27,6 @@ export default function SignupPage() {
   function handleSignup() {
     setError("");
 
-    // Required field validation
     if (!form.firstName || !form.lastName || !form.email || !form.password || !form.phone || !form.whatsApp) {
       setError("Pray complete all required fields before sealing the register.");
       return;
@@ -63,16 +64,6 @@ export default function SignupPage() {
         setLoading(false);
       });
   }
-
-  const fields = [
-    { name: "firstName",       label: "First Name",                 placeholder: "e.g. James",             type: "text",     required: true  },
-    { name: "lastName",        label: "Last Name & Title",          placeholder: "e.g. Perera",            type: "text",     required: true  },
-    { name: "email",           label: "Electronic Correspondence",  placeholder: "your.name@post.com",     type: "email",    required: true  },
-    { name: "phone",           label: "Calling Number",             placeholder: "+94 77 000 0000",        type: "tel",      required: true  },
-    { name: "whatsApp",        label: "WhatsApp Number",            placeholder: "+94 77 000 0000",        type: "tel",      required: true  },
-    { name: "password",        label: "Secret Passphrase",          placeholder: "··········",             type: "password", required: true  },
-    { name: "confirmPassword", label: "Re-inscribe Passphrase",     placeholder: "··········",             type: "password", required: true  },
-  ];
 
   return (
     <>
@@ -184,7 +175,6 @@ export default function SignupPage() {
         .rd-rule { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, #8b603088, transparent); }
         .rd-diamond { width: 5px; height: 5px; background: var(--gold); transform: rotate(45deg); opacity: 0.65; flex-shrink: 0; }
 
-        /* Two-column row for side-by-side fields */
         .field-row {
           display: grid; grid-template-columns: 1fr 1fr; gap: 0 18px;
           position: relative; z-index: 1;
@@ -206,18 +196,36 @@ export default function SignupPage() {
         }
         .field-wrap.focused .ink-dot-r { opacity: 0.3; }
 
+        /* Password field wrapper to hold input + toggle */
+        .pw-input-wrap {
+          position: relative; display: flex; align-items: center;
+        }
+
         .ink-field-r {
           width: 100%; background: transparent;
           border: none; border-bottom: 1.5px solid #a07838bb;
           outline: none;
           font-family: 'IM Fell English', serif; font-style: italic;
           font-size: 0.94rem; color: var(--ink);
-          padding: 4px 2px 5px;
+          padding: 4px 26px 5px 2px;
           transition: border-color 0.3s; letter-spacing: 0.02em;
           box-sizing: border-box;
         }
         .ink-field-r::placeholder { color: #a0845566; font-style: italic; font-size: 0.83rem; }
         .ink-field-r:focus { border-bottom-color: var(--ink); }
+
+        /* Eye toggle button */
+        .pw-toggle {
+          position: absolute; right: 2px; bottom: 5px;
+          background: none; border: none; padding: 0;
+          cursor: pointer; display: flex; align-items: center; justify-content: center;
+          color: #a07838aa;
+          transition: color 0.2s, transform 0.15s;
+          z-index: 2; line-height: 1;
+        }
+        .pw-toggle:hover { color: var(--ink-faded); transform: scale(1.15); }
+        .pw-toggle:active { transform: scale(0.95); }
+        .pw-toggle svg { width: 15px; height: 15px; display: block; }
 
         .reg-error {
           font-family: 'IM Fell English', serif; font-style: italic;
@@ -432,8 +440,8 @@ export default function SignupPage() {
                 {/* Password + Confirm Password side by side */}
                 <div className="field-row">
                   {[
-                    { name: "password",        label: "Secret Passphrase",    placeholder: "··········" },
-                    { name: "confirmPassword", label: "Re-inscribe Passphrase", placeholder: "··········" },
+                    { name: "password",        label: "Secret Passphrase",      show: showPassword,        setShow: setShowPassword        },
+                    { name: "confirmPassword", label: "Re-inscribe Passphrase", show: showConfirmPassword, setShow: setShowConfirmPassword },
                   ].map((f) => (
                     <div key={f.name}>
                       <label className="field-label">
@@ -441,17 +449,41 @@ export default function SignupPage() {
                       </label>
                       <div className={`field-wrap ${inkFocus === f.name ? "focused" : ""}`}>
                         <div className="ink-dot-r" />
-                        <input
-                          type="password"
-                          name={f.name}
-                          placeholder={f.placeholder}
-                          className="ink-field-r"
-                          value={form[f.name]}
-                          onChange={handleChange}
-                          onFocus={() => setInkFocus(f.name)}
-                          onBlur={() => setInkFocus(null)}
-                          autoComplete="new-password"
-                        />
+                        <div className="pw-input-wrap">
+                          <input
+                            type={f.show ? "text" : "password"}
+                            name={f.name}
+                            placeholder="··········"
+                            className="ink-field-r"
+                            value={form[f.name]}
+                            onChange={handleChange}
+                            onFocus={() => setInkFocus(f.name)}
+                            onBlur={() => setInkFocus(null)}
+                            autoComplete="new-password"
+                          />
+                          <button
+                            type="button"
+                            className="pw-toggle"
+                            onClick={() => f.setShow((v) => !v)}
+                            tabIndex={-1}
+                            title={f.show ? "Conceal passphrase" : "Reveal passphrase"}
+                          >
+                            {f.show ? (
+                              /* Eye-off icon */
+                              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+                                <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+                                <line x1="1" y1="1" x2="23" y2="23"/>
+                              </svg>
+                            ) : (
+                              /* Eye icon */
+                              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                              </svg>
+                            )}
+                          </button>
+                        </div>
                       </div>
                     </div>
                   ))}
