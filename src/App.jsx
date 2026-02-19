@@ -12,6 +12,7 @@ import CategoriesPage from "./pages/client-pages/categories.jsx";
 import LeonineSplash from "./components/LeonineSplash.jsx";
 import GalleryPage from "./pages/client-pages/galleryPage.jsx";
 import FeedbackPage from "./pages/client-pages/feedbackForm.jsx";
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 function App() {
   const [showSplash, setShowSplash] = useState(false);
@@ -38,8 +39,22 @@ function App() {
           <Routes>
             <Route path="/login" element={<Loginpage />} />
             <Route path="/signup" element={<SignupPage />} />
-            <Route path="/booking" element={<BookingPage />} />
-            <Route path="/feedback" element={<FeedbackPage />} /> {/* FIX: added missing route */}
+            <Route
+              path="/booking"
+              element={
+                <ProtectedRoute>
+                  <BookingPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/feedback"
+              element={
+                <ProtectedRoute>
+                  <FeedbackPage />
+                </ProtectedRoute>
+              }
+            />
             <Route path="/retreats" element={<CategoriesPage />} />
             <Route path="/rooms" element={<RoomsPage />} />
             <Route path="/gallery" element={<GalleryPage />} />
