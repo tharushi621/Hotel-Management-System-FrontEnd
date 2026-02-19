@@ -22,8 +22,6 @@ export default function AddRoomForm() {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    // ✅ FIX 1: was /api/category (singular + wrong) → /api/categories
-    // ✅ FIX 2: was res.data.categories → res.data.list (backend returns { list: result })
     axios
       .get(`${import.meta.env.VITE_BACKEND_URL}/api/categories`)
       .then((res) => setCategories(res.data.list || []))
@@ -60,128 +58,210 @@ export default function AddRoomForm() {
     }
   };
 
-  const inputClass = "w-full bg-emerald-950/60 border border-emerald-700/50 text-emerald-100 placeholder-emerald-600 rounded-xl px-4 py-3 outline-none focus:border-emerald-400 focus:bg-emerald-950/80 transition-all text-sm";
-  const labelClass = "block text-xs font-semibold text-emerald-400 uppercase tracking-widest mb-2";
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-950 via-emerald-950 to-teal-950 p-6 flex items-center justify-center">
-      <div className="w-full max-w-2xl">
+    <>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=Jost:wght@300;400;500;600&display=swap');
+        .lv-add-page { font-family: 'Jost', sans-serif; background: #f5f0e8; min-height: 100vh; }
+        .lv-add-display { font-family: 'Playfair Display', serif; }
+        .lv-add-input {
+          width: 100%; box-sizing: border-box;
+          background: #fff;
+          border: 1px solid #d4c9b0;
+          color: #2d3b2e;
+          border-radius: 8px;
+          padding: 10px 14px;
+          outline: none;
+          font-family: 'Jost', sans-serif;
+          font-size: 0.875rem;
+          transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .lv-add-input:focus {
+          border-color: #c9a84c;
+          box-shadow: 0 0 0 3px rgba(201,168,76,0.12);
+        }
+        .lv-add-label {
+          display: block;
+          font-family: 'Jost', sans-serif;
+          font-size: 0.65rem;
+          font-weight: 600;
+          letter-spacing: 0.15em;
+          text-transform: uppercase;
+          color: #5a7a5c;
+          margin-bottom: 6px;
+        }
+        .lv-add-divider {
+          height: 1px;
+          background: linear-gradient(90deg, transparent, #c9a84c55, transparent);
+          margin: 22px 0;
+        }
+        .lv-add-cancel-btn:hover { background: #f5f0e8 !important; }
+        .lv-add-submit-btn:hover { opacity: 0.88; }
+        .lv-add-upload-zone:hover {
+          border-color: #c9a84c !important;
+          background: #fdf9f1 !important;
+        }
+      `}</style>
 
-        {/* Header */}
-        <div className="relative overflow-hidden bg-gradient-to-r from-emerald-800 via-green-800 to-teal-800 rounded-t-2xl shadow-2xl p-8 border border-emerald-700/40">
-          <div className="absolute inset-0 opacity-5" style={{ backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 39px, #6ee7b7 40px), repeating-linear-gradient(90deg, transparent, transparent 39px, #6ee7b7 40px)" }} />
-          <div className="relative flex items-center gap-4">
-            <span className="bg-emerald-600/40 p-3 rounded-xl text-2xl">🛏️</span>
-            <div>
-              <h2 className="text-2xl font-black text-white tracking-tight">Add New Room</h2>
-              <p className="text-emerald-300 text-sm mt-0.5">Fill in the details to create a new room</p>
+      <div className="lv-add-page">
+        <div style={{ maxWidth: 680, margin: "0 auto", padding: "40px 16px 60px" }}>
+
+          {/* Page header */}
+          <div style={{ marginBottom: 28 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
+              <div style={{ height: 1, width: 28, background: "linear-gradient(90deg,#c9a84c,#d4891a)" }}></div>
+              <span style={{ fontSize: "0.6rem", letterSpacing: "0.35em", textTransform: "uppercase", color: "#9a7c3c", fontFamily: "'Jost',sans-serif" }}>Admin · Room Management</span>
             </div>
+            <h1 className="lv-add-display" style={{ fontSize: "1.9rem", color: "#1a3a1e", fontWeight: 500, margin: 0 }}>Add New Room</h1>
+            <p style={{ color: "#7a8c7a", fontSize: "0.83rem", marginTop: 5, fontFamily: "'Jost',sans-serif" }}>Register a new retreat space at Leonine Villa.</p>
           </div>
-        </div>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="bg-emerald-950/80 border border-emerald-800/50 border-t-0 rounded-b-2xl shadow-2xl p-8 space-y-6">
+          {/* Card */}
+          <div style={{ background: "#fff", border: "1px solid #e2d9c8", borderRadius: 14, boxShadow: "0 2px 20px rgba(26,58,30,0.07)", overflow: "hidden" }}>
 
-          {/* Room ID + Category */}
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className={labelClass}>Room ID <span className="text-red-400">*</span></label>
-              <input type="number" value={roomId} onChange={(e) => setRoomId(e.target.value)}
-                placeholder="e.g. 101" className={inputClass} required />
-            </div>
-            <div>
-              <label className={labelClass}>Category <span className="text-red-400">*</span></label>
-              <select value={category} onChange={(e) => setCategory(e.target.value)} className={inputClass} required>
-                <option value="" className="bg-emerald-950">Select category</option>
-                {categories.map((cat) => (
-                  <option key={cat._id} value={cat.name} className="bg-emerald-950">
-                    {cat.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          {/* Max Guests + Available */}
-          <div className="grid grid-cols-2 gap-4 items-end">
-            <div>
-              <label className={labelClass}>Max Guests</label>
-              <input type="number" value={maxGuests} onChange={(e) => setMaxGuests(e.target.value)}
-                min={1} className={inputClass} />
-            </div>
-            <div>
-              <label className={labelClass}>Availability</label>
-              <button type="button" onClick={() => setAvailable(!available)}
-                className={`w-full flex items-center justify-center gap-2 py-3 rounded-xl border font-semibold text-sm transition-all
-                  ${available
-                    ? "bg-emerald-700/30 border-emerald-500/50 text-emerald-300 hover:bg-emerald-700/40"
-                    : "bg-red-900/20 border-red-500/30 text-red-400 hover:bg-red-900/30"}`}>
-                {available ? "✅ Available" : "❌ Unavailable"}
-              </button>
-            </div>
-          </div>
-
-          {/* Photos */}
-          <div>
-            <label className={labelClass}>Photos</label>
-            <label className="flex flex-col items-center justify-center w-full border-2 border-dashed border-emerald-700/60 hover:border-emerald-500 rounded-xl p-6 text-center cursor-pointer bg-emerald-950/40 hover:bg-emerald-900/30 transition-all">
-              <input type="file" accept="image/*" onChange={handlePhotoUpload} className="hidden" />
-              <div className="bg-emerald-800/40 p-4 rounded-full mb-3">
-                <FaUpload className="text-emerald-400 text-xl" />
+            {/* Card top strip */}
+            <div style={{ background: "linear-gradient(135deg,#1a3a1e 0%,#2e5c35 100%)", padding: "18px 26px", display: "flex", alignItems: "center", gap: 12 }}>
+              <span style={{ fontSize: "1.2rem" }}>🛏️</span>
+              <div>
+                <div className="lv-add-display" style={{ color: "#f5f0e8", fontSize: "1rem", fontWeight: 500 }}>Room Details</div>
+                <div style={{ color: "rgba(201,168,76,0.7)", fontSize: "0.62rem", letterSpacing: "0.22em", textTransform: "uppercase", fontFamily: "'Jost',sans-serif" }}>Leonine Villa & Sanctuary</div>
               </div>
-              <p className="text-emerald-300 font-semibold text-sm">
-                {photoUploading ? "Uploading..." : "Click to upload photo"}
-              </p>
-              <p className="text-emerald-600 text-xs mt-1">PNG, JPG or WEBP</p>
-            </label>
-            {photos.length > 0 && (
-              <div className="flex gap-3 mt-4 flex-wrap">
-                {photos.map((p, idx) => (
-                  <div key={idx} className="relative w-28 h-28 rounded-xl overflow-hidden border-2 border-emerald-700/40">
-                    <img src={p} alt={`Room ${idx}`} className="w-full h-full object-cover" />
-                    <button type="button" onClick={() => setPhotos((prev) => prev.filter((_, i) => i !== idx))}
-                      className="absolute top-1 right-1 bg-red-500/80 hover:bg-red-500 text-white p-1 rounded-full transition-colors">
-                      <FaTimes className="text-xs" />
-                    </button>
+            </div>
+
+            <form onSubmit={handleSubmit} style={{ padding: "26px 28px" }}>
+
+              {/* Room ID + Category */}
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 16 }}>
+                <div>
+                  <label className="lv-add-label">Room ID <span style={{ color: "#c0392b" }}>*</span></label>
+                  <input type="number" value={roomId} onChange={(e) => setRoomId(e.target.value)}
+                    placeholder="e.g. 101" className="lv-add-input" required />
+                </div>
+                <div>
+                  <label className="lv-add-label">Category <span style={{ color: "#c0392b" }}>*</span></label>
+                  <select value={category} onChange={(e) => setCategory(e.target.value)} className="lv-add-input" required>
+                    <option value="">Select category</option>
+                    {categories.map((cat) => (
+                      <option key={cat._id} value={cat.name}>{cat.name}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              {/* Max Guests + Availability */}
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 16 }}>
+                <div>
+                  <label className="lv-add-label">Max Guests</label>
+                  <input type="number" value={maxGuests} onChange={(e) => setMaxGuests(e.target.value)}
+                    min={1} className="lv-add-input" />
+                </div>
+                <div>
+                  <label className="lv-add-label">Availability</label>
+                  <button type="button" onClick={() => setAvailable(!available)} style={{
+                    width: "100%", padding: "10px 14px", borderRadius: 8, border: "1px solid",
+                    fontFamily: "'Jost',sans-serif", fontSize: "0.83rem", fontWeight: 500, cursor: "pointer",
+                    transition: "all 0.2s",
+                    background: available ? "#edf7ee" : "#fff5f5",
+                    borderColor: available ? "#7cad7a" : "#f5c6c6",
+                    color: available ? "#2e5c35" : "#b91c1c",
+                  }}>
+                    {available ? "✓  Available" : "✗  Unavailable"}
+                  </button>
+                </div>
+              </div>
+
+              <div className="lv-add-divider"></div>
+
+              {/* Photos */}
+              <div style={{ marginBottom: 16 }}>
+                <label className="lv-add-label">Room Photos</label>
+                <label className="lv-add-upload-zone" style={{
+                  display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+                  border: "2px dashed #d4c9b0", borderRadius: 10, padding: "22px", cursor: "pointer",
+                  background: "#fafaf7", transition: "all 0.2s",
+                }}>
+                  <input type="file" accept="image/*" onChange={handlePhotoUpload} style={{ display: "none" }} />
+                  <div style={{ background: "#f0ebe0", borderRadius: "50%", padding: 10, marginBottom: 8 }}>
+                    <FaUpload style={{ color: "#9a7c3c", fontSize: "0.95rem" }} />
                   </div>
-                ))}
+                  <p style={{ color: "#5a7a5c", fontWeight: 500, fontSize: "0.82rem", margin: 0 }}>
+                    {photoUploading ? "Uploading…" : "Click to upload a photo"}
+                  </p>
+                  <p style={{ color: "#b0a890", fontSize: "0.7rem", marginTop: 3 }}>PNG, JPG or WEBP</p>
+                </label>
+
+                {photos.length > 0 && (
+                  <div style={{ display: "flex", gap: 10, marginTop: 12, flexWrap: "wrap" }}>
+                    {photos.map((p, idx) => (
+                      <div key={idx} style={{ position: "relative", width: 84, height: 84, borderRadius: 8, overflow: "hidden", border: "1px solid #d4c9b0" }}>
+                        <img src={p} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                        <button type="button" onClick={() => setPhotos((prev) => prev.filter((_, i) => i !== idx))}
+                          style={{ position: "absolute", top: 3, right: 3, background: "rgba(180,30,30,0.85)", border: "none", borderRadius: "50%", padding: "3px 5px", cursor: "pointer", color: "#fff", lineHeight: 1 }}>
+                          <FaTimes style={{ fontSize: "0.55rem" }} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
-            )}
+
+              {/* Special Description */}
+              <div style={{ marginBottom: 16 }}>
+                <label className="lv-add-label">Special Description</label>
+                <textarea value={specialDescription} onChange={(e) => setSpecialDescription(e.target.value)}
+                  rows={3} placeholder="Describe what makes this retreat special…"
+                  className="lv-add-input" style={{ resize: "none" }} />
+              </div>
+
+              {/* Notes */}
+              <div style={{ marginBottom: 8 }}>
+                <label className="lv-add-label">Internal Notes</label>
+                <textarea value={notes} onChange={(e) => setNotes(e.target.value)}
+                  rows={2} placeholder="Notes for admin reference only…"
+                  className="lv-add-input" style={{ resize: "none" }} />
+              </div>
+
+              <div className="lv-add-divider"></div>
+
+              {/* Actions */}
+              <div style={{ display: "flex", gap: 10 }}>
+                <button type="button" onClick={() => navigate("/admin/rooms")}
+                  className="lv-add-cancel-btn"
+                  style={{
+                    flex: 1, padding: "11px", borderRadius: 8,
+                    border: "1px solid #d4c9b0", background: "#fff",
+                    color: "#5a7a5c", fontFamily: "'Jost',sans-serif",
+                    fontSize: "0.72rem", letterSpacing: "0.12em", textTransform: "uppercase",
+                    cursor: "pointer", fontWeight: 500, transition: "all 0.2s"
+                  }}>
+                  Cancel
+                </button>
+                <button type="submit" disabled={isLoading || photoUploading}
+                  className="lv-add-submit-btn"
+                  style={{
+                    flex: 2, padding: "11px", borderRadius: 8,
+                    background: isLoading || photoUploading ? "#a8c8a0" : "linear-gradient(135deg,#1a3a1e 0%,#2e5c35 100%)",
+                    border: "none", color: "#f5f0e8",
+                    fontFamily: "'Jost',sans-serif", fontSize: "0.72rem",
+                    letterSpacing: "0.12em", textTransform: "uppercase",
+                    cursor: isLoading || photoUploading ? "not-allowed" : "pointer",
+                    fontWeight: 600, display: "flex", alignItems: "center",
+                    justifyContent: "center", gap: 8, transition: "opacity 0.2s",
+                    boxShadow: "0 3px 14px rgba(26,58,30,0.22)"
+                  }}>
+                  <FaPlusCircle style={{ fontSize: "0.8rem" }} />
+                  {isLoading || photoUploading ? "Saving…" : "Add Room"}
+                </button>
+              </div>
+
+            </form>
           </div>
 
-          {/* Special Description */}
-          <div>
-            <label className={labelClass}>Special Description</label>
-            <textarea value={specialDescription} onChange={(e) => setSpecialDescription(e.target.value)}
-              rows={3} placeholder="Describe what makes this room special..."
-              className={`${inputClass} resize-none`} />
-          </div>
-
-          {/* Notes */}
-          <div>
-            <label className={labelClass}>Notes</label>
-            <textarea value={notes} onChange={(e) => setNotes(e.target.value)}
-              rows={3} placeholder="Internal notes about this room..."
-              className={`${inputClass} resize-none`} />
-          </div>
-
-          <div className="h-px bg-emerald-800/50" />
-
-          {/* Actions */}
-          <div className="flex gap-3">
-            <button type="button" onClick={() => navigate("/admin/rooms")}
-              className="flex-1 py-3 rounded-xl border border-emerald-700/50 text-emerald-400 hover:bg-emerald-900/40 transition-all font-semibold text-sm">
-              Cancel
-            </button>
-            <button type="submit" disabled={isLoading || photoUploading}
-              className="flex-1 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold text-sm transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-900/50">
-              <FaPlusCircle />
-              {isLoading || photoUploading ? "Saving..." : "Add Room"}
-            </button>
-          </div>
-
-        </form>
+          <p style={{ textAlign: "center", color: "#c0b090", fontSize: "0.65rem", marginTop: 18, letterSpacing: "0.12em", fontFamily: "'Jost',sans-serif" }}>
+            LEONINE VILLA & SANCTUARY · Admin Panel
+          </p>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
