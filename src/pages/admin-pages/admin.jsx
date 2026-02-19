@@ -50,10 +50,21 @@ async function fetchRecentBookings() {
     });
     if (!res.ok) return [];
     const data = await res.json();
-    // AdminBooking uses res.data.result
     const arr = data.result ?? data.bookings ?? (Array.isArray(data) ? data : []);
     return [...arr].reverse().slice(0, 8);
   } catch { return []; }
+}
+
+// Get admin info from token in localStorage
+function getAdminFromToken() {
+  try {
+    const t = token();
+    if (!t || t === "null") return null;
+    const payload = JSON.parse(atob(t.split(".")[1]));
+    return payload;
+  } catch {
+    return null;
+  }
 }
 
 export default function AdminPage() {
@@ -62,6 +73,7 @@ export default function AdminPage() {
   const [stats, setStats]                   = useState({ bookings: "…", rooms: "…", users: "…", rating: "…" });
   const [recentBookings, setRecentBookings] = useState([]);
   const [loadingStats, setLoadingStats]     = useState(true);
+  const [adminInfo, setAdminInfo]           = useState(null);
 
   const location = useLocation();
   const navigate  = useNavigate();
@@ -71,17 +83,19 @@ export default function AdminPage() {
     return () => clearInterval(t);
   }, []);
 
+  // Get admin name from token
+  useEffect(() => {
+    const info = getAdminFromToken();
+    setAdminInfo(info);
+  }, []);
+
   useEffect(() => {
     (async () => {
       setLoadingStats(true);
       const [bookings, rooms, users, rating, recent] = await Promise.all([
-        // AdminBooking: res.data.result array
         fetchStat("/api/bookings", (d) => (d.result ?? []).length),
-        // AdminRoom: res.data.rooms array
         fetchStat("/api/rooms",    (d) => (d.rooms ?? []).length),
-        // AdminUser: res.data.totalUsers number
         fetchStat("/api/users/all?page=1&limit=1", (d) => d.totalUsers ?? "—"),
-        // AdminFeedback: res.data.result array — compute avg
         fetchStat("/api/feedbacks", (d) => {
           const arr = d.result ?? [];
           if (!arr.length) return "—";
@@ -99,8 +113,15 @@ export default function AdminPage() {
   const fmt       = (d) => d.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true });
   const fmtDate   = (d) => d.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
   const isActive      = (p) => location.pathname === p;
-  const isOnDashboard = navItems.every((n) => !location.pathname.startsWith(n.to));
+  const isOnDashboard = location.pathname === "/admin";
   const activeLabel   = navItems.find((n) => location.pathname.startsWith(n.to))?.label ?? "Dashboard";
+
+  // Derive admin display name and initial
+  const adminFirstName  = adminInfo?.firstName || adminInfo?.name || "Admin";
+  const adminLastName   = adminInfo?.lastName || "";
+  const adminFullName   = adminLastName ? `${adminFirstName} ${adminLastName}` : adminFirstName;
+  const adminInitial    = adminFirstName.charAt(0).toUpperCase();
+  const adminEmail      = adminInfo?.email || "";
 
   const quickStats = [
     { label: "Total Bookings",   value: stats.bookings, icon: <FaBookmark />, rgb: "201,168,76" },
@@ -108,6 +129,11 @@ export default function AdminPage() {
     { label: "Registered Users", value: stats.users,    icon: <FaUser />,     rgb: "212,137,26" },
     { label: "Avg Rating",       value: stats.rating,   icon: <FaComments />, rgb: "201,168,76" },
   ];
+
+  const handleSignOut = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
 
   return (
     <div style={{ width: "100%", height: "100vh", display: "flex", overflow: "hidden", background: "#060e07", fontFamily: "'Jost',sans-serif" }}>
@@ -153,6 +179,8 @@ export default function AdminPage() {
         .bc span { color:rgba(201,168,76,0.75); }
         .sec-title { font-family:'Playfair Display',serif; font-size:1rem; color:#f5f0e8; font-weight:500; }
         .sec-label { font-size:8px; letter-spacing:0.35em; text-transform:uppercase; color:rgba(201,168,76,0.5); font-weight:500; }
+        .sign-out-btn { background:none; border:none; cursor:pointer; padding:4px; transition:all 0.2s; border-radius:4px; }
+        .sign-out-btn:hover { color:#e57373 !important; }
       `}</style>
 
       {/* ══ SIDEBAR ══ */}
@@ -173,12 +201,17 @@ export default function AdminPage() {
         </div>
 
         {/* Dashboard link */}
-        <div style={{ padding:"10px 10px 0" }}>
-          <button onClick={() => navigate("/admin")} className={`ni ${isOnDashboard ? "act" : ""}`} title={collapsed ? "Dashboard" : undefined}>
-            <span className="ni-icon" style={{ color: isOnDashboard ? "#c9a84c" : "inherit" }}><FaHome /></span>
-            {!collapsed && <span className="ni-label">Dashboard</span>}
-          </button>
-        </div>
+<div style={{ padding:"10px 10px 0" }}>
+  <button onClick={() => navigate("/admin")} className={`ni ${isOnDashboard ? "act" : ""}`} title={collapsed ? "Dashboard" : undefined}>
+    <span className="ni-icon" style={{ color: isOnDashboard ? "#c9a84c" : "inherit" }}><FaHome /></span>
+    {!collapsed && <span className="ni-label">Dashboard</span>}
+  </button>
+  <button onClick={() => navigate("/")} className="ni" title={collapsed ? "Visit Site" : undefined}>
+    <span className="ni-icon" style={{ color: "rgba(124,173,122,0.75)" }}>↗</span>
+    {!collapsed && <span className="ni-label" style={{ color: "rgba(124,173,122,0.75)" }}>Visit Site</span>}
+  </button>
+</div>
+<div style={{ padding:"0 10px" }}><div className="gold-div" /></div>
         <div style={{ padding:"0 10px" }}><div className="gold-div" /></div>
 
         {/* Modules */}
@@ -192,7 +225,7 @@ export default function AdminPage() {
           ))}
         </nav>
 
-        {/* Clock + Profile */}
+        {/* Clock + Profile — shows ADMIN NAME from token */}
         <div style={{ padding:"10px", borderTop:"1px solid rgba(201,168,76,0.08)", display:"flex", flexDirection:"column", gap:"8px" }}>
           <div style={{ background:"rgba(201,168,76,0.05)", border:"1px solid rgba(201,168,76,0.12)", borderRadius:"12px", padding: collapsed ? "9px 7px" : "9px 13px", display:"flex", alignItems:"center", gap:"9px" }}>
             <FaClock style={{ color:"rgba(201,168,76,0.55)", fontSize:"12px", flexShrink:0 }} />
@@ -204,14 +237,26 @@ export default function AdminPage() {
             )}
           </div>
           <div style={{ background:"linear-gradient(135deg,rgba(201,168,76,0.08),rgba(26,58,30,0.4))", border:"1px solid rgba(201,168,76,0.15)", borderRadius:"12px", padding: collapsed ? "9px 7px" : "9px 13px", display:"flex", alignItems:"center", gap:"9px" }}>
-            <div style={{ width:"30px", height:"30px", flexShrink:0, background:"linear-gradient(135deg,#c9a84c,#d4891a)", borderRadius:"50%", display:"flex", alignItems:"center", justifyContent:"center", fontSize:"12px", fontWeight:700, color:"#0d1f0f", boxShadow:"0 2px 10px rgba(201,168,76,0.3)" }}>A</div>
+            {/* Avatar with admin initial */}
+            <div style={{ width:"30px", height:"30px", flexShrink:0, background:"linear-gradient(135deg,#c9a84c,#d4891a)", borderRadius:"50%", display:"flex", alignItems:"center", justifyContent:"center", fontSize:"12px", fontWeight:700, color:"#0d1f0f", boxShadow:"0 2px 10px rgba(201,168,76,0.3)" }}>
+              {adminInitial}
+            </div>
             {!collapsed && (
               <>
                 <div style={{ flex:1, overflow:"hidden" }}>
-                  <div style={{ fontSize:"11px", fontWeight:600, color:"#f5f0e8" }}>Admin</div>
-                  <div style={{ fontSize:"8px", color:"rgba(201,168,76,0.45)", letterSpacing:"0.15em", textTransform:"uppercase" }}>Resort Manager</div>
+                  {/* Admin name from token — not hardcoded "Resort Manager" */}
+                  <div style={{ fontSize:"11px", fontWeight:600, color:"#f5f0e8", whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{adminFullName}</div>
+                  <div style={{ fontSize:"8px", color:"rgba(201,168,76,0.45)", letterSpacing:"0.15em", textTransform:"uppercase", whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>
+                    {adminEmail || "Administrator"}
+                  </div>
                 </div>
-                <FaSignOutAlt style={{ color:"rgba(201,168,76,0.3)", fontSize:"11px", cursor:"pointer", flexShrink:0 }} />
+                <button
+                  className="sign-out-btn"
+                  title="Sign out"
+                  onClick={handleSignOut}
+                >
+                  <FaSignOutAlt style={{ color:"rgba(201,168,76,0.3)", fontSize:"11px" }} />
+                </button>
               </>
             )}
           </div>
@@ -247,7 +292,10 @@ export default function AdminPage() {
                 <div style={{ position:"relative", zIndex:1 }}>
                   <div style={{ fontSize:"8px", letterSpacing:"0.4em", textTransform:"uppercase", color:"rgba(201,168,76,0.5)", marginBottom:"8px" }}>Resort Management System</div>
                   <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:"1.9rem", color:"#f5f0e8", fontWeight:500, marginBottom:"7px", lineHeight:1.2 }}>
-                    Welcome back, <span style={{ background:"linear-gradient(135deg,#c9a84c,#f0d080)", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent" }}>Admin</span>
+                    Welcome back,{" "}
+                    <span style={{ background:"linear-gradient(135deg,#c9a84c,#f0d080)", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent" }}>
+                      {adminFirstName}
+                    </span>
                   </h1>
                   <p style={{ fontSize:"12px", color:"rgba(200,190,175,0.55)", maxWidth:"460px", lineHeight:1.75 }}>
                     Live data from your MongoDB database. All stats update on each visit.
