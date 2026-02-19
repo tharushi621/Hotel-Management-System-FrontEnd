@@ -56,7 +56,7 @@ export default function AdminFeedback() {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       toast.success("Feedback deleted.");
-      // FIX: update local state directly, no need to refetch
+    
       setFeedbacks((prev) => prev.filter((f) => f._id !== id));
     } catch {
       toast.error("Error deleting feedback.");
@@ -72,7 +72,7 @@ export default function AdminFeedback() {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       toast.success(`Feedback marked as ${newStatus}.`);
-      // FIX: update local state directly instead of setIsLoaded(false) which triggers full refetch
+      
       setFeedbacks((prev) =>
         prev.map((f) => (f._id === id ? { ...f, status: newStatus } : f))
       );
@@ -102,10 +102,10 @@ export default function AdminFeedback() {
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col" style={{ fontFamily: "'Inter', sans-serif" }}>
 
-      {/* Header — matches AdminUser / AdminBooking pattern */}
+     
       <div className="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between gap-4 flex-wrap">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-teal-500 flex items-center justify-center shadow-sm">
+          <div className="w-9 h-9 rounded-xl bg-[#1e2d16] flex items-center justify-center shadow-sm">
             <FaCommentAlt className="text-white text-sm" />
           </div>
           <div>
@@ -114,10 +114,9 @@ export default function AdminFeedback() {
           </div>
         </div>
 
-        {/* Stats pill */}
         <div className="flex items-center gap-2 bg-teal-50 border border-teal-100 rounded-xl px-4 py-2 ml-auto">
-          <span className="text-xs text-teal-600 font-medium">Total</span>
-          <span className="text-xl font-black text-teal-700 leading-none">{feedbacks.length}</span>
+          <span className="text-xs text-[#1e2d16] font-medium">Total</span>
+          <span className="text-xl font-black text-[#1e2d16] leading-none">{feedbacks.length}</span>
         </div>
       </div>
 
@@ -167,7 +166,7 @@ export default function AdminFeedback() {
 
                       {/* Booking ID */}
                       <td className="px-4 py-3">
-                        <span className="font-mono font-semibold text-teal-700 text-xs bg-teal-50 border border-teal-100 px-2 py-1 rounded-lg">
+                        <span className="font-mono font-semibold text-[#1e2d16] text-xs bg-teal-50 border border-teal-100 px-2 py-1 rounded-lg">
                           #{f.bookingId}
                         </span>
                       </td>
@@ -203,7 +202,7 @@ export default function AdminFeedback() {
                       {/* Status */}
                       <td className="px-4 py-3 text-center">
                         {f.status === "Visible" ? (
-                          <span className="text-xs font-semibold text-teal-600 bg-teal-50 px-2 py-0.5 rounded-full border border-teal-100">
+                          <span className="text-xs font-semibold text-[#1e2d16] bg-teal-50 px-2 py-0.5 rounded-full border border-teal-100">
                             Visible
                           </span>
                         ) : (
@@ -222,14 +221,14 @@ export default function AdminFeedback() {
                             className={`w-7 h-7 flex items-center justify-center rounded-lg transition-all text-xs
                               ${f.status === "Visible"
                                 ? "bg-amber-50 text-amber-500 hover:bg-amber-100 border border-amber-100"
-                                : "bg-teal-50 text-teal-500 hover:bg-teal-100 border border-teal-100"}`}
+                                : "bg-teal-50 text-[#1e2d16] hover:bg-teal-100 border border-teal-100"}`}
                           >
                             {f.status === "Visible" ? <FaEyeSlash /> : <FaEye />}
                           </button>
                           <button
                             onClick={() => handleDelete(f._id)}
                             title="Delete feedback"
-                            className="w-7 h-7 flex items-center justify-center rounded-lg bg-red-50 text-red-400 hover:bg-red-100 border border-red-100 transition-all text-xs"
+                            className="w-7 h-7 flex items-center justify-center rounded-lg bg-red-50 text-red-700 hover:bg-red-100 border border-red-100 transition-all text-xs"
                           >
                             <FaTrash />
                           </button>
