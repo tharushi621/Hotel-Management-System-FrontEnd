@@ -297,14 +297,14 @@ export default function BookingPage() {
             <div className="b-ref">
               Reservation Form<br />
               {bookingRef
-                ? `Ref. ${String(bookingRef.bookingId).padStart(4, "0")} / 2025`
-                : "Ref. _ _ _ _ / 2025"}
+                ? `Ref. ${String(bookingRef.bookingId).padStart(4, "0")} / 2026`
+                : "Ref. _ _ _ _ / 2026"}
             </div>
 
             <div className="b-postmark">
               <div className="b-pm-inner">
                 <span>Leonine</span>
-                <span className="bpy">2025</span>
+                <span className="bpy">2026</span>
                 <span>Reserve</span>
               </div>
             </div>
@@ -505,7 +505,7 @@ export default function BookingPage() {
               <text x="40" y="47" textAnchor="middle" fontFamily="Cinzel,serif" fontSize="19" fontWeight="700" fill="#f4e4c1cc">R</text>
               <path id="bsr" d="M40 40 m-28,0 a28,28 0 1,1 56,0 a28,28 0 1,1 -56,0" fill="none"/>
               <text fontSize="5.8" fontFamily="Cinzel,serif" fill="#f4e4c188" letterSpacing="0.16em">
-                <textPath href="#bsr">RESERVATION · LEONINE · 2025 · </textPath>
+                <textPath href="#bsr">RESERVATION · LEONINE · 2026 · </textPath>
               </text>
               <defs>
                 <radialGradient id="bseal" cx="40" cy="34" r="38" gradientUnits="userSpaceOnUse">
