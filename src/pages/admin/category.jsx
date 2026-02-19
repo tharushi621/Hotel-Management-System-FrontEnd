@@ -145,7 +145,7 @@ export default function AdminCategory() {
                           <div>
                             <h2 className="text-sm font-semibold text-slate-800">{cat.name}</h2>
                             <span className="inline-block mt-1 text-xs font-semibold text-[#1e2d16] bg-teal-50 border border-teal-100 px-2 py-0.5 rounded-full">
-                              Rs. {cat.price}
+                              $ {cat.price}
                             </span>
                           </div>
                         </div>
