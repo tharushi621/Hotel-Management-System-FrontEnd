@@ -16,56 +16,61 @@ import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import VerifyEmailPage from "./pages/client-pages/verifyemailpage.jsx";
 
 function App() {
-  const [showSplash, setShowSplash] = useState(false);
+  // Start as null so we don't flash content before we've checked localStorage
+  const [showSplash, setShowSplash] = useState(null);
 
   useEffect(() => {
     const hasVisited = localStorage.getItem("hasVisited");
     if (!hasVisited) {
       setShowSplash(true);
+    } else {
+      setShowSplash(false);
     }
   }, []);
 
   const handleSplashComplete = () => {
-    setShowSplash(false);
     localStorage.setItem("hasVisited", "true");
+    setShowSplash(false);
   };
 
-  return (
-    <>
-      {showSplash && <LeonineSplash onComplete={handleSplashComplete} />}
+  // Still checking localStorage — render nothing to avoid flicker
+  if (showSplash === null) return null;
 
-      {!showSplash && (
-        <BrowserRouter>
-          <Toaster position="top-right" reverseOrder={false} />
-          <Routes>
-            <Route path="/login" element={<Loginpage />} />
-            <Route path="/signup" element={<SignupPage />} />
-            <Route
-              path="/booking"
-              element={
-                <ProtectedRoute>
-                  <BookingPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/feedback"
-              element={
-                <ProtectedRoute>
-                  <FeedbackPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="/retreats" element={<CategoriesPage />} />
-            <Route path="/rooms" element={<RoomsPage />} />
-            <Route path="/gallery" element={<GalleryPage />} />
-            <Route path="/admin/*" element={<AdminPage />} />
-            <Route path="/*" element={<HomePage />} />
-            <Route path="/verify-email" element={<VerifyEmailPage />} />
-          </Routes>
-        </BrowserRouter>
+  return (
+    <BrowserRouter>
+      <Toaster position="top-right" reverseOrder={false} />
+
+      {showSplash ? (
+        <LeonineSplash onComplete={handleSplashComplete} />
+      ) : (
+        <Routes>
+          <Route path="/login" element={<Loginpage />} />
+          <Route path="/signup" element={<SignupPage />} />
+          <Route
+            path="/booking"
+            element={
+              <ProtectedRoute>
+                <BookingPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/feedback"
+            element={
+              <ProtectedRoute>
+                <FeedbackPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/retreats" element={<CategoriesPage />} />
+          <Route path="/rooms" element={<RoomsPage />} />
+          <Route path="/gallery" element={<GalleryPage />} />
+          <Route path="/admin/*" element={<AdminPage />} />
+          <Route path="/verify-email" element={<VerifyEmailPage />} />
+          <Route path="/*" element={<HomePage />} />
+        </Routes>
       )}
-    </>
+    </BrowserRouter>
   );
 }
 
