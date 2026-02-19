@@ -13,6 +13,7 @@ import LeonineSplash from "./components/LeonineSplash.jsx";
 import GalleryPage from "./pages/client-pages/galleryPage.jsx";
 import FeedbackPage from "./pages/client-pages/feedbackForm.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import VerifyEmailPage from "./pages/client-pages/verifyemailpage.jsx";
 
 function App() {
   const [showSplash, setShowSplash] = useState(false);
@@ -60,6 +61,7 @@ function App() {
             <Route path="/gallery" element={<GalleryPage />} />
             <Route path="/admin/*" element={<AdminPage />} />
             <Route path="/*" element={<HomePage />} />
+            <Route path="/verify-email" element={<VerifyEmailPage />} />
           </Routes>
         </BrowserRouter>
       )}
