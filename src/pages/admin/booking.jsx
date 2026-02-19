@@ -82,7 +82,7 @@ export default function AdminBooking() {
       {/* Header */}
       <div className="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between gap-4 flex-wrap">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-teal-500 flex items-center justify-center shadow-sm">
+          <div className="w-9 h-9 rounded-xl bg-[#1e2d16] flex items-center justify-center shadow-sm">
             <FaCalendarAlt className="text-white text-sm" />
           </div>
           <div>
@@ -93,8 +93,8 @@ export default function AdminBooking() {
 
         {/* Total pill */}
         <div className="flex items-center gap-2 bg-teal-50 border border-teal-100 rounded-xl px-4 py-2 ml-auto">
-          <span className="text-xs text-teal-600 font-medium">Total</span>
-          <span className="text-xl font-black text-teal-700 leading-none">{bookings.length}</span>
+          <span className="text-xs text-[#1e2d16] font-medium">Total</span>
+          <span className="text-xl font-black text-[#1e2d16] leading-none">{bookings.length}</span>
         </div>
       </div>
 
@@ -120,7 +120,7 @@ export default function AdminBooking() {
                 {!isLoaded ? (
                   <tr>
                     <td colSpan={9} className="text-center py-16">
-                      <div className="w-7 h-7 border-2 border-teal-400 border-t-transparent rounded-full animate-spin mx-auto" />
+                      <div className="w-7 h-7 border-2 border-[#1e2e16] border-t-transparent rounded-full animate-spin mx-auto" />
                       <p className="text-slate-400 text-xs mt-2">Loading bookings…</p>
                     </td>
                   </tr>
@@ -144,7 +144,7 @@ export default function AdminBooking() {
 
                       {/* Booking ID */}
                       <td className="px-4 py-3">
-                        <span className="font-mono font-semibold text-teal-700 text-xs bg-teal-50 border border-teal-100 px-2 py-1 rounded-lg">
+                        <span className="font-mono font-semibold text-[#1e2e16] text-xs bg-teal-50 border border-teal-100 px-2 py-1 rounded-lg">
                           #{b.bookingId}
                         </span>
                       </td>
@@ -193,14 +193,14 @@ export default function AdminBooking() {
                           <button
                             onClick={() => navigate("/admin/bookings/update", { state: b })}
                             title="Edit booking"
-                            className="w-7 h-7 flex items-center justify-center rounded-lg bg-sky-50 text-sky-500 hover:bg-sky-100 border border-sky-100 transition-all text-xs"
+                            className="w-7 h-7 flex items-center justify-center rounded-lg bg-sky-50 text-[#1e2e16] hover:bg-sky-100 border border-sky-100 transition-all text-xs"
                           >
                             <FaEdit />
                           </button>
                           <button
                             onClick={() => handleDelete(b.bookingId)}
                             title="Delete booking"
-                            className="w-7 h-7 flex items-center justify-center rounded-lg bg-red-50 text-red-400 hover:bg-red-100 border border-red-100 transition-all text-xs"
+                            className="w-7 h-7 flex items-center justify-center rounded-lg bg-red-50 text-red-700 hover:bg-red-100 border border-red-100 transition-all text-xs"
                           >
                             <FaTrash />
                           </button>
@@ -235,7 +235,7 @@ export default function AdminBooking() {
                 onClick={() => setCurrentPage(pg)}
                 className={`w-8 h-8 rounded-lg font-semibold transition-all text-xs
                   ${pg === currentPage
-                    ? "bg-teal-500 text-white shadow-sm"
+                    ? "bg-[#1e2e16] text-white shadow-sm"
                     : "bg-slate-50 text-slate-500 hover:bg-slate-100 border border-slate-200"}`}
               >
                 {pg}
