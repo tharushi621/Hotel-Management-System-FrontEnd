@@ -411,7 +411,7 @@ export default function CategoriesPage() {
                     {cat.price && (
                       <div className="absolute top-6 right-6 price-tag rounded-2xl px-5 py-3 text-center">
                         <div className="font-body text-xs tracking-widest uppercase text-stone-400 mb-1">From</div>
-                        <div className="font-display text-2xl font-bold anim-shimmer">LKR {cat.price?.toLocaleString()}</div>
+                        <div className="font-display text-2xl font-bold anim-shimmer">$ {cat.price?.toLocaleString()}</div>
                         <div className="font-body text-xs text-stone-500 mt-1">per night</div>
                       </div>
                     )}
@@ -508,12 +508,7 @@ export default function CategoriesPage() {
       <section className="py-24 px-6 relative overflow-hidden" style={{ background: "linear-gradient(135deg, #0d1f0f, #1a3a1e, #0d1a10)" }}>
         <div className="batik-pattern absolute inset-0 pointer-events-none"></div>
         <div className="max-w-3xl mx-auto text-center">
-          <img
-  src="/logo.png"
-  alt="Leonine Logo"
-  className="w-10 h-10 mx-auto mb-6 opacity-80"
-  style={{ filter: "drop-shadow(0 0 10px rgba(201,168,76,0.45))" }}
-/>
+          
 
           <h2 className="font-display text-5xl md:text-6xl text-amber-50 font-medium mb-4">Find Your</h2>
           <h2 className="font-display text-5xl md:text-6xl font-light italic mb-8 anim-shimmer">Perfect Sanctuary</h2>
