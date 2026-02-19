@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export default function Loginpage() {
   const [email, setEmail] = useState("");
@@ -9,6 +9,10 @@ export default function Loginpage() {
   const [error, setError] = useState("");
   const [inkFocus, setInkFocus] = useState(null);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // If redirected from a protected route, go back there after login
+  const from = location.state?.from || "/";
 
   function handleLogin() {
     if (!email || !password) {
@@ -23,13 +27,12 @@ export default function Loginpage() {
         password,
       })
       .then((res) => {
-        // Save token
         localStorage.setItem("token", res.data.token);
-        
+
         if (res.data.user && res.data.user.type === "admin") {
-          navigate("/admin");
+          navigate("/admin", { replace: true });
         } else {
-          navigate("/");
+          navigate(from, { replace: true });
         }
       })
       .catch((err) => {
@@ -258,6 +261,22 @@ export default function Loginpage() {
           line-height: 1.55;
         }
 
+        /* Redirect notice banner */
+        .redirect-notice {
+          font-family: 'IM Fell English', serif;
+          font-style: italic;
+          font-size: 0.76rem;
+          color: #1a3d1a;
+          margin-bottom: 14px;
+          padding: 7px 12px;
+          border-left: 2px solid #1a3d1a88;
+          background: #1a3d1a08;
+          position: relative;
+          z-index: 1;
+          animation: fadeIn 0.4s ease;
+          line-height: 1.55;
+        }
+
         .field-label {
           font-family: 'IM Fell English', serif;
           font-size: 0.74rem;
@@ -476,6 +495,15 @@ export default function Loginpage() {
               <div className="divider-diamond" />
               <div className="divider-rule" />
             </div>
+
+            {/* Show a contextual message when redirected from booking/feedback */}
+            {from !== "/" && (
+              <div className="redirect-notice">
+                🔏 &nbsp; To proceed with your{" "}
+                {from === "/booking" ? "reservation" : "request"}, pray sign in
+                to your account — you shall be returned forthwith.
+              </div>
+            )}
 
             <p className="salutation">
               Dear Esteemed Traveller, pray inscribe your credentials below,
