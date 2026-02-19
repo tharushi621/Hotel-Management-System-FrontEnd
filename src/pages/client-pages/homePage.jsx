@@ -160,7 +160,6 @@ export default function HomePage() {
     },
   ];
 
-  // ✅ REMOVED handleBookingNav — ProtectedRoute in App.jsx handles auth redirect automatically
   const handleCallCurator = () => {
     window.location.href = "tel:+94812204455";
   };
@@ -183,13 +182,6 @@ export default function HomePage() {
     return parts.charAt(0).toUpperCase() + parts.slice(1).replace(/[._]/g, " ");
   };
 
-  const socials = [
-    { letter: "I", label: "Instagram", href: "https://instagram.com" },
-    { letter: "F", label: "Facebook", href: "https://facebook.com" },
-    { letter: "P", label: "Pinterest", href: "https://pinterest.com" },
-    { letter: "Y", label: "YouTube", href: "https://youtube.com" },
-  ];
-
   return (
     <div className="font-body bg-stone-950 overflow-x-hidden">
       <style>{`
@@ -203,6 +195,8 @@ export default function HomePage() {
         .font-display { font-family: 'Playfair Display', serif; }
         .font-serif-light { font-family: 'Cormorant Infant', serif; }
         .font-body { font-family: 'Jost', sans-serif; }
+
+        *, *::before, *::after { box-sizing: border-box; }
 
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #1a1a1a; }
@@ -234,6 +228,9 @@ export default function HomePage() {
         @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes pulse-glow { 0%, 100% { box-shadow: 0 0 20px rgba(201,168,76,0.3); } 50% { box-shadow: 0 0 50px rgba(201,168,76,0.6); } }
         @keyframes ping-slow { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(2.5); opacity: 0; } }
+        @keyframes float-slow { 0%, 100% { transform: translate(-50%,-50%) translateY(0px); } 50% { transform: translate(-50%,-50%) translateY(-20px); } }
+        @keyframes fbFloatIn { from { opacity: 0; transform: translateY(28px) scale(0.88); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        @keyframes fbStarPulse { 0%,100% { filter: drop-shadow(0 0 2px rgba(201,168,76,0.4)); } 50% { filter: drop-shadow(0 0 8px rgba(201,168,76,0.9)); } }
 
         .anim-shimmer-text { background: linear-gradient(90deg, #c9a84c 0%, #f0d080 40%, #d4891a 60%, #c9a84c 100%); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: shimmer 4s linear infinite; }
         .anim-hero-1 { animation: fadeInDown 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both; }
@@ -243,18 +240,39 @@ export default function HomePage() {
         .anim-hero-5 { animation: fadeInUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) 1.4s both; }
         .anim-pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
         .ping-slow { animation: ping-slow 2s ease-out infinite; }
+
         .nav-link { position: relative; letter-spacing: 0.15em; }
         .nav-link::before { content: ''; position: absolute; bottom: -4px; left: 50%; transform: translateX(-50%); width: 0; height: 1px; background: var(--gold); transition: width 0.3s ease; }
         .nav-link:hover::before { width: 100%; }
         .testimonial-slide { transition: opacity 0.8s ease, transform 0.8s ease; }
 
-        .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: 200px 200px; gap: 12px; }
+        /* ── GALLERY ── */
+        .gallery-grid {
+          display: grid;
+          grid-template-columns: 1fr;
+          grid-auto-rows: 220px;
+          gap: 12px;
+        }
+        @media (min-width: 640px) {
+          .gallery-grid {
+            grid-template-columns: repeat(2, 1fr);
+            grid-auto-rows: 200px;
+          }
+        }
+        @media (min-width: 1024px) {
+          .gallery-grid {
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: 200px 200px;
+            grid-auto-rows: unset;
+          }
+          .gallery-item:nth-child(1) { grid-row: span 2; }
+        }
+
         .gallery-item { position: relative; border-radius: 16px; overflow: hidden; cursor: pointer; border: 1px solid rgba(201,168,76,0.1); }
         .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s cubic-bezier(0.4,0,0.2,1); }
         .gallery-item:hover img { transform: scale(1.06); }
         .gallery-item-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(5,10,6,0.85) 0%, transparent 55%); opacity: 0; transition: opacity 0.4s ease; display: flex; align-items: flex-end; padding: 14px; }
         .gallery-item:hover .gallery-item-overlay { opacity: 1; }
-        .gallery-item:nth-child(1) { grid-row: span 2; }
 
         .wave-separator { position: absolute; bottom: -2px; left: 0; width: 100%; overflow: hidden; line-height: 0; }
         .stat-number { font-family: 'Playfair Display', serif; background: linear-gradient(135deg, #c9a84c, #f0d080, #d4891a); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
@@ -267,17 +285,19 @@ export default function HomePage() {
         .heritage-feat:hover::before { opacity: 1; }
         .heritage-feat-glow { position: absolute; bottom: -30px; right: -30px; width: 90px; height: 90px; background: radial-gradient(circle, rgba(201,168,76,0.07) 0%, transparent 70%); border-radius: 50%; pointer-events: none; }
 
+        /* ── EXPERIENCE CARDS ── */
         .exp-v-card {
           position: relative; border-radius: 1.5rem; overflow: hidden; cursor: pointer;
-          border: 1px solid rgba(201,168,76,0.1); height: 520px;
-          transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1); flex-shrink: 0;
+          border: 1px solid rgba(201,168,76,0.1); height: 480px;
+          transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
         }
+        @media (max-width: 639px) { .exp-v-card { height: 360px; } }
         .exp-v-card:hover { border-color: rgba(201,168,76,0.4); transform: translateY(-8px) scale(1.015); box-shadow: 0 32px 80px rgba(0,0,0,0.65), 0 0 0 1px rgba(201,168,76,0.2); }
         .exp-v-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s cubic-bezier(0.4,0,0.2,1), filter 0.5s ease; filter: brightness(0.72) saturate(1.1); }
         .exp-v-card:hover img { transform: scale(1.06); filter: brightness(0.6) saturate(1.25); }
         .exp-v-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(4,10,5,0.97) 0%, rgba(4,10,5,0.75) 35%, rgba(4,10,5,0.15) 65%, transparent 100%); transition: background 0.5s ease; }
         .exp-v-card:hover .exp-v-overlay { background: linear-gradient(to top, rgba(4,10,5,0.99) 0%, rgba(4,10,5,0.82) 40%, rgba(4,10,5,0.25) 70%, transparent 100%); }
-        .exp-v-content { position: absolute; bottom: 0; left: 0; right: 0; padding: 2rem 1.75rem; }
+        .exp-v-content { position: absolute; bottom: 0; left: 0; right: 0; padding: 1.75rem 1.5rem; }
         .exp-v-desc { font-family: 'Jost', sans-serif; font-size: 0.8rem; color: rgba(210,200,180,0.0); line-height: 1.7; max-height: 0; overflow: hidden; transition: max-height 0.5s cubic-bezier(0.23,1,0.32,1), color 0.4s ease 0.1s, margin-top 0.4s ease; margin-top: 0; }
         .exp-v-card:hover .exp-v-desc { max-height: 120px; color: rgba(210,200,180,0.85); margin-top: 0.65rem; }
         .exp-v-badge { position: absolute; top: 1rem; right: 1rem; background: rgba(5,10,6,0.65); backdrop-filter: blur(10px); border: 1px solid rgba(201,168,76,0.25); border-radius: 999px; padding: 0.2rem 0.75rem; font-family: 'Jost', sans-serif; font-size: 0.58rem; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(201,168,76,0.85); }
@@ -288,23 +308,53 @@ export default function HomePage() {
         .location-info-card:hover { border-color: rgba(201,168,76,0.4); background: rgba(255,248,220,0.5); transform: translateX(4px); }
         .location-icon-wrap { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #c9a84c22, #d4891a11); border: 1px solid rgba(201,168,76,0.3); flex-shrink: 0; }
 
-        .fb-float { position: fixed; bottom: 36px; right: 36px; z-index: 9999; display: flex; align-items: center; gap: 9px; padding: 11px 22px; border: 1px solid rgba(201,168,76,0.45); border-radius: 999px; cursor: pointer; background: linear-gradient(135deg, rgba(13,26,16,0.94) 0%, rgba(26,58,30,0.97) 100%); backdrop-filter: blur(16px); color: #c9a84c; font-family: 'Jost', sans-serif; font-size: 0.65rem; letter-spacing: 0.22em; text-transform: uppercase; box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(201,168,76,0.08) inset; transition: transform 0.22s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.22s ease; animation: fbFloatIn 0.8s cubic-bezier(0.16,1,0.3,1) 1.5s both; }
+        /* ── FLOATING FEEDBACK BUTTON ── */
+        .fb-float {
+          position: fixed; bottom: 16px; right: 16px; z-index: 9999;
+          display: flex; align-items: center; gap: 7px;
+          padding: 8px 14px;
+          border: 1px solid rgba(201,168,76,0.45); border-radius: 999px; cursor: pointer;
+          background: linear-gradient(135deg, rgba(13,26,16,0.96) 0%, rgba(26,58,30,0.98) 100%);
+          backdrop-filter: blur(16px); color: #c9a84c;
+          font-family: 'Jost', sans-serif; font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase;
+          box-shadow: 0 6px 24px rgba(0,0,0,0.5), 0 0 0 1px rgba(201,168,76,0.08) inset;
+          transition: transform 0.22s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.22s ease;
+          animation: fbFloatIn 0.8s cubic-bezier(0.16,1,0.3,1) 1.5s both;
+          max-width: calc(100vw - 32px);
+          white-space: nowrap;
+        }
+        @media (min-width: 640px) {
+          .fb-float { bottom: 24px; right: 24px; font-size: 0.6rem; padding: 9px 16px; gap: 8px; }
+        }
         .fb-float:hover { transform: translateY(-4px) scale(1.04); border-color: rgba(201,168,76,0.8); box-shadow: 0 16px 44px rgba(0,0,0,0.55), 0 0 24px rgba(201,168,76,0.18); }
         .fb-float-star { font-size: 0.9rem; color: #c9a84c; filter: drop-shadow(0 0 4px rgba(201,168,76,0.55)); animation: fbStarPulse 3s ease-in-out 2.5s infinite; flex-shrink: 0; }
-        @keyframes fbFloatIn { from { opacity: 0; transform: translateY(28px) scale(0.88); } to { opacity: 1; transform: translateY(0) scale(1); } }
-        @keyframes fbStarPulse { 0%,100% { filter: drop-shadow(0 0 2px rgba(201,168,76,0.4)); } 50% { filter: drop-shadow(0 0 8px rgba(201,168,76,0.9)); } }
+
         .testimonial-author-tag { display: inline-block; padding: 2px 10px; border-radius: 999px; background: rgba(201,168,76,0.1); border: 1px solid rgba(201,168,76,0.2); font-size: 0.65rem; letter-spacing: 0.15em; color: rgba(201,168,76,0.7); text-transform: uppercase; margin-top: 4px; }
+
+        /* ── STAT GRID: 2-col on mobile, 4-col on md+ ── */
+        .stat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0; }
+        @media (min-width: 768px) { .stat-grid { grid-template-columns: repeat(4, 1fr); } }
+        .stat-grid > div { border-right: 1px solid rgba(201,168,76,0.2); border-bottom: 1px solid rgba(201,168,76,0.2); }
+        @media (min-width: 768px) { .stat-grid > div:nth-child(4), .stat-grid > div:last-child { border-right: none; } .stat-grid > div { border-bottom: none; } }
+        .stat-grid > div:nth-child(2n) { border-right: none; }
+        @media (min-width: 768px) { .stat-grid > div:nth-child(2n) { border-right: 1px solid rgba(201,168,76,0.2); } }
+
+        /* ── ROOMS section tab scroll on mobile ── */
+        .room-tab-row { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; }
+        @media (max-width: 500px) { .room-tab-row { flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; padding-bottom: 8px; -webkit-overflow-scrolling: touch; scrollbar-width: none; } .room-tab-row::-webkit-scrollbar { display: none; } }
       `}</style>
 
-      {/* NAVIGATION */}
-      <nav className={`fixed top-0 w-full z-50 transition-all duration-700 ${scrolled ? "nav-carved py-3" : "py-5 bg-transparent"}`}>
-        <div className="max-w-screen-xl mx-auto px-6 flex items-center justify-between">
+      {/* ═══════════════════════════════════════════
+          NAVIGATION
+      ═══════════════════════════════════════════ */}
+      <nav className={`fixed top-0 w-full z-50 transition-all duration-700 ${scrolled ? "nav-carved py-3" : "py-4 bg-transparent"}`}>
+        <div className="max-w-screen-xl mx-auto px-4 sm:px-6 flex items-center justify-between">
           <div className="flex flex-col items-start group cursor-pointer" onClick={() => navigate("/")}>
             <div className="flex items-center gap-2">
-              <img src="/logo.png" alt="Leonine Logo" className="w-[50px] h-[50px]" />
-              <span className="font-display text-2xl font-medium tracking-widest text-amber-100 group-hover:text-yellow-400 transition-colors duration-300">LEONINE</span>
+              <img src="/logo.png" alt="Leonine Logo" className="w-10 h-10 sm:w-[50px] sm:h-[50px]" />
+              <span className="font-display text-xl sm:text-2xl font-medium tracking-widest text-amber-100 group-hover:text-yellow-400 transition-colors duration-300">LEONINE</span>
             </div>
-            <span className="font-body text-xs tracking-[0.4em] text-yellow-600/70 ml-14 uppercase">Villa & Sanctuary</span>
+            <span className="font-body text-[9px] sm:text-xs tracking-[0.4em] text-yellow-600/70 ml-12 sm:ml-14 uppercase">Villa & Sanctuary</span>
           </div>
 
           <ul className="hidden lg:flex items-center gap-8">
@@ -318,22 +368,15 @@ export default function HomePage() {
           </ul>
 
           <div className="hidden lg:flex items-center gap-3">
-            <button
-              className="font-body text-xs tracking-widest uppercase text-stone-300 hover:text-yellow-400 transition-colors duration-300 px-4 py-2"
-              onClick={() => navigate("/login")}
-            >
+            <button className="font-body text-xs tracking-widest uppercase text-stone-300 hover:text-yellow-400 transition-colors duration-300 px-4 py-2" onClick={() => navigate("/login")}>
               Sign In
             </button>
-            {/* ✅ Direct navigate — ProtectedRoute handles the auth check */}
-            <button
-              className="btn-ripple font-body text-xs tracking-widest uppercase px-6 py-3 rounded-full border border-yellow-600/50 text-yellow-400 hover:bg-yellow-600/10 hover:border-yellow-500 transition-all duration-300 anim-pulse-glow"
-              onClick={() => navigate("/booking")}
-            >
+            <button className="btn-ripple font-body text-xs tracking-widest uppercase px-6 py-3 rounded-full border border-yellow-600/50 text-yellow-400 hover:bg-yellow-600/10 hover:border-yellow-500 transition-all duration-300 anim-pulse-glow" onClick={() => navigate("/booking")}>
               Reserve Now
             </button>
           </div>
 
-          <button className="lg:hidden text-stone-300 hover:text-yellow-400 transition-colors" onClick={() => setMenuOpen(!menuOpen)}>
+          <button className="lg:hidden text-stone-300 hover:text-yellow-400 transition-colors p-2" onClick={() => setMenuOpen(!menuOpen)}>
             <div className="flex flex-col gap-1.5 w-6">
               <span className={`block h-px bg-current transition-all duration-300 ${menuOpen ? "rotate-45 translate-y-2" : ""}`}></span>
               <span className={`block h-px bg-current transition-all duration-300 ${menuOpen ? "opacity-0" : ""}`}></span>
@@ -352,83 +395,88 @@ export default function HomePage() {
             <button className="mt-3 w-full font-body text-xs tracking-widest uppercase py-3 text-stone-300 hover:text-yellow-400 transition-colors border-b border-stone-800/50" onClick={() => { setMenuOpen(false); navigate("/login"); }}>
               Sign In
             </button>
-            {/* ✅ Direct navigate — ProtectedRoute handles the auth check */}
-            <button
-              className="mt-4 w-full font-body text-xs tracking-widest uppercase px-6 py-3 rounded-full border border-yellow-600/50 text-yellow-400 hover:bg-yellow-600/10 transition-all"
-              onClick={() => { setMenuOpen(false); navigate("/booking"); }}
-            >
+            <button className="mt-4 w-full font-body text-xs tracking-widest uppercase px-6 py-3 rounded-full border border-yellow-600/50 text-yellow-400 hover:bg-yellow-600/10 transition-all" onClick={() => { setMenuOpen(false); navigate("/booking"); }}>
               Reserve Now
             </button>
           </div>
         )}
       </nav>
 
-      {/* HERO */}
+      {/* ═══════════════════════════════════════════
+          HERO
+      ═══════════════════════════════════════════ */}
       <section id="home" ref={heroRef} className="hero-grain relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img src="/h1.jpg" alt="Leonine Villa" className="w-full h-full object-cover" style={{ transform: `translateY(${scrollY * 0.3}px)` }} />
-          <div className="absolute inset-0 bg-gradient-to-b from-stone-950/40 via-transparent to-stone-950/70"></div>
-          <div className="absolute inset-0 bg-gradient-to-r from-stone-950/25 via-transparent to-stone-950/15"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-stone-950/50 via-transparent to-stone-950/70"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-stone-950/35 via-transparent to-stone-950/15"></div>
           <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse at center, transparent 40%, rgba(5,10,6,0.45) 100%)" }}></div>
         </div>
 
-        <div className="relative z-10 pt-24 px-12 sm:px-24 md:px-32 lg:px-40 flex flex-col items-start w-full">
-          <div className="anim-hero-1 inline-flex items-center gap-3 mb-8">
-            <div className="gold-line w-16"></div>
-            <span className="font-body text-xs tracking-[0.4em] uppercase text-yellow-400/90">Sri Lanka · Est. 2019</span>
-            <div className="gold-line w-16"></div>
+        <div className="relative z-10 pt-24 sm:pt-28 px-5 sm:px-10 md:px-16 lg:px-28 xl:px-36 flex flex-col items-start w-full">
+          <div className="anim-hero-1 inline-flex items-center gap-3 mb-6 sm:mb-8">
+            <div className="gold-line w-10 sm:w-16"></div>
+            <span className="font-body text-[10px] sm:text-xs tracking-[0.35em] uppercase text-yellow-400/90">Sri Lanka · Est. 2019</span>
+            <div className="gold-line w-10 sm:w-16"></div>
           </div>
+
           <h1 className="font-display text-glow mb-4 anim-hero-2 text-left">
-            <span className="block text-6xl md:text-8xl xl:text-9xl font-medium text-white leading-none tracking-wide">Leonine</span>
-            <span className="block text-3xl md:text-4xl xl:text-5xl font-light italic text-yellow-400/95 mt-2 tracking-widest">Villa & Sanctuary</span>
+            <span className="block text-5xl sm:text-6xl md:text-8xl xl:text-9xl font-medium text-white leading-none tracking-wide">Leonine</span>
+            <span className="block text-2xl sm:text-3xl md:text-4xl xl:text-5xl font-light italic text-yellow-400/95 mt-2 tracking-widest">Villa & Sanctuary</span>
           </h1>
-          <div className="anim-hero-3 flex items-center gap-4 my-6">
-            <div className="gold-line w-20"></div>
-            <div className="text-yellow-500 text-lg">❋</div>
-            <div className="gold-line w-20"></div>
+
+          <div className="anim-hero-3 flex items-center gap-4 my-5 sm:my-6">
+            <div className="gold-line w-14 sm:w-20"></div>
+            <div className="text-yellow-500 text-base sm:text-lg">❋</div>
+            <div className="gold-line w-14 sm:w-20"></div>
           </div>
-          <p className="anim-hero-4 font-serif-light text-xl md:text-2xl text-stone-200 leading-relaxed max-w-lg font-light italic mb-10 text-left">
+
+          <p className="anim-hero-4 font-serif-light text-lg sm:text-xl md:text-2xl text-stone-200 leading-relaxed max-w-xs sm:max-w-lg font-light italic mb-8 sm:mb-10 text-left">
             Where Sri Lanka's ancient soul breathes through every leaf, every carved pillar, every firefly-lit evening in the heart of the jungle.
           </p>
-          <div className="anim-hero-5 flex flex-col sm:flex-row gap-4 justify-start">
-            {/* ✅ Direct navigate */}
+
+          <div className="anim-hero-5 flex flex-row gap-3 justify-start flex-wrap">
             <button
-              className="btn-ripple group font-body text-sm tracking-widest uppercase px-10 py-4 rounded-full text-stone-900 font-medium transition-all duration-500 hover:scale-105"
-              style={{ background: "linear-gradient(135deg, #c9a84c 0%, #f0d080 50%, #d4891a 100%)", boxShadow: "0 8px 32px rgba(201,168,76,0.4)" }}
+              className="btn-ripple group font-body text-[10px] tracking-widest uppercase px-6 py-2.5 rounded-full text-stone-900 font-medium transition-all duration-500 hover:scale-105"
+              style={{ background: "linear-gradient(135deg, #c9a84c 0%, #f0d080 50%, #d4891a 100%)", boxShadow: "0 6px 20px rgba(201,168,76,0.35)" }}
               onClick={() => navigate("/booking")}
             >
-              Book Your Sanctuary <span className="ml-2 group-hover:ml-4 transition-all duration-300">→</span>
+              Book Your Sanctuary <span className="ml-1 group-hover:ml-2 transition-all duration-300">→</span>
             </button>
             <button
-              className="btn-ripple font-body text-sm tracking-widest uppercase px-10 py-4 rounded-full text-amber-100 border border-yellow-600/50 hover:border-yellow-400/80 hover:bg-yellow-900/15 transition-all duration-300"
+              className="btn-ripple font-body text-[10px] tracking-widest uppercase px-6 py-2.5 rounded-full text-amber-100 border border-yellow-600/40 hover:border-yellow-400/70 hover:bg-yellow-900/15 transition-all duration-300"
               onClick={() => document.getElementById("heritage")?.scrollIntoView({ behavior: "smooth" })}
             >
               Discover the Story
             </button>
           </div>
-          <div className="anim-hero-5 mt-14 flex flex-wrap items-center justify-start gap-6 opacity-75">
+
+          <div className="anim-hero-5 mt-10 sm:mt-14 flex flex-wrap items-center justify-start gap-4 sm:gap-6 opacity-75">
             {["World's Best Eco Villa 2024", "Traveller Pick", "UNESCO Heritage Partner"].map((award) => (
               <div key={award} className="flex items-center gap-2">
                 <span className="text-yellow-500 text-xs">★</span>
-                <span className="font-body text-xs tracking-wider text-stone-300 uppercase">{award}</span>
+                <span className="font-body text-[10px] sm:text-xs tracking-wider text-stone-300 uppercase">{award}</span>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="relative z-10 w-full max-w-4xl mx-auto px-6 mt-16">
-          <div className="booking-glass rounded-2xl p-6 grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[
-              { num: "14", unit: "Acres", label: "of Wild Jungle" },
-              { num: "5,000+", unit: "", label: "Souls Transformed" },
-              { num: "1,400", unit: "m", label: "Above Sea Level" },
-              { num: "24/7", unit: "", label: "Dedicated Butlers" },
-            ].map((stat, i) => (
-              <div key={i} className="text-center border-r border-yellow-900/30 last:border-0 px-2">
-                <div className="stat-number text-3xl font-bold">{stat.num}<span className="text-lg">{stat.unit}</span></div>
-                <div className="font-body text-xs tracking-wider text-stone-400 uppercase mt-1">{stat.label}</div>
-              </div>
-            ))}
+        {/* Stats bar */}
+        <div className="relative z-10 w-full max-w-4xl mx-auto px-4 sm:px-6 mt-12 sm:mt-16">
+          <div className="booking-glass rounded-2xl p-4 sm:p-6">
+            <div className="stat-grid">
+              {[
+                { num: "14", unit: "Acres", label: "of Wild Jungle" },
+                { num: "5,000+", unit: "", label: "Souls Transformed" },
+                { num: "1,400", unit: "m", label: "Above Sea Level" },
+                { num: "24/7", unit: "", label: "Dedicated Butlers" },
+              ].map((stat, i) => (
+                <div key={i} className="text-center px-2 py-3 sm:py-0">
+                  <div className="stat-number text-2xl sm:text-3xl font-bold">{stat.num}<span className="text-base sm:text-lg">{stat.unit}</span></div>
+                  <div className="font-body text-[10px] sm:text-xs tracking-wider text-stone-400 uppercase mt-1">{stat.label}</div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -443,27 +491,29 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* HERITAGE */}
-      <section id="heritage" className="relative py-24 px-6" style={{ background: "linear-gradient(135deg, #0d1f0f 0%, #1a3a1e 50%, #0d1a10 100%)" }}>
+      {/* ═══════════════════════════════════════════
+          HERITAGE
+      ═══════════════════════════════════════════ */}
+      <section id="heritage" className="relative py-16 sm:py-24 px-4 sm:px-6" style={{ background: "linear-gradient(135deg, #0d1f0f 0%, #1a3a1e 50%, #0d1a10 100%)" }}>
         <div className="batik-pattern absolute inset-0 pointer-events-none"></div>
         <div className="max-w-screen-xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
+          <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
             <div>
               <div className="flex items-center gap-4 mb-6">
                 <div className="gold-line w-12"></div>
                 <span className="font-body text-xs tracking-[0.4em] uppercase text-yellow-600/80">Our Heritage</span>
               </div>
-              <h2 className="font-display text-5xl md:text-6xl font-medium text-amber-50 leading-tight mb-2">Born from the</h2>
-              <h2 className="font-display text-5xl md:text-6xl font-light italic mb-8" style={{ background: "linear-gradient(135deg, #c9a84c, #f0d080, #d4891a)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+              <h2 className="font-display text-4xl sm:text-5xl md:text-6xl font-medium text-amber-50 leading-tight mb-2">Born from the</h2>
+              <h2 className="font-display text-4xl sm:text-5xl md:text-6xl font-light italic mb-6 sm:mb-8" style={{ background: "linear-gradient(135deg, #c9a84c, #f0d080, #d4891a)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
                 Soil of Lanka
               </h2>
-              <p className="font-serif-light text-xl text-stone-300 leading-relaxed italic mb-6 font-light">
+              <p className="font-serif-light text-lg sm:text-xl text-stone-300 leading-relaxed italic mb-5 font-light">
                 "Leonine" draws from the ancient Sinhala symbol of the Lion — strength, grace, and an unbreakable bond with the land.
               </p>
-              <p className="font-body text-sm text-stone-400 leading-relaxed mb-10">
+              <p className="font-body text-sm text-stone-400 leading-relaxed mb-8 sm:mb-10">
                 Nestled in Sri Lanka's Central Highlands, every structure at Leonine Villa honours traditional Kandyan craftsmanship — hand-carved jak wood columns, rammed earth walls, hand-laid Dumbara mats — blended with contemporary sanctuary design.
               </p>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {[
                   { icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 10v11M16 10v11M12 10v11" /></svg>, label: "Architecture", title: "Kandyan Architecture", desc: "Royal building traditions, reborn in every carved pillar and ceremonial arch." },
                   { icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><path d="M12 2a10 10 0 0 1 0 20A10 10 0 0 1 12 2z" /><path d="M12 6v6l3 3" /><path d="M6 12c0-1.5.5-3 1.5-4.2" /><path d="M18 12a6 6 0 0 1-6 6" /><circle cx="12" cy="12" r="2" /></svg>, label: "Sustainability", title: "Zero Carbon Footprint", desc: "100% solar & rainwater systems — luxury that leaves no trace on the earth." },
@@ -484,7 +534,9 @@ export default function HomePage() {
                 ))}
               </div>
             </div>
-            <div className="relative h-[600px] hidden lg:block">
+
+            {/* Heritage images — hidden on mobile, visible on lg+ */}
+            <div className="relative h-[500px] lg:h-[600px] hidden lg:block">
               <div className="absolute top-0 right-0 w-72 h-80 rounded-2xl overflow-hidden" style={{ border: "1px solid rgba(201,168,76,0.2)", boxShadow: "0 30px 60px rgba(0,0,0,0.5)" }}>
                 <img src="/h2.jpg" alt="Heritage" className="w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-stone-950/60 to-transparent"></div>
@@ -493,8 +545,7 @@ export default function HomePage() {
                 <img src="/c5.jpg" alt="Villa" className="w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-stone-950/50 to-transparent"></div>
               </div>
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10" style={{ animation: "float-slow 8s ease-in-out infinite" }}>
-                <style>{`@keyframes float-slow { 0%, 100% { transform: translate(-50%,-50%) translateY(0px); } 50% { transform: translate(-50%,-50%) translateY(-20px); } }`}</style>
+              <div className="absolute top-1/2 left-1/2 z-10" style={{ transform: "translate(-50%,-50%)", animation: "float-slow 8s ease-in-out infinite" }}>
                 <div className="w-28 h-28 rounded-full flex flex-col items-center justify-center text-center" style={{ background: "linear-gradient(135deg, #0d1f0f, #1a3a1e)", border: "2px solid rgba(201,168,76,0.5)", boxShadow: "0 0 40px rgba(201,168,76,0.2), inset 0 0 30px rgba(0,0,0,0.5)" }}>
                   <span className="font-display text-3xl font-bold anim-shimmer-text">5★</span>
                   <span className="font-body text-xs text-stone-400 tracking-wider uppercase mt-1">Awarded</span>
@@ -505,58 +556,68 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ROOMS */}
-      <section id="retreats" className="py-24 bg-linen relative overflow-hidden">
+      {/* ═══════════════════════════════════════════
+          ROOMS
+      ═══════════════════════════════════════════ */}
+      <section id="retreats" className="py-16 sm:py-24 bg-linen relative overflow-hidden">
         <div className="absolute top-0 left-0 w-full overflow-hidden" style={{ height: "60px" }}>
           <svg viewBox="0 0 1440 60" preserveAspectRatio="none" className="w-full h-full">
             <path d="M0,0 C360,60 1080,0 1440,50 L1440,0 L0,0 Z" fill="#0d1f0f" />
           </svg>
         </div>
-        <div className="max-w-screen-xl mx-auto px-6 pt-8">
-          <div className="text-center mb-16">
+        <div className="max-w-screen-xl mx-auto px-4 sm:px-6 pt-6 sm:pt-8">
+          <div className="text-center mb-10 sm:mb-16">
             <div className="flex items-center justify-center gap-4 mb-4">
               <div className="gold-line w-16"></div>
               <span className="font-body text-xs tracking-[0.4em] uppercase text-yellow-700">Sacred Retreats</span>
               <div className="gold-line w-16"></div>
             </div>
-            <h2 className="font-display text-5xl md:text-6xl text-stone-900 font-medium mb-4">Curated Sanctuaries</h2>
-            <p className="font-serif-light text-xl text-stone-600 italic font-light max-w-xl mx-auto">
+            <h2 className="font-display text-4xl sm:text-5xl md:text-6xl text-stone-900 font-medium mb-4">Curated Sanctuaries</h2>
+            <p className="font-serif-light text-lg sm:text-xl text-stone-600 italic font-light max-w-xl mx-auto">
               Each retreat is a world unto itself — nature, luxury, and heritage woven into one living space
             </p>
           </div>
-          <div className="flex gap-2 justify-center mb-10 flex-wrap">
+
+          {/* Tabs — horizontally scrollable on very small phones */}
+          <div className="room-tab-row mb-8 sm:mb-10">
             {rooms.map((r, i) => (
-              <button key={i} onClick={() => setActiveRoom(i)} className={`font-body text-xs tracking-widest uppercase px-6 py-3 rounded-full transition-all duration-300 ${activeRoom === i ? "text-stone-900 font-medium" : "border border-stone-300 text-stone-500 hover:border-stone-400"}`} style={activeRoom === i ? { background: "linear-gradient(135deg, #c9a84c, #f0d080, #d4891a)", boxShadow: "0 4px 20px rgba(201,168,76,0.4)" } : {}}>
+              <button key={i} onClick={() => setActiveRoom(i)}
+                className="font-body text-xs tracking-widest uppercase px-5 sm:px-6 py-3 rounded-full transition-all duration-300 flex-shrink-0"
+                style={activeRoom === i
+                  ? { background: "linear-gradient(135deg, #c9a84c, #f0d080, #d4891a)", color: "#1a1a1a", fontWeight: 500, boxShadow: "0 4px 20px rgba(201,168,76,0.4)" }
+                  : { border: "1px solid #d6d3d1", color: "#78716c" }}>
                 {r.subtitle}
               </button>
             ))}
           </div>
+
           {rooms.map((room, i) => (
-            <div key={i} style={{ display: activeRoom === i ? "block" : "none" }} className={`transition-all duration-700 ${activeRoom === i ? "opacity-100" : "opacity-0"}`}>
-              <div className="grid lg:grid-cols-2 gap-12 items-center">
-                <div className="room-card-3d rounded-3xl overflow-hidden relative" style={{ height: "500px", boxShadow: "0 30px 70px rgba(0,0,0,0.2)" }}>
-                  <img src={room.image} alt={room.title} className="w-full h-full object-cover" />
+            <div key={i} style={{ display: activeRoom === i ? "block" : "none" }}>
+              <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 items-center">
+                <div className="room-card-3d rounded-2xl sm:rounded-3xl overflow-hidden relative" style={{ height: "320px", boxShadow: "0 30px 70px rgba(0,0,0,0.2)" }}>
+                  <img src={room.image} alt={room.title} className="w-full h-full object-cover" style={{ minHeight: "100%" }} />
                   <div className="absolute bottom-0 left-0 right-0 h-32" style={{ background: "linear-gradient(to top, rgba(0,0,0,0.45) 0%, transparent 100%)" }}></div>
-                  <div className="absolute top-6 left-6 font-body text-xs tracking-widest uppercase px-4 py-2 rounded-full text-stone-900 font-medium" style={{ background: "linear-gradient(135deg, #c9a84c, #f0d080)" }}>{room.tag}</div>
-                  <div className="absolute bottom-6 right-6 font-display text-6xl font-bold text-white/10">0{i + 1}</div>
+                  <div className="absolute top-4 left-4 sm:top-6 sm:left-6 font-body text-xs tracking-widest uppercase px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-stone-900 font-medium" style={{ background: "linear-gradient(135deg, #c9a84c, #f0d080)" }}>{room.tag}</div>
+                  <div className="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 font-display text-5xl sm:text-6xl font-bold text-white/10">0{i + 1}</div>
                 </div>
                 <div className="lg:pl-8">
                   <div className="flex items-center gap-4 mb-4">
                     <div style={{ height: "1px", width: "40px", background: "linear-gradient(90deg, #c9a84c, #d4891a)" }}></div>
                     <span className="font-body text-xs tracking-[0.3em] uppercase text-yellow-700">{room.subtitle}</span>
                   </div>
-                  <h3 className="font-display text-4xl text-stone-900 font-medium mb-6">{room.title}</h3>
-                  <p className="font-serif-light text-lg text-stone-600 leading-relaxed italic font-light mb-8">{room.description}</p>
-                  <div className="grid grid-cols-2 gap-3 mb-8">
+                  <h3 className="font-display text-3xl sm:text-4xl text-stone-900 font-medium mb-4 sm:mb-6">{room.title}</h3>
+                  <p className="font-serif-light text-base sm:text-lg text-stone-600 leading-relaxed italic font-light mb-6 sm:mb-8">{room.description}</p>
+                  <div className="grid grid-cols-2 gap-2 sm:gap-3 mb-6 sm:mb-8">
                     {["Private Plunge Pool", "Open-Air Rain Bath", "Butler Service", "Forest Terrace", "Organic Minibar", "Stargazing Deck"].map((am) => (
-                      <div key={am} className="flex items-center gap-2 font-body text-sm text-stone-600">
-                        <span className="text-yellow-600 text-xs">✦</span> {am}
+                      <div key={am} className="flex items-center gap-2 font-body text-xs sm:text-sm text-stone-600">
+                        <span className="text-yellow-600 text-xs flex-shrink-0">✦</span> {am}
                       </div>
                     ))}
                   </div>
-                  <div className="flex items-center gap-4">
-                    {/* ✅ Direct navigate */}
-                    <button className="btn-ripple font-body text-xs tracking-widest uppercase px-8 py-4 rounded-full text-stone-900 font-medium transition-all hover:scale-105" style={{ background: "linear-gradient(135deg, #c9a84c, #f0d080, #d4891a)", boxShadow: "0 6px 24px rgba(201,168,76,0.4)" }} onClick={() => navigate("/booking")}>
+                  <div className="flex flex-col xs:flex-row items-start xs:items-center gap-3 sm:gap-4">
+                    <button className="btn-ripple font-body text-xs tracking-widest uppercase px-7 sm:px-8 py-4 rounded-full text-stone-900 font-medium transition-all hover:scale-105 w-full xs:w-auto text-center"
+                      style={{ background: "linear-gradient(135deg, #c9a84c, #f0d080, #d4891a)", boxShadow: "0 6px 24px rgba(201,168,76,0.4)" }}
+                      onClick={() => navigate("/booking")}>
                       Reserve This Retreat
                     </button>
                     <button className="font-body text-xs tracking-widest uppercase text-stone-500 hover:text-yellow-700 transition-colors duration-300 flex items-center gap-2" onClick={() => navigate("/rooms")}>
@@ -567,7 +628,8 @@ export default function HomePage() {
               </div>
             </div>
           ))}
-          <div className="flex justify-center gap-3 mt-10">
+
+          <div className="flex justify-center gap-3 mt-8 sm:mt-10">
             {rooms.map((_, i) => (
               <button key={i} onClick={() => setActiveRoom(i)} className={`rounded-full transition-all duration-300 ${activeRoom === i ? "w-8 h-2 bg-yellow-600" : "w-2 h-2 bg-stone-400 hover:bg-stone-600"}`}></button>
             ))}
@@ -575,27 +637,30 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* EXPERIENCES */}
-      <section className="py-24 px-6 relative overflow-hidden" style={{ background: "linear-gradient(135deg, #0d1f0f 0%, #162b18 50%, #0d1f0f 100%)" }}>
+      {/* ═══════════════════════════════════════════
+          EXPERIENCES
+      ═══════════════════════════════════════════ */}
+      <section className="py-16 sm:py-24 px-4 sm:px-6 relative overflow-hidden" style={{ background: "linear-gradient(135deg, #0d1f0f 0%, #162b18 50%, #0d1f0f 100%)" }}>
         <div className="batik-pattern absolute inset-0 pointer-events-none"></div>
         <div className="max-w-screen-xl mx-auto">
-          <div className="text-center mb-16">
+          <div className="text-center mb-10 sm:mb-16">
             <div className="flex items-center justify-center gap-4 mb-4">
               <div className="gold-line w-16"></div>
               <span className="font-body text-xs tracking-[0.4em] uppercase text-yellow-600/80">Curated Moments</span>
               <div className="gold-line w-16"></div>
             </div>
-            <h2 className="font-display text-5xl md:text-6xl text-amber-50 font-medium mb-4">
+            <h2 className="font-display text-4xl sm:text-5xl md:text-6xl text-amber-50 font-medium mb-4">
               Experiences That
               <span className="block font-light italic mt-1" style={{ background: "linear-gradient(135deg, #c9a84c, #f0d080)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
                 Rewrite the Soul
               </span>
             </h2>
-            <p className="font-serif-light text-lg text-stone-400 italic font-light max-w-lg mx-auto">
+            <p className="font-serif-light text-base sm:text-lg text-stone-400 italic font-light max-w-lg mx-auto">
               Six immersive journeys, each a doorway into the living spirit of Lanka
             </p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
             {experiences.map((exp, i) => (
               <div key={i} className="exp-v-card">
                 <img src={exp.image} alt={exp.title} />
@@ -605,41 +670,41 @@ export default function HomePage() {
                   <div style={{ marginBottom: "0.5rem" }}>
                     <span style={{ fontFamily: "'Jost', sans-serif", fontSize: "0.62rem", letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(201,168,76,0.75)" }}>{exp.detail}</span>
                   </div>
-                  <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.35rem", fontWeight: 500, color: "#fef3c7", lineHeight: 1.25 }}>{exp.title}</h3>
+                  <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.25rem", fontWeight: 500, color: "#fef3c7", lineHeight: 1.25 }}>{exp.title}</h3>
                   <p className="exp-v-desc">{exp.desc}</p>
                   <div className="exp-v-arrow">→</div>
                 </div>
               </div>
             ))}
           </div>
-          <div className="text-center mt-14">
-            <button className="btn-ripple font-body text-xs tracking-widest uppercase px-12 py-5 rounded-full border border-yellow-600/40 text-yellow-400 hover:bg-yellow-900/10 hover:border-yellow-500 transition-all duration-300">
-              Explore All Experiences
-            </button>
-          </div>
+
+
         </div>
       </section>
 
-      {/* TESTIMONIALS */}
-      <section className="py-24 px-6 bg-linen relative overflow-hidden">
+      {/* ═══════════════════════════════════════════
+          TESTIMONIALS
+      ═══════════════════════════════════════════ */}
+      <section className="py-16 sm:py-24 px-4 sm:px-6 bg-linen relative overflow-hidden">
         <div className="max-w-4xl mx-auto text-center">
           <div className="flex items-center justify-center gap-4 mb-4">
             <div className="gold-line w-16"></div>
             <span className="font-body text-xs tracking-[0.4em] uppercase text-yellow-700">Guest Voices</span>
             <div className="gold-line w-16"></div>
           </div>
-          <h2 className="font-display text-5xl md:text-6xl text-stone-900 font-medium mb-16">Words From the Wild</h2>
+          <h2 className="font-display text-4xl sm:text-5xl md:text-6xl text-stone-900 font-medium mb-10 sm:mb-16">Words From the Wild</h2>
+
           {testimonials.length === 0 ? (
             <div className="text-stone-400 italic font-serif-light text-lg py-8">Be the first to share your experience at Leonine...</div>
           ) : (
             <>
-              <div className="relative min-h-56">
+              <div className="relative min-h-64 sm:min-h-56">
                 {testimonials.map((t, i) => (
                   <div key={i} className="testimonial-slide absolute inset-0 flex flex-col items-center" style={{ opacity: activeTestimonial === i ? 1 : 0, transform: activeTestimonial === i ? "translateY(0)" : "translateY(20px)", pointerEvents: activeTestimonial === i ? "all" : "none" }}>
-                    <div className="flex gap-1 mb-6">
-                      {[...Array(5)].map((_, s) => (<span key={s} className="text-xl" style={{ color: s < (t.rating || 5) ? "#d97706" : "#d1d5db" }}>★</span>))}
+                    <div className="flex gap-1 mb-5 sm:mb-6">
+                      {[...Array(5)].map((_, s) => (<span key={s} className="text-lg sm:text-xl" style={{ color: s < (t.rating || 5) ? "#d97706" : "#d1d5db" }}>★</span>))}
                     </div>
-                    <blockquote className="font-serif-light text-2xl md:text-3xl text-stone-700 italic font-light leading-relaxed mb-8 max-w-3xl">"{t.comment}"</blockquote>
+                    <blockquote className="font-serif-light text-xl sm:text-2xl md:text-3xl text-stone-700 italic font-light leading-relaxed mb-6 sm:mb-8 max-w-3xl">"{t.comment}"</blockquote>
                     <div className="flex flex-col items-center gap-1">
                       <div className="w-10 h-px" style={{ background: "linear-gradient(90deg, #c9a84c, #d4891a)" }}></div>
                       <p className="font-body text-sm font-medium text-stone-700 mt-2">{getDisplayName(t)}</p>
@@ -649,32 +714,38 @@ export default function HomePage() {
                   </div>
                 ))}
               </div>
-              <div className="flex justify-center gap-3 mt-12">
+              <div className="flex justify-center gap-3 mt-10 sm:mt-12">
                 {testimonials.map((_, i) => (<button key={i} onClick={() => setActiveTestimonial(i)} className={`rounded-full transition-all duration-300 ${activeTestimonial === i ? "w-8 h-2 bg-yellow-600" : "w-2 h-2 bg-stone-400 hover:bg-stone-500"}`}></button>))}
               </div>
             </>
           )}
-          <div className="mt-16 flex flex-wrap items-center justify-center gap-8 opacity-40">
-            {["Travel + Leisure", "Architectural Digest", "National Geographic", "Forbes"].map((pub) => (<span key={pub} className="font-display text-stone-600 text-sm italic">{pub}</span>))}
+
+          <div className="mt-12 sm:mt-16 flex flex-wrap items-center justify-center gap-5 sm:gap-8 opacity-40">
+            {["Travel + Leisure", "Architectural Digest", "National Geographic", "Forbes"].map((pub) => (
+              <span key={pub} className="font-display text-stone-600 text-sm italic">{pub}</span>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* GALLERY */}
-      <section id="gallery" className="py-24 px-6 relative" style={{ background: "linear-gradient(135deg, #0d1f0f 0%, #1a3a1e 50%, #0d1a10 100%)" }}>
+      {/* ═══════════════════════════════════════════
+          GALLERY
+      ═══════════════════════════════════════════ */}
+      <section id="gallery" className="py-16 sm:py-24 px-4 sm:px-6 relative" style={{ background: "linear-gradient(135deg, #0d1f0f 0%, #1a3a1e 50%, #0d1a10 100%)" }}>
         <div className="max-w-screen-xl mx-auto">
-          <div className="flex items-end justify-between mb-12 flex-wrap gap-4">
+          <div className="flex items-end justify-between mb-8 sm:mb-12 flex-wrap gap-4">
             <div>
               <div className="flex items-center gap-4 mb-3">
                 <div className="gold-line w-12"></div>
                 <span className="font-body text-xs tracking-[0.4em] uppercase text-yellow-600/80">Leonine Life</span>
               </div>
-              <h2 className="font-display text-5xl text-amber-50 font-medium">Moments<br /><span className="font-light italic" style={{ color: "#c9a84c" }}>Captured</span></h2>
+              <h2 className="font-display text-4xl sm:text-5xl text-amber-50 font-medium">Moments<br /><span className="font-light italic" style={{ color: "#c9a84c" }}>Captured</span></h2>
             </div>
-            <button className="font-body text-xs tracking-widest uppercase px-8 py-3 rounded-full border border-yellow-700/40 text-yellow-500 hover:border-yellow-500 hover:bg-yellow-900/10 transition-all" onClick={() => navigate("/gallery")}>
+            <button className="font-body text-xs tracking-widest uppercase px-6 sm:px-8 py-3 rounded-full border border-yellow-700/40 text-yellow-500 hover:border-yellow-500 hover:bg-yellow-900/10 transition-all" onClick={() => navigate("/gallery")}>
               Full Gallery →
             </button>
           </div>
+
           <div className="gallery-grid">
             {galleryImages.map((img, i) => (
               <div key={i} className="gallery-item">
@@ -686,21 +757,23 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* LOCATION */}
-      <section className="py-24 px-6 bg-linen relative overflow-hidden">
+      {/* ═══════════════════════════════════════════
+          LOCATION
+      ═══════════════════════════════════════════ */}
+      <section className="py-16 sm:py-24 px-4 sm:px-6 bg-linen relative overflow-hidden">
         <div className="max-w-screen-xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-start">
+          <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-start">
             <div>
               <div className="flex items-center gap-4 mb-3">
                 <div className="gold-line w-12"></div>
                 <span className="font-body text-xs tracking-[0.4em] uppercase text-yellow-700">Where to Find Us</span>
               </div>
-              <h2 className="font-display text-5xl text-stone-900 font-medium mb-2">The Heart of</h2>
-              <h2 className="font-display text-5xl font-light italic mb-4" style={{ color: "#c9a84c" }}>Highland Lanka</h2>
-              <p className="font-body text-sm text-stone-500 leading-relaxed mb-8 max-w-md">
+              <h2 className="font-display text-4xl sm:text-5xl text-stone-900 font-medium mb-2">The Heart of</h2>
+              <h2 className="font-display text-4xl sm:text-5xl font-light italic mb-4" style={{ color: "#c9a84c" }}>Highland Lanka</h2>
+              <p className="font-body text-sm text-stone-500 leading-relaxed mb-6 sm:mb-8 max-w-md">
                 Perched at 1,400 metres above sea level in Sri Lanka's Central Province, Leonine Villa is a 45-minute journey from Kandy — the last royal capital of the Kandyan Kingdom.
               </p>
-              <div className="space-y-3 mb-8">
+              <div className="space-y-3 mb-6 sm:mb-8">
                 {[
                   { icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 text-yellow-700"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>, label: "Address", val: "Heerassagala, Kandy, Central Province, Sri Lanka" },
                   { icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 text-yellow-700"><path d="M21 16.5a2.5 2.5 0 0 1-2.5 2.5H5.5A2.5 2.5 0 0 1 3 16.5V7.5A2.5 2.5 0 0 1 5.5 5h13A2.5 2.5 0 0 1 21 7.5v9z"/><path d="M3 8l9 6 9-6"/></svg>, label: "Nearest International Airport", val: "Bandaranaike International Airport (BIA) — approx. 2.5 hrs" },
@@ -716,12 +789,16 @@ export default function HomePage() {
                   </div>
                 ))}
               </div>
-              <div className="flex gap-3 flex-wrap">
-                <button className="btn-ripple font-body text-xs tracking-widest uppercase px-8 py-4 rounded-full text-stone-900 font-medium hover:scale-105 transition-transform" style={{ background: "linear-gradient(135deg, #c9a84c, #f0d080, #d4891a)", boxShadow: "0 6px 24px rgba(201,168,76,0.4)" }} onClick={handleGetDirections}>Get Directions</button>
-                <button className="btn-ripple font-body text-xs tracking-widest uppercase px-8 py-4 rounded-full text-stone-700 border border-stone-300 hover:border-yellow-500 hover:text-yellow-700 transition-all" onClick={handleCallCurator}>Call Us</button>
+              <div className="flex flex-col xs:flex-row gap-3 flex-wrap">
+                <button className="btn-ripple font-body text-xs tracking-widest uppercase px-7 sm:px-8 py-4 rounded-full text-stone-900 font-medium hover:scale-105 transition-transform w-full xs:w-auto text-center"
+                  style={{ background: "linear-gradient(135deg, #c9a84c, #f0d080, #d4891a)", boxShadow: "0 6px 24px rgba(201,168,76,0.4)" }}
+                  onClick={handleGetDirections}>Get Directions</button>
+                <button className="btn-ripple font-body text-xs tracking-widest uppercase px-7 sm:px-8 py-4 rounded-full text-stone-700 border border-stone-300 hover:border-yellow-500 hover:text-yellow-700 transition-all w-full xs:w-auto text-center"
+                  onClick={handleCallCurator}>Call Us</button>
               </div>
             </div>
-            <div className="relative h-96 lg:h-[520px] rounded-3xl overflow-hidden" style={{ border: "1px solid rgba(201,168,76,0.2)", boxShadow: "0 30px 70px rgba(0,0,0,0.15)" }}>
+
+            <div className="relative h-72 sm:h-96 lg:h-[520px] rounded-2xl sm:rounded-3xl overflow-hidden mt-4 lg:mt-0" style={{ border: "1px solid rgba(201,168,76,0.2)", boxShadow: "0 30px 70px rgba(0,0,0,0.15)" }}>
               <img src="/n1.jpg" alt="Sri Lanka Highland Landscape" className="w-full h-full object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-stone-900/50 to-transparent"></div>
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
@@ -733,7 +810,7 @@ export default function HomePage() {
                   <div className="mt-2 px-3 py-1 rounded-full text-xs font-body font-medium tracking-wider uppercase text-stone-900 whitespace-nowrap" style={{ background: "linear-gradient(135deg, #c9a84c, #f0d080)" }}>Leonine Villa</div>
                 </div>
               </div>
-              <div className="absolute top-5 right-5 px-3 py-2 rounded-xl font-body text-xs text-yellow-200 tracking-wider" style={{ background: "rgba(10,22,12,0.75)", backdropFilter: "blur(8px)", border: "1px solid rgba(201,168,76,0.25)" }}>
+              <div className="absolute top-4 right-4 sm:top-5 sm:right-5 px-3 py-2 rounded-xl font-body text-xs text-yellow-200 tracking-wider" style={{ background: "rgba(10,22,12,0.75)", backdropFilter: "blur(8px)", border: "1px solid rgba(201,168,76,0.25)" }}>
                 <div className="text-yellow-500 font-semibold">1,400 m</div>
                 <div className="text-stone-400 text-[10px] uppercase tracking-widest">Elevation</div>
               </div>
@@ -742,30 +819,34 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* BOOKING CTA */}
-      <section className="py-24 px-6 relative overflow-hidden" style={{ background: "linear-gradient(135deg, #0d1f0f 0%, #1a3a1e 50%, #0d1a10 100%)" }}>
+      {/* ═══════════════════════════════════════════
+          BOOKING CTA
+      ═══════════════════════════════════════════ */}
+      <section className="py-16 sm:py-24 px-4 sm:px-6 relative overflow-hidden" style={{ background: "linear-gradient(135deg, #0d1f0f 0%, #1a3a1e 50%, #0d1a10 100%)" }}>
         <div className="batik-pattern absolute inset-0 pointer-events-none"></div>
         <div className="max-w-4xl mx-auto text-center">
           <div className="flex items-center justify-center gap-4 mb-6">
             <div className="gold-line w-16"></div>
-            <img src="/logo.png" alt="Leonine" className="w-12 h-12 object-contain" style={{ filter: "drop-shadow(0 0 12px rgba(201,168,76,0.4))" }} />
+            <img src="/logo.png" alt="Leonine" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" style={{ filter: "drop-shadow(0 0 12px rgba(201,168,76,0.4))" }} />
             <div className="gold-line w-16"></div>
           </div>
-          <h2 className="font-display text-5xl md:text-7xl text-amber-50 font-medium mb-4">Your Sanctuary</h2>
-          <h2 className="font-display text-5xl md:text-7xl font-light italic mb-8" style={{ background: "linear-gradient(135deg, #c9a84c, #f0d080, #d4891a)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Awaits</h2>
-          <p className="font-serif-light text-xl text-stone-300 italic font-light max-w-xl mx-auto mb-12 leading-relaxed">
+          <h2 className="font-display text-5xl sm:text-6xl md:text-7xl text-amber-50 font-medium mb-4">Your Sanctuary</h2>
+          <h2 className="font-display text-5xl sm:text-6xl md:text-7xl font-light italic mb-6 sm:mb-8" style={{ background: "linear-gradient(135deg, #c9a84c, #f0d080, #d4891a)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Awaits</h2>
+          <p className="font-serif-light text-lg sm:text-xl text-stone-300 italic font-light max-w-xl mx-auto mb-10 sm:mb-12 leading-relaxed">
             Only 6 retreats available at any time. Each stay is crafted individually. Your journey into the soul of Sri Lanka begins with one conversation.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            {/* ✅ Direct navigate */}
-            <button className="btn-ripple group font-body text-sm tracking-widest uppercase px-12 py-5 rounded-full text-stone-900 font-medium transition-all hover:scale-105" style={{ background: "linear-gradient(135deg, #c9a84c 0%, #f0d080 50%, #d4891a 100%)", boxShadow: "0 10px 40px rgba(201,168,76,0.5)" }} onClick={() => navigate("/booking")}>
+          <div className="flex flex-col xs:flex-row gap-4 justify-center">
+            <button className="btn-ripple group font-body text-xs sm:text-sm tracking-widest uppercase px-10 sm:px-12 py-4 sm:py-5 rounded-full text-stone-900 font-medium transition-all hover:scale-105 w-full xs:w-auto text-center"
+              style={{ background: "linear-gradient(135deg, #c9a84c 0%, #f0d080 50%, #d4891a 100%)", boxShadow: "0 10px 40px rgba(201,168,76,0.5)" }}
+              onClick={() => navigate("/booking")}>
               Begin Your Journey →
             </button>
-            <button className="btn-ripple font-body text-sm tracking-widest uppercase px-12 py-5 rounded-full text-amber-200 border border-yellow-700/40 hover:bg-yellow-900/10 hover:border-yellow-500 transition-all" onClick={handleCallCurator}>
+            <button className="btn-ripple font-body text-xs sm:text-sm tracking-widest uppercase px-10 sm:px-12 py-4 sm:py-5 rounded-full text-amber-200 border border-yellow-700/40 hover:bg-yellow-900/10 hover:border-yellow-500 transition-all w-full xs:w-auto text-center"
+              onClick={handleCallCurator}>
               Speak to a Curator
             </button>
           </div>
-          <div className="mt-10 flex flex-wrap justify-center gap-6 text-stone-500">
+          <div className="mt-8 sm:mt-10 flex flex-wrap justify-center gap-4 sm:gap-6 text-stone-500">
             {["Free Cancellation", "Instant Confirmation", "No Hidden Fees", "Private Transfer Included"].map((t) => (
               <div key={t} className="flex items-center gap-2 font-body text-xs">
                 <span className="text-yellow-700">✓</span>
@@ -779,7 +860,7 @@ export default function HomePage() {
       {/* FOOTER */}
       <Footer />
 
-      {/* Floating Feedback Button — ✅ direct navigate, ProtectedRoute guards /feedback */}
+      {/* Floating Feedback Button */}
       <button className="fb-float" onClick={() => navigate("/feedback")} title="Share your experience at Leonine">
         <span className="fb-float-star">★</span>
         Share Your Experience
