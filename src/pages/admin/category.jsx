@@ -55,7 +55,7 @@ export default function AdminCategory() {
       {/* Header */}
       <div className="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between gap-4 flex-wrap">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-teal-500 flex items-center justify-center shadow-sm">
+          <div className="w-9 h-9 rounded-xl bg-[#1e2d16] flex items-center justify-center shadow-sm">
             <FaTags className="text-white text-sm" />
           </div>
           <div>
@@ -66,12 +66,12 @@ export default function AdminCategory() {
 
         <div className="flex items-center gap-3 ml-auto">
           <div className="flex items-center gap-2 bg-teal-50 border border-teal-100 rounded-xl px-4 py-2">
-            <span className="text-xs text-teal-600 font-medium">Total</span>
-            <span className="text-xl font-black text-teal-700 leading-none">{categories.length}</span>
+            <span className="text-xs text-[#1e2d16] font-medium">Total</span>
+            <span className="text-xl font-black text-[#1e2d16] leading-none">{categories.length}</span>
           </div>
           <button
             onClick={() => navigate("/admin/add-category")}
-            className="flex items-center gap-2 bg-teal-500 hover:bg-teal-600 text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition-all shadow-sm"
+            className="flex items-center gap-2 bg-[#1e2d16] hover:bg-green-800 text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition-all shadow-sm"
           >
             <FaPlus style={{ fontSize: 10 }} /> Add Category
           </button>
@@ -84,7 +84,7 @@ export default function AdminCategory() {
         {/* Loading */}
         {!isLoaded && (
           <div className="bg-white rounded-xl border border-slate-200 p-16 text-center">
-            <div className="w-7 h-7 border-2 border-teal-400 border-t-transparent rounded-full animate-spin mx-auto" />
+            <div className="w-7 h-7 border-2 border-[#1e2d16] border-t-transparent rounded-full animate-spin mx-auto" />
             <p className="text-slate-400 text-xs mt-2">Loading categories…</p>
           </div>
         )}
@@ -93,13 +93,13 @@ export default function AdminCategory() {
         {isLoaded && categories.length === 0 && (
           <div className="bg-white rounded-xl border border-slate-200 p-16 text-center">
             <div className="w-16 h-16 bg-teal-50 border border-teal-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <FaTags className="text-teal-400 text-2xl" />
+              <FaTags className="text-[#1e2e16] text-2xl" />
             </div>
             <h3 className="text-sm font-semibold text-slate-700 mb-1">No categories yet</h3>
             <p className="text-xs text-slate-400 mb-4">Add your first category to get started.</p>
             <button
               onClick={() => navigate("/admin/add-category")}
-              className="inline-flex items-center gap-2 bg-teal-500 hover:bg-teal-600 text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition-all"
+              className="inline-flex items-center gap-2 bg-[#1e2d16] hover:bg-[#1e2d15] text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition-all"
             >
               <FaPlus style={{ fontSize: 10 }} /> Add Category
             </button>
@@ -144,7 +144,7 @@ export default function AdminCategory() {
                           </span>
                           <div>
                             <h2 className="text-sm font-semibold text-slate-800">{cat.name}</h2>
-                            <span className="inline-block mt-1 text-xs font-semibold text-teal-700 bg-teal-50 border border-teal-100 px-2 py-0.5 rounded-full">
+                            <span className="inline-block mt-1 text-xs font-semibold text-[#1e2d16] bg-teal-50 border border-teal-100 px-2 py-0.5 rounded-full">
                               Rs. {cat.price}
                             </span>
                           </div>
@@ -155,14 +155,14 @@ export default function AdminCategory() {
                           <button
                             onClick={() => navigate("/admin/update-category", { state: cat })}
                             title="Edit category"
-                            className="w-7 h-7 flex items-center justify-center rounded-lg bg-sky-50 text-sky-500 hover:bg-sky-100 border border-sky-100 transition-all text-xs"
+                            className="w-7 h-7 flex items-center justify-center rounded-lg bg-sky-50 text-[#1e2d16] hover:bg-sky-100 border border-sky-100 transition-all text-xs"
                           >
                             <FaEdit />
                           </button>
                           <button
                             onClick={() => handleDelete(cat._id)}
                             title="Delete category"
-                            className="w-7 h-7 flex items-center justify-center rounded-lg bg-red-50 text-red-400 hover:bg-red-100 border border-red-100 transition-all text-xs"
+                            className="w-7 h-7 flex items-center justify-center rounded-lg bg-red-50 text-red-700 hover:bg-red-100 border border-red-100 transition-all text-xs"
                           >
                             <FaTrash />
                           </button>
