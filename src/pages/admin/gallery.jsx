@@ -72,12 +72,12 @@ export default function AdminGallery() {
       {/* Header — matches AdminUser / AdminBooking / AdminFeedback pattern */}
       <div className="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between gap-4 flex-wrap">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-teal-500 flex items-center justify-center shadow-sm">
+          <div className="w-9 h-9 rounded-xl bg-[#1e2d16] flex items-center justify-center shadow-sm">
             <FaImage className="text-white text-sm" />
           </div>
           <div>
             <h1 className="text-base font-bold text-slate-800 leading-tight">Gallery Management</h1>
-            <p className="text-xs text-slate-400">Images shown on the public gallery page</p>
+            <p className="text-xs text-[#1e2d16]">Images shown on the public gallery page</p>
           </div>
         </div>
 
@@ -96,14 +96,14 @@ export default function AdminGallery() {
 
           {/* Total pill */}
           <div className="flex items-center gap-2 bg-teal-50 border border-teal-100 rounded-xl px-4 py-2">
-            <span className="text-xs text-teal-600 font-medium">Total</span>
-            <span className="text-xl font-black text-teal-700 leading-none">{galleryItems.length}</span>
+            <span className="text-xs text-[#1e2d16] font-medium">Total</span>
+            <span className="text-xl font-black text-[#1e2d16] leading-none">{galleryItems.length}</span>
           </div>
 
           {/* Add button */}
           <button
             onClick={() => navigate("/admin/add-gallery")}
-            className="flex items-center gap-2 bg-teal-500 hover:bg-teal-600 text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition-all shadow-sm"
+            className="flex items-center gap-2 bg-[#1e2d16] hover:bg-[#1e2d16] text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition-all shadow-sm"
           >
             <FaPlus style={{ fontSize: 10 }} /> Add Item
           </button>
@@ -120,7 +120,7 @@ export default function AdminGallery() {
               onClick={() => setFilterCategory(cat)}
               className={`px-3 py-1 rounded-full text-xs font-semibold transition-all
                 ${filterCategory === cat
-                  ? "bg-teal-500 text-white shadow-sm"
+                  ? "bg-[#1e2d16] text-white shadow-sm"
                   : "bg-slate-100 text-slate-500 hover:bg-slate-200"}`}
             >
               {cat}
@@ -143,7 +143,7 @@ export default function AdminGallery() {
         {/* Loading */}
         {!isLoaded && (
           <div className="bg-white rounded-xl border border-slate-200 p-16 text-center">
-            <div className="w-7 h-7 border-2 border-teal-400 border-t-transparent rounded-full animate-spin mx-auto" />
+            <div className="w-7 h-7 border-2 border-[#1e2d16] border-t-transparent rounded-full animate-spin mx-auto" />
             <p className="text-slate-400 text-xs mt-2">Loading gallery items…</p>
           </div>
         )}
@@ -152,13 +152,13 @@ export default function AdminGallery() {
         {isLoaded && galleryItems.length === 0 && (
           <div className="bg-white rounded-xl border border-slate-200 p-16 text-center">
             <div className="w-16 h-16 bg-teal-50 border border-teal-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <FaImage className="text-teal-400 text-2xl" />
+              <FaImage className="text-[#1e2d16] text-2xl" />
             </div>
             <h3 className="text-sm font-semibold text-slate-700 mb-1">No gallery items yet</h3>
             <p className="text-xs text-slate-400 mb-4">Add your first image to display on the public gallery.</p>
             <button
               onClick={() => navigate("/admin/add-gallery")}
-              className="inline-flex items-center gap-2 bg-teal-500 hover:bg-teal-600 text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition-all"
+              className="inline-flex items-center gap-2 bg-[#1e2d16] hover:bg-[#1e2d16] text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition-all"
             >
               <FaPlus style={{ fontSize: 10 }} /> Add Gallery Item
             </button>
@@ -235,14 +235,14 @@ export default function AdminGallery() {
                           <button
                             onClick={() => navigate("/admin/update-gallery", { state: item })}
                             title="Edit item"
-                            className="w-7 h-7 flex items-center justify-center rounded-lg bg-sky-50 text-sky-500 hover:bg-sky-100 border border-sky-100 transition-all text-xs"
+                            className="w-7 h-7 flex items-center justify-center rounded-lg bg-sky-50 text-[#1e2d16] hover:bg-sky-100 border border-sky-100 transition-all text-xs"
                           >
                             <FaEdit />
                           </button>
                           <button
                             onClick={() => handleDelete(item._id)}
                             title="Delete item"
-                            className="w-7 h-7 flex items-center justify-center rounded-lg bg-red-50 text-red-400 hover:bg-red-100 border border-red-100 transition-all text-xs"
+                            className="w-7 h-7 flex items-center justify-center rounded-lg bg-red-50 text-red-700 hover:bg-red-100 border border-red-100 transition-all text-xs"
                           >
                             <FaTrash />
                           </button>
