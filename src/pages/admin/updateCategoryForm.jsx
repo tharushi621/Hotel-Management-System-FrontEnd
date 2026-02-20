@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { uploadMedia } from "../utils/uploadMedia";
+import uploadMedia from "../../utils/uploadMedia";
 
 export default function UpdateCategoryForm() {
   const { state } = useLocation();
