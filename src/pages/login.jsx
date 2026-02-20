@@ -27,7 +27,9 @@ export default function Loginpage() {
         password,
       })
       .then((res) => {
-        localStorage.setItem("token", res.data.token);
+        // Store token in sessionStorage so it clears when the browser tab closes,
+        // requiring login every new session
+        sessionStorage.setItem("token", res.data.token);
 
         if (res.data.user && res.data.user.type === "admin") {
           navigate("/admin", { replace: true });
@@ -476,8 +478,8 @@ export default function Loginpage() {
             </div>
 
             <div className="stamp-corner">
-              <div className="stamp-inner"><img src="/logo.png" alt="Logo" className="stamp-lion" />
-
+              <div className="stamp-inner">
+                <img src="/logo.png" alt="Logo" className="stamp-lion" />
                 <span>LVN</span>
               </div>
             </div>
