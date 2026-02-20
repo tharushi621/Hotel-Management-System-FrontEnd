@@ -32,7 +32,8 @@ export default function BookingPage() {
   function handleSubmit() {
     setError("");
 
-    const token = localStorage.getItem("token");
+    // Read token from sessionStorage — requires login every new browser session
+    const token = sessionStorage.getItem("token");
     if (!token || token === "null" || token.trim() === "") {
       navigate("/login", { state: { from: "/booking" } });
       return;
@@ -65,9 +66,12 @@ export default function BookingPage() {
           category: chosenRoom.category,
           start: form.checkIn,
           end:   form.checkOut,
+          // Pass the guest email from the form so the backend can send confirmation to it
+          guestEmail: form.email,
           notes: [
             `Name: ${form.name}`,
             form.phone    ? `Phone: ${form.phone}`       : null,
+            `Email: ${form.email}`,
             `Guests: ${form.guests}`,
             form.requests ? `Requests: ${form.requests}` : null,
           ].filter(Boolean).join(" | "),
@@ -368,6 +372,7 @@ export default function BookingPage() {
                 )}
 
                 <div className="b-welcome-note">
+                  A confirmation has been dispatched to your correspondence address.<br />
                   Our butler shall correspond with thee shortly to confirm your sanctuary.<br />
                   A deposit of 30% will be requested upon confirmation.<br />
                   We await your arrival with the warmest anticipation.
@@ -410,7 +415,12 @@ export default function BookingPage() {
                   </div>
 
                   <div className="form-full">
-                    <label className="b-label">Electronic Correspondence <span className="req">*</span></label>
+                    <label className="b-label">
+                      Electronic Correspondence <span className="req">*</span>
+                      <em style={{ fontSize: "0.65rem", marginLeft: 6, opacity: 0.7 }}>
+                        — booking confirmation will be sent here
+                      </em>
+                    </label>
                     <div className={`b-wrap ${inkFocus === "email" ? "focused" : ""}`}>
                       <div className="b-dot" />
                       <input name="email" type="email" placeholder="your.name@correspondence.com"
