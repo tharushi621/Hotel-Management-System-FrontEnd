@@ -12,11 +12,11 @@ import CategoriesPage from "./pages/client-pages/categories.jsx";
 import LeonineSplash from "./components/LeonineSplash.jsx";
 import GalleryPage from "./pages/client-pages/galleryPage.jsx";
 import FeedbackPage from "./pages/client-pages/feedbackForm.jsx";
-import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import VerifyEmailPage from "./pages/client-pages/verifyemailpage.jsx";
+import ProtectedRoute from "./components/ProtectedRoute.jsx"
+
 
 function App() {
-  // Read sessionStorage synchronously — no null phase, no white flash
   const [showSplash, setShowSplash] = useState(
     () => !sessionStorage.getItem("hasVisited")
   );
@@ -30,8 +30,6 @@ function App() {
     <BrowserRouter>
       <Toaster position="top-right" reverseOrder={false} />
 
-      {/* Routes always mounted underneath — home page is already painted
-          when the splash fades out, so there is zero white flash. */}
       <Routes>
         <Route path="/login" element={<Loginpage />} />
         <Route path="/signup" element={<SignupPage />} />
