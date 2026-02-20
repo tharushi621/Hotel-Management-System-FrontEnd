@@ -2,7 +2,10 @@ import { Navigate, useLocation } from "react-router-dom";
 
 export default function ProtectedRoute({ children }) {
   const location = useLocation();
-  const token = localStorage.getItem("token");
+
+  // sessionStorage clears when the browser tab/window closes,
+  // so every new session requires a fresh login
+  const token = sessionStorage.getItem("token");
   const isAuthenticated = token && token !== "null" && token.trim() !== "";
 
   if (!isAuthenticated) {
