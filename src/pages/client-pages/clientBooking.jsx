@@ -60,7 +60,7 @@ export default function BookingPage() {
 
     axios
       .post(
-        import.meta.env.VITE_BACKEND_URL + "/api/bookings/create-by-category",
+        import.meta.env.VITE_BACKEND_URL + "/api/bookings/category",
         {
           category: chosenRoom.category,
           start: form.checkIn,
