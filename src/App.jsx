@@ -16,11 +16,13 @@ import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import VerifyEmailPage from "./pages/client-pages/verifyemailpage.jsx";
 
 function App() {
-  // Start as null so we don't flash content before we've checked localStorage
+  // Start as null so we don't flash content before we've checked sessionStorage
   const [showSplash, setShowSplash] = useState(null);
 
   useEffect(() => {
-    const hasVisited = localStorage.getItem("hasVisited");
+    // sessionStorage clears when the browser tab/window is closed,
+    // so the splash will show again every new session
+    const hasVisited = sessionStorage.getItem("hasVisited");
     if (!hasVisited) {
       setShowSplash(true);
     } else {
@@ -29,11 +31,11 @@ function App() {
   }, []);
 
   const handleSplashComplete = () => {
-    localStorage.setItem("hasVisited", "true");
+    sessionStorage.setItem("hasVisited", "true");
     setShowSplash(false);
   };
 
-  // Still checking localStorage — render nothing to avoid flicker
+  // Still checking sessionStorage — render nothing to avoid flicker
   if (showSplash === null) return null;
 
   return (
