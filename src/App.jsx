@@ -16,7 +16,7 @@ import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import VerifyEmailPage from "./pages/client-pages/verifyemailpage.jsx";
 
 function App() {
-  // Read sessionStorage synchronously during render — no null phase, no white flash
+  // Read sessionStorage synchronously — no null phase, no white flash
   const [showSplash, setShowSplash] = useState(
     () => !sessionStorage.getItem("hasVisited")
   );
@@ -30,8 +30,8 @@ function App() {
     <BrowserRouter>
       <Toaster position="top-right" reverseOrder={false} />
 
-      {/* Routes are always mounted. The splash sits on top via position:fixed,
-          so when it fades out the home page is already painted beneath — zero white flash. */}
+      {/* Routes always mounted underneath — home page is already painted
+          when the splash fades out, so there is zero white flash. */}
       <Routes>
         <Route path="/login" element={<Loginpage />} />
         <Route path="/signup" element={<SignupPage />} />
@@ -59,7 +59,7 @@ function App() {
         <Route path="/*" element={<HomePage />} />
       </Routes>
 
-      {/* Splash overlays everything; unmounts cleanly after exit animation */}
+      {/* Splash sits on top via position:fixed; unmounts after exit */}
       {showSplash && <LeonineSplash onComplete={handleSplashComplete} />}
     </BrowserRouter>
   );
