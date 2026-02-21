@@ -13,8 +13,8 @@ import LeonineSplash from "./components/LeonineSplash.jsx";
 import GalleryPage from "./pages/client-pages/galleryPage.jsx";
 import FeedbackPage from "./pages/client-pages/feedbackForm.jsx";
 import VerifyEmailPage from "./pages/client-pages/verifyemailpage.jsx";
-import ProtectedRoute from "./components/ProtectedRoute.jsx"
-
+import ForgotPasswordPage from "./pages/ForgotPasswordPage.jsx";
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 function App() {
   const [showSplash, setShowSplash] = useState(
@@ -29,10 +29,11 @@ function App() {
   return (
     <BrowserRouter>
       <Toaster position="top-right" reverseOrder={false} />
-
       <Routes>
         <Route path="/login" element={<Loginpage />} />
         <Route path="/signup" element={<SignupPage />} />
+        <Route path="/verify-email" element={<VerifyEmailPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route
           path="/booking"
           element={
@@ -53,7 +54,6 @@ function App() {
         <Route path="/rooms" element={<RoomsPage />} />
         <Route path="/gallery" element={<GalleryPage />} />
         <Route path="/admin/*" element={<AdminPage />} />
-        <Route path="/verify-email" element={<VerifyEmailPage />} />
         <Route path="/*" element={<HomePage />} />
       </Routes>
       {showSplash && <LeonineSplash onComplete={handleSplashComplete} />}
