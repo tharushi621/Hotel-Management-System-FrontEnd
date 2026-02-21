@@ -517,7 +517,6 @@ export default function Loginpage() {
               <div className="divider-rule" />
             </div>
 
-            {/* Show a contextual message when redirected from booking/feedback */}
             {from !== "/" && (
               <div className="redirect-notice">
                 🔏 &nbsp; To proceed with your{" "}
@@ -570,10 +569,9 @@ export default function Loginpage() {
               onClick={handleLogin}
               disabled={loading}
             >
-              {loading ? "Sealing the envelope..." : "✦  Sign In  ✦"}
+              {loading ? "Signing in..." : "Login"}
             </button>
 
-            {/* Clear Sign Up section */}
             <div className="signup-divider">
               <div className="signup-divider-rule" />
               <span className="signup-divider-text">Don't have an account?</span>
@@ -584,7 +582,7 @@ export default function Loginpage() {
               className="signup-btn"
               onClick={() => navigate("/signup")}
             >
-              ✦  Sign Up  ✦
+              Sign Up
             </button>
           </div>
 
