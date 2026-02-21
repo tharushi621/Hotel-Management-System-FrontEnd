@@ -509,7 +509,7 @@ export default function Loginpage() {
               To: The Honoured Guest &nbsp;&nbsp; · &nbsp;&nbsp; Leonine Villa Natura Resort, Sri Lanka
             </div>
 
-            <h1 className="letter-heading">A Letter of Welcome</h1>
+            <h1 className="letter-heading">A Letter of </h1>
 
             <div className="quill-divider">
               <div className="divider-rule" />
