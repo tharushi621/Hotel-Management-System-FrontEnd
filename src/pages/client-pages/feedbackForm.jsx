@@ -272,14 +272,14 @@ export default function FeedbackPage() {
             <div className="fb-ref">
               Guest Testimony<br />
               {submittedRef
-                ? `Ref. ${String(submittedRef.bookingId).padStart(4, "0")} / 2025`
-                : "Ref. _ _ _ _ / 2025"}
+                ? `Ref. ${String(submittedRef.bookingId).padStart(4, "0")} / 2026`
+                : "Ref. _ _ _ _ / 2026"}
             </div>
 
             <div className="fb-postmark">
               <div className="fb-pm-inner">
                 <span>Leonine</span>
-                <span className="fbpy">2025</span>
+                <span className="fbpy">2026</span>
                 <span>Reserve</span>
               </div>
             </div>
