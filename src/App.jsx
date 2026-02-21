@@ -56,8 +56,6 @@ function App() {
         <Route path="/verify-email" element={<VerifyEmailPage />} />
         <Route path="/*" element={<HomePage />} />
       </Routes>
-
-      {/* Splash sits on top via position:fixed; unmounts after exit */}
       {showSplash && <LeonineSplash onComplete={handleSplashComplete} />}
     </BrowserRouter>
   );

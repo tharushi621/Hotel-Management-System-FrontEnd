@@ -19,47 +19,30 @@ function CornerOrnament({ flip = false, flipY = false, size = 72 }) {
       <path d="M10 10 L10 26 M10 10 L26 10" stroke="#c9a84c" strokeWidth="0.6" strokeLinecap="round" opacity="0.6" />
       {/* Corner diamond */}
       <rect x="1.5" y="1.5" width="5" height="5" fill="#c9a84c" transform="rotate(45 4 4)" />
-      {/* Diamond accent along top */}
-      <rect x="17.5" y="1.5" width="3.5" height="3.5" fill="#c9a84c" opacity="0.7" transform="rotate(45 19 3)" />
-      {/* Diamond accent along left */}
-      <rect x="1.5" y="17.5" width="3.5" height="3.5" fill="#c9a84c" opacity="0.7" transform="rotate(45 3 19)" />
       {/* Elegant curve flourish */}
       <path d="M28 4 Q20 4 12 12" stroke="#c9a84c" strokeWidth="0.5" opacity="0.35" fill="none" />
     </svg>
   );
 }
 
-// ─── Horizontal Divider Rule ────────────────────────────────────────────────────
-function GoldRule({ width = "100%", opacity = 1 }) {
+// ─── Horizontal Divider Rule — clean single line, no mid-line diamonds ─────────
+function GoldRule({ width = "100%" }) {
   return (
     <svg
       width={width}
-      height="18"
-      viewBox="0 0 600 18"
+      height="10"
+      viewBox="0 0 600 10"
       preserveAspectRatio="xMidYMid meet"
       fill="none"
-      style={{ opacity }}
     >
-      {/* Primary rule */}
-      <line x1="0" y1="9" x2="600" y2="9" stroke="url(#gr)" strokeWidth="0.8" />
-      {/* Secondary hairline */}
-      <line x1="40" y1="12" x2="560" y2="12" stroke="url(#gr)" strokeWidth="0.3" opacity="0.4" />
-      {/* Centre medallion */}
-      <rect x="296" y="5" width="8" height="8" fill="#c9a84c" transform="rotate(45 300 9)" />
-      {/* Quarter diamonds */}
-      {[120, 480].map((cx, i) => (
-        <rect key={i} x={cx - 3} y="6" width="6" height="6" fill="#c9a84c" opacity="0.55" transform={`rotate(45 ${cx} 9)`} />
-      ))}
-      {/* Micro dots */}
-      {[60, 190, 410, 540].map((cx, i) => (
-        <circle key={i} cx={cx} cy="9" r="1.2" fill="#c9a84c" opacity="0.35" />
-      ))}
+      {/* Single clean rule */}
+      <line x1="0" y1="5" x2="600" y2="5" stroke="url(#gr)" strokeWidth="0.8" />
       <defs>
         <linearGradient id="gr" x1="0" y1="0" x2="600" y2="0" gradientUnits="userSpaceOnUse">
           <stop offset="0%"   stopColor="#c9a84c" stopOpacity="0" />
-          <stop offset="20%"  stopColor="#c9a84c" stopOpacity="0.8" />
-          <stop offset="50%"  stopColor="#f0d080" stopOpacity="1" />
-          <stop offset="80%"  stopColor="#c9a84c" stopOpacity="0.8" />
+          <stop offset="25%"  stopColor="#f0d080" stopOpacity="0.9" />
+          <stop offset="50%"  stopColor="#f5e070" stopOpacity="1" />
+          <stop offset="75%"  stopColor="#f0d080" stopOpacity="0.9" />
           <stop offset="100%" stopColor="#c9a84c" stopOpacity="0" />
         </linearGradient>
       </defs>
@@ -67,7 +50,6 @@ function GoldRule({ width = "100%", opacity = 1 }) {
   );
 }
 
-// ─── Centre medallion rule (smaller, for section breaks) ─────────────────────
 function ThinRule({ show, delay = 0, widthPct = "60%" }) {
   return (
     <div
@@ -88,48 +70,44 @@ function AmbientMist({ active }) {
   if (!active) return null;
   return (
     <>
-      {/* Left mist panels */}
       {[
-        { top: 5,  h: 40, dur: 9,   del: 0,   op: 0.55 },
-        { top: 35, h: 38, dur: 10,  del: 1.5, op: 0.45 },
-        { top: 62, h: 38, dur: 8.5, del: 0.8, op: 0.4  },
+        { top: 5,  h: 40, dur: 9,   del: 0,   op: 0.65 },
+        { top: 35, h: 38, dur: 10,  del: 1.5, op: 0.5 },
+        { top: 62, h: 38, dur: 8.5, del: 0.8, op: 0.45 },
       ].map((m, i) => (
         <div key={`lm-${i}`} style={{
           position: "absolute", top: `${m.top}%`, left: 0,
           width: "28%", height: `${m.h}%`,
-          background: "linear-gradient(90deg, rgba(180,200,170,0.13) 0%, rgba(180,200,170,0.04) 60%, transparent 100%)",
+          background: "linear-gradient(90deg, rgba(10,60,20,0.25) 0%, rgba(20,80,30,0.08) 60%, transparent 100%)",
           opacity: m.op,
           animation: `mistDrift ${m.dur}s ease-in-out ${m.del}s infinite alternate`,
           pointerEvents: "none",
         }} />
       ))}
-      {/* Right mist panels */}
       {[
-        { top: 5,  h: 40, dur: 9,   del: 0.5, op: 0.55 },
-        { top: 35, h: 38, dur: 10,  del: 2,   op: 0.45 },
-        { top: 62, h: 38, dur: 8.5, del: 1.2, op: 0.4  },
+        { top: 5,  h: 40, dur: 9,   del: 0.5, op: 0.65 },
+        { top: 35, h: 38, dur: 10,  del: 2,   op: 0.5 },
+        { top: 62, h: 38, dur: 8.5, del: 1.2, op: 0.45 },
       ].map((m, i) => (
         <div key={`rm-${i}`} style={{
           position: "absolute", top: `${m.top}%`, right: 0,
           width: "28%", height: `${m.h}%`,
-          background: "linear-gradient(270deg, rgba(180,200,170,0.13) 0%, rgba(180,200,170,0.04) 60%, transparent 100%)",
+          background: "linear-gradient(270deg, rgba(10,60,20,0.25) 0%, rgba(20,80,30,0.08) 60%, transparent 100%)",
           opacity: m.op,
           animation: `mistDrift ${m.dur}s ease-in-out ${m.del}s infinite alternate`,
           pointerEvents: "none",
         }} />
       ))}
-      {/* Central ambient glow */}
       <div style={{
         position: "absolute", top: "50%", left: "50%",
-        transform: "translate(-50%,-50%)", width: "60%", height: "60%",
-        background: "radial-gradient(ellipse at center, rgba(201,168,76,0.04) 0%, transparent 70%)",
+        transform: "translate(-50%,-50%)", width: "65%", height: "65%",
+        background: "radial-gradient(ellipse at center, rgba(201,168,76,0.07) 0%, transparent 70%)",
         pointerEvents: "none",
       }} />
-      {/* Subtle gold centre warmth */}
       <div style={{
         position: "absolute", top: "50%", left: "50%",
         transform: "translate(-50%,-50%)", width: "40%", height: "40%",
-        background: "radial-gradient(ellipse at center, rgba(201,168,76,0.06) 0%, transparent 65%)",
+        background: "radial-gradient(ellipse at center, rgba(201,168,76,0.1) 0%, transparent 65%)",
         animation: "warmPulse 6s ease-in-out infinite",
         pointerEvents: "none",
       }} />
@@ -154,7 +132,6 @@ export default function LeonineSplash({ onComplete }) {
   }, []);
 
   const handleEnter = () => {
-    // Fade the whole splash to dark (matches home page bg) then unmount
     setPhase(6);
     setTimeout(() => onComplete?.(), 1000);
   };
@@ -189,7 +166,7 @@ export default function LeonineSplash({ onComplete }) {
           100% { background-position:  200% center; }
         }
         .splash-shimmer-text {
-          background: linear-gradient(90deg, #c9a84c 0%, #f0d080 40%, #d4891a 60%, #c9a84c 100%);
+          background: linear-gradient(90deg, #b8861e 0%, #f5e070 30%, #faf0a0 50%, #f5e070 70%, #b8861e 100%);
           background-size: 200% auto;
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
@@ -198,8 +175,6 @@ export default function LeonineSplash({ onComplete }) {
         }
       `}</style>
 
-      {/* ══ ROOT — covers entire viewport ══
-          On exit: fades to #050e06 which matches the home page dark bg perfectly */}
       <div
         style={{
           position: "fixed",
@@ -209,38 +184,38 @@ export default function LeonineSplash({ onComplete }) {
           alignItems: "center",
           justifyContent: "center",
           overflow: "hidden",
-          background: "#050e06",
+          background: "#020c03",
           opacity: exiting ? 0 : 1,
           transition: exiting ? "opacity 1s ease" : "none",
           pointerEvents: exiting ? "none" : "auto",
         }}
       >
-        {/* ── Deep radial bg ── */}
+        {/* Deep rich green radial bg */}
         <div style={{
           position: "absolute", inset: 0,
-          background: "radial-gradient(ellipse at 50% 40%, #0d2410 0%, #070f08 45%, #030806 100%)",
+          background: "radial-gradient(ellipse at 50% 40%, #0e2e12 0%, #061208 45%, #020904 100%)",
           opacity: phase >= 1 ? 1 : 0,
           transition: "opacity 2s ease",
         }} />
 
-        {/* ── Subtle grain ── */}
+        {/* Subtle grain */}
         <div style={{
           position: "absolute", inset: 0,
-          backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E\")",
+          backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.022'/%3E%3C/svg%3E\")",
           pointerEvents: "none",
         }} />
 
-        {/* ── Fine horizontal stone lines ── */}
+        {/* Fine horizontal stone lines */}
         <div style={{
           position: "absolute", inset: 0,
-          backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(201,168,76,0.025) 40px)",
+          backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(201,168,76,0.018) 40px)",
           pointerEvents: "none",
         }} />
 
-        {/* ══ MIST ══ */}
+        {/* MIST */}
         <AmbientMist active={phase >= 2} />
 
-        {/* ══ PRECISE BORDER FRAME ══ */}
+        {/* ══ BORDER FRAME — no border diamonds ══ */}
         <svg
           style={{
             position: "absolute", inset: 0,
@@ -253,75 +228,49 @@ export default function LeonineSplash({ onComplete }) {
         >
           <defs>
             <linearGradient id="borderGrad" x1="0" y1="0" x2="1" y2="0" gradientUnits="objectBoundingBox">
-              <stop offset="0%"   stopColor="#c9a84c" stopOpacity="0.3" />
-              <stop offset="30%"  stopColor="#f0d080" stopOpacity="0.85" />
-              <stop offset="50%"  stopColor="#c9a84c" stopOpacity="1" />
-              <stop offset="70%"  stopColor="#f0d080" stopOpacity="0.85" />
-              <stop offset="100%" stopColor="#c9a84c" stopOpacity="0.3" />
+              <stop offset="0%"   stopColor="#c9a84c" stopOpacity="0.2" />
+              <stop offset="30%"  stopColor="#f0d080" stopOpacity="0.9" />
+              <stop offset="50%"  stopColor="#f5e070" stopOpacity="1" />
+              <stop offset="70%"  stopColor="#f0d080" stopOpacity="0.9" />
+              <stop offset="100%" stopColor="#c9a84c" stopOpacity="0.2" />
             </linearGradient>
             <linearGradient id="borderGradV" x1="0" y1="0" x2="0" y2="1" gradientUnits="objectBoundingBox">
-              <stop offset="0%"   stopColor="#c9a84c" stopOpacity="0.3" />
-              <stop offset="30%"  stopColor="#f0d080" stopOpacity="0.85" />
-              <stop offset="50%"  stopColor="#c9a84c" stopOpacity="1" />
-              <stop offset="70%"  stopColor="#f0d080" stopOpacity="0.85" />
-              <stop offset="100%" stopColor="#c9a84c" stopOpacity="0.3" />
+              <stop offset="0%"   stopColor="#c9a84c" stopOpacity="0.2" />
+              <stop offset="30%"  stopColor="#f0d080" stopOpacity="0.9" />
+              <stop offset="50%"  stopColor="#f5e070" stopOpacity="1" />
+              <stop offset="70%"  stopColor="#f0d080" stopOpacity="0.9" />
+              <stop offset="100%" stopColor="#c9a84c" stopOpacity="0.2" />
             </linearGradient>
           </defs>
 
           {/* Outer primary border — top / bottom */}
-          <line x1="12" y1="12" x2="988" y2="12" stroke="url(#borderGrad)" strokeWidth="0.9"
+          <line x1="12" y1="12" x2="988" y2="12" stroke="url(#borderGrad)" strokeWidth="1.1"
             strokeDasharray="976" strokeDashoffset={phase >= 1 ? 0 : 1000}
             style={{ transition: "stroke-dashoffset 2s cubic-bezier(0.4,0,0.2,1) 0.4s" }} />
-          <line x1="12" y1="588" x2="988" y2="588" stroke="url(#borderGrad)" strokeWidth="0.9"
+          <line x1="12" y1="588" x2="988" y2="588" stroke="url(#borderGrad)" strokeWidth="1.1"
             strokeDasharray="976" strokeDashoffset={phase >= 1 ? 0 : 1000}
             style={{ transition: "stroke-dashoffset 2s cubic-bezier(0.4,0,0.2,1) 0.6s" }} />
           {/* Outer primary border — left / right */}
-          <line x1="12" y1="12" x2="12" y2="588" stroke="url(#borderGradV)" strokeWidth="0.9"
+          <line x1="12" y1="12" x2="12" y2="588" stroke="url(#borderGradV)" strokeWidth="1.1"
             strokeDasharray="576" strokeDashoffset={phase >= 1 ? 0 : 600}
             style={{ transition: "stroke-dashoffset 1.8s cubic-bezier(0.4,0,0.2,1) 0.5s" }} />
-          <line x1="988" y1="12" x2="988" y2="588" stroke="url(#borderGradV)" strokeWidth="0.9"
+          <line x1="988" y1="12" x2="988" y2="588" stroke="url(#borderGradV)" strokeWidth="1.1"
             strokeDasharray="576" strokeDashoffset={phase >= 1 ? 0 : 600}
             style={{ transition: "stroke-dashoffset 1.8s cubic-bezier(0.4,0,0.2,1) 0.7s" }} />
 
-          {/* Inner secondary border */}
-          <line x1="24" y1="24" x2="976" y2="24" stroke="url(#borderGrad)" strokeWidth="0.4"
-            strokeDasharray="952" strokeOpacity="0.45" strokeDashoffset={phase >= 1 ? 0 : 952}
+          {/* Inner secondary border — slightly more visible */}
+          <line x1="24" y1="24" x2="976" y2="24" stroke="url(#borderGrad)" strokeWidth="0.5"
+            strokeDasharray="952" strokeOpacity="0.5" strokeDashoffset={phase >= 1 ? 0 : 952}
             style={{ transition: "stroke-dashoffset 2s cubic-bezier(0.4,0,0.2,1) 0.8s" }} />
-          <line x1="24" y1="576" x2="976" y2="576" stroke="url(#borderGrad)" strokeWidth="0.4"
-            strokeDasharray="952" strokeOpacity="0.45" strokeDashoffset={phase >= 1 ? 0 : 952}
+          <line x1="24" y1="576" x2="976" y2="576" stroke="url(#borderGrad)" strokeWidth="0.5"
+            strokeDasharray="952" strokeOpacity="0.5" strokeDashoffset={phase >= 1 ? 0 : 952}
             style={{ transition: "stroke-dashoffset 2s cubic-bezier(0.4,0,0.2,1) 0.9s" }} />
-          <line x1="24" y1="24" x2="24" y2="576" stroke="url(#borderGradV)" strokeWidth="0.4"
-            strokeDasharray="552" strokeOpacity="0.45" strokeDashoffset={phase >= 1 ? 0 : 552}
+          <line x1="24" y1="24" x2="24" y2="576" stroke="url(#borderGradV)" strokeWidth="0.5"
+            strokeDasharray="552" strokeOpacity="0.5" strokeDashoffset={phase >= 1 ? 0 : 552}
             style={{ transition: "stroke-dashoffset 1.8s cubic-bezier(0.4,0,0.2,1) 0.85s" }} />
-          <line x1="976" y1="24" x2="976" y2="576" stroke="url(#borderGradV)" strokeWidth="0.4"
-            strokeDasharray="552" strokeOpacity="0.45" strokeDashoffset={phase >= 1 ? 0 : 552}
+          <line x1="976" y1="24" x2="976" y2="576" stroke="url(#borderGradV)" strokeWidth="0.5"
+            strokeDasharray="552" strokeOpacity="0.5" strokeDashoffset={phase >= 1 ? 0 : 552}
             style={{ transition: "stroke-dashoffset 1.8s cubic-bezier(0.4,0,0.2,1) 0.95s" }} />
-
-          {/* Top centre diamond */}
-          {phase >= 1 && <rect x="496" y="8"   width="8" height="8" fill="#c9a84c" transform="rotate(45 500 12)"  opacity="0.9" />}
-          {/* Bottom centre diamond */}
-          {phase >= 1 && <rect x="496" y="584" width="8" height="8" fill="#c9a84c" transform="rotate(45 500 588)" opacity="0.9" />}
-          {/* Left / Right centre diamonds */}
-          {phase >= 1 && <>
-            <rect x="8"   y="296" width="8" height="8" fill="#c9a84c" transform="rotate(45 12 300)"  opacity="0.9" />
-            <rect x="984" y="296" width="8" height="8" fill="#c9a84c" transform="rotate(45 988 300)" opacity="0.9" />
-          </>}
-
-          {/* Inner border corner accent diamonds */}
-          {phase >= 1 && [[24,24],[976,24],[24,576],[976,576]].map(([cx,cy],i) => (
-            <rect key={i} x={cx-3} y={cy-3} width="6" height="6" fill="#c9a84c"
-              transform={`rotate(45 ${cx} ${cy})`} opacity="0.5" />
-          ))}
-
-          {/* Quarter-point accent diamonds */}
-          {phase >= 1 && [250,750].map((cx,i) => (
-            <rect key={i} x={cx-3} y="9" width="6" height="6" fill="#c9a84c"
-              transform={`rotate(45 ${cx} 12)`} opacity="0.5" />
-          ))}
-          {phase >= 1 && [150,450].map((cy,i) => (
-            <rect key={i} x="9" y={cy-3} width="6" height="6" fill="#c9a84c"
-              transform={`rotate(45 12 ${cy})`} opacity="0.4" />
-          ))}
         </svg>
 
         {/* ══ CORNER ORNAMENTS ══ */}
@@ -345,14 +294,14 @@ export default function LeonineSplash({ onComplete }) {
         <div style={{
           position: "relative", zIndex: 10,
           display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center",
-          padding: "0 48px", maxWidth: 560, width: "100%",
+          padding: "0 48px", maxWidth: 620, width: "100%",
         }}>
           {/* Halo rings */}
           {phase >= 3 && [0,1,2].map(i => (
             <div key={i} style={{
               position: "absolute", top: "50%", left: "50%",
-              width: 90, height: 90, borderRadius: "50%",
-              border: "1px solid rgba(201,168,76,0.4)",
+              width: 110, height: 110, borderRadius: "50%",
+              border: "1px solid rgba(240,208,100,0.45)",
               animation: `haloExpand 3s ease-out ${i * 1}s infinite`,
               pointerEvents: "none",
             }} />
@@ -361,9 +310,9 @@ export default function LeonineSplash({ onComplete }) {
           {/* Heritage subtitle */}
           <div style={{
             fontFamily: "'Jost', sans-serif",
-            fontSize: "0.6rem", letterSpacing: "0.45em",
-            textTransform: "uppercase", color: "rgba(201,168,76,0.65)",
-            marginBottom: 12,
+            fontSize: "0.75rem", letterSpacing: "0.42em",
+            textTransform: "uppercase", color: "rgba(240,208,100,0.8)",
+            marginBottom: 14,
             opacity: phase >= 4 ? 1 : 0,
             transform: phase >= 4 ? "translateY(0)" : "translateY(12px)",
             transition: "opacity 1s ease 0.1s, transform 1s ease 0.1s",
@@ -373,32 +322,32 @@ export default function LeonineSplash({ onComplete }) {
 
           {/* Thin rule above logo */}
           <div style={{
-            width: "100%", marginBottom: 18,
+            width: "100%", marginBottom: 22,
             opacity: phase >= 4 ? 1 : 0,
             transition: "opacity 0.8s ease 0.25s",
           }}>
             <ThinRule show={phase >= 4} delay={0.25} widthPct="100%" />
           </div>
 
-          {/* Logo */}
+          {/* Logo — BIGGER */}
           <div style={{
-            width: 72, height: 72, marginBottom: 18, position: "relative",
+            width: 120, height: 120, marginBottom: 22, position: "relative",
             opacity: phase >= 3 ? 1 : 0, transition: "opacity 0.1s",
           }}>
             {phase >= 3 && (
               <img src="/logo.png" alt="Leonine" style={{
                 width: "100%", height: "100%", objectFit: "contain",
-                filter: "drop-shadow(0 0 18px rgba(201,168,76,0.55))",
+                filter: "drop-shadow(0 0 28px rgba(240,200,80,0.75)) drop-shadow(0 0 8px rgba(240,200,80,0.4))",
                 animation: "logoReveal 1.2s cubic-bezier(0.16,1,0.3,1) both",
               }} />
             )}
           </div>
 
-          {/* LEONINE — main title */}
+          {/* LEONINE — main title BIGGER */}
           <h1 className="splash-shimmer-text" style={{
             fontFamily: "'Playfair Display', serif",
-            fontSize: "clamp(2.6rem, 6vw, 4rem)",
-            fontWeight: 500, letterSpacing: "0.35em", lineHeight: 1, marginBottom: 8,
+            fontSize: "clamp(3.8rem, 9vw, 5.8rem)",
+            fontWeight: 500, letterSpacing: "0.38em", lineHeight: 1, marginBottom: 10,
             opacity: phase >= 4 ? 1 : 0,
             transform: phase >= 4 ? "translateY(0)" : "translateY(18px)",
             transition: "opacity 1s ease 0.2s, transform 1s ease 0.2s",
@@ -406,12 +355,12 @@ export default function LeonineSplash({ onComplete }) {
             LEONINE
           </h1>
 
-          {/* Subtitle */}
+          {/* Subtitle BIGGER */}
           <p style={{
             fontFamily: "'Cormorant Infant', serif",
-            fontSize: "clamp(0.85rem, 2vw, 1.05rem)",
-            fontStyle: "italic", fontWeight: 300, letterSpacing: "0.28em",
-            color: "rgba(245,235,210,0.75)", marginBottom: 18,
+            fontSize: "clamp(1.1rem, 2.8vw, 1.5rem)",
+            fontStyle: "italic", fontWeight: 300, letterSpacing: "0.3em",
+            color: "rgba(245,230,185,0.9)", marginBottom: 20,
             opacity: phase >= 4 ? 1 : 0,
             transform: phase >= 4 ? "translateY(0)" : "translateY(12px)",
             transition: "opacity 1s ease 0.35s, transform 1s ease 0.35s",
@@ -421,19 +370,19 @@ export default function LeonineSplash({ onComplete }) {
 
           {/* Rule */}
           <div style={{
-            width: "100%", marginBottom: 18,
+            width: "100%", marginBottom: 20,
             opacity: phase >= 4 ? 1 : 0,
             transition: "opacity 0.8s ease 0.5s",
           }}>
             <ThinRule show={phase >= 4} delay={0} widthPct="100%" />
           </div>
 
-          {/* Tagline */}
+          {/* Tagline BIGGER */}
           <p style={{
             fontFamily: "'Cormorant Infant', serif",
-            fontSize: "clamp(0.78rem, 1.8vw, 0.95rem)",
+            fontSize: "clamp(1rem, 2.2vw, 1.25rem)",
             fontStyle: "italic", fontWeight: 300,
-            color: "rgba(200,185,155,0.65)", letterSpacing: "0.12em", marginBottom: 18,
+            color: "rgba(210,195,155,0.8)", letterSpacing: "0.14em", marginBottom: 20,
             opacity: phase >= 4 ? 1 : 0,
             transform: phase >= 4 ? "translateY(0)" : "translateY(12px)",
             transition: "opacity 1s ease 0.65s, transform 1s ease 0.65s",
@@ -443,14 +392,14 @@ export default function LeonineSplash({ onComplete }) {
 
           {/* Second rule */}
           <div style={{
-            width: "100%", marginBottom: 28,
+            width: "100%", marginBottom: 32,
             opacity: phase >= 4 ? 1 : 0,
             transition: "opacity 0.8s ease 0.82s",
           }}>
             <ThinRule show={phase >= 4} delay={0.82} widthPct="100%" />
           </div>
 
-          {/* Enter button */}
+          {/* Enter button — BIGGER */}
           <div style={{
             opacity: phase >= 5 ? 1 : 0,
             transform: phase >= 5 ? "translateY(0)" : "translateY(12px)",
@@ -461,24 +410,23 @@ export default function LeonineSplash({ onComplete }) {
               style={{
                 position: "relative", overflow: "hidden",
                 fontFamily: "'Jost', sans-serif",
-                fontSize: "0.62rem", fontWeight: 400,
-                letterSpacing: "0.4em", textTransform: "uppercase",
-                color: "#1a1a0a",
-                background: "linear-gradient(135deg, #c9a84c 0%, #f0d080 50%, #d4891a 100%)",
+                fontSize: "0.85rem", fontWeight: 500,
+                letterSpacing: "0.45em", textTransform: "uppercase",
+                color: "#0d1a0e",
+                background: "linear-gradient(135deg, #b8861e 0%, #f5e070 40%, #faf0a0 55%, #f0d060 70%, #c9951f 100%)",
                 border: "none", borderRadius: "999px",
-                padding: "14px 44px", cursor: "pointer",
-                boxShadow: "0 8px 32px rgba(201,168,76,0.45), 0 2px 8px rgba(0,0,0,0.4)",
+                padding: "18px 60px", cursor: "pointer",
+                boxShadow: "0 8px 40px rgba(240,200,80,0.55), 0 2px 12px rgba(0,0,0,0.5)",
                 transition: "filter 0.2s ease, transform 0.2s ease",
               }}
               onMouseEnter={e => { e.currentTarget.style.filter = "brightness(1.14)"; e.currentTarget.style.transform = "scale(1.06)"; }}
               onMouseLeave={e => { e.currentTarget.style.filter = "brightness(1)";    e.currentTarget.style.transform = "scale(1)"; }}
             >
               Enter
-              {/* Shimmer sweep */}
               <span style={{
                 position: "absolute", top: 0, left: "-80%",
                 width: "60%", height: "100%",
-                background: "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.28) 50%, transparent 100%)",
+                background: "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%)",
                 transform: "skewX(-15deg)",
                 animation: "shimmerSweep 3s ease-in-out 1.5s infinite",
                 pointerEvents: "none",
@@ -487,26 +435,26 @@ export default function LeonineSplash({ onComplete }) {
           </div>
         </div>
 
-        {/* ══ BOTTOM STRIP ══ */}
+        {/* ══ BOTTOM STRIP — BIGGER text ══ */}
         <div style={{
           position: "absolute", bottom: 28, left: 0, right: 0,
           display: "flex", justifyContent: "center",
           opacity: phase >= 5 ? 1 : 0,
           transition: "opacity 0.9s ease 0.2s",
-          whiteSpace: "nowrap", alignItems: "center", gap: 12,
+          whiteSpace: "nowrap", alignItems: "center", gap: 14,
         }}>
-          <div style={{ height: 1, width: 32, background: "linear-gradient(90deg,transparent,rgba(201,168,76,0.4))" }} />
+          <div style={{ height: 1, width: 36, background: "linear-gradient(90deg,transparent,rgba(240,200,80,0.5))" }} />
           {["Sri Lanka", "Nature", "Culture", "Heritage"].map((w, i) => (
-            <span key={w} style={{ display: "inline-flex", alignItems: "center", gap: 12 }}>
+            <span key={w} style={{ display: "inline-flex", alignItems: "center", gap: 14 }}>
               <span style={{
                 fontFamily: "'Jost', sans-serif",
-                fontSize: "0.55rem", letterSpacing: "0.35em",
-                textTransform: "uppercase", color: "rgba(201,168,76,0.5)",
+                fontSize: "0.72rem", letterSpacing: "0.35em",
+                textTransform: "uppercase", color: "rgba(240,200,80,0.7)",
               }}>{w}</span>
-              {i < 3 && <span style={{ color: "rgba(201,168,76,0.3)", fontSize: "0.5rem" }}>◆</span>}
+              {i < 3 && <span style={{ color: "rgba(240,200,80,0.45)", fontSize: "0.6rem" }}>◆</span>}
             </span>
           ))}
-          <div style={{ height: 1, width: 32, background: "linear-gradient(90deg,rgba(201,168,76,0.4),transparent)" }} />
+          <div style={{ height: 1, width: 36, background: "linear-gradient(90deg,rgba(240,200,80,0.5),transparent)" }} />
         </div>
       </div>
     </>

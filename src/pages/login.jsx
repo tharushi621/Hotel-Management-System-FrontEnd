@@ -11,7 +11,6 @@ export default function Loginpage() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // If redirected from a protected route, go back there after login
   const from = location.state?.from || "/";
 
   function handleLogin() {
@@ -27,8 +26,6 @@ export default function Loginpage() {
         password,
       })
       .then((res) => {
-        // Store token in sessionStorage so it clears when the browser tab closes,
-        // requiring login every new session
         sessionStorage.setItem("token", res.data.token);
 
         if (res.data.user && res.data.user.type === "admin") {
