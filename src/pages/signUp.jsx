@@ -50,7 +50,6 @@ export default function SignupPage() {
       })
       .then(() => {
         setSuccess(true);
-        // Pass email via router state so VerifyEmailPage knows where to send OTP confirmation
         setTimeout(() => navigate("/verify-email", { state: { email: form.email } }), 2000);
       })
       .catch((err) => {
@@ -182,8 +181,10 @@ export default function SignupPage() {
               </div>
             </div>
             <div className="stamp-corner">
-              <div className="stamp-inner"><img src="/logo.png" alt="Logo" className="stamp-lion" />
-<span>LVN</span></div>
+              <div className="stamp-inner">
+                <img src="/logo.png" alt="Logo" className="stamp-lion" />
+                <span>LVN</span>
+              </div>
             </div>
             <div className="ornament">✦ &nbsp;·&nbsp; ✦</div>
             <div className="letter-address">To: The Prospective Guest &nbsp;·&nbsp; Leonine Villa Natura Resort, Sri Lanka</div>
@@ -193,8 +194,8 @@ export default function SignupPage() {
 
             {success ? (
               <div className="success-msg">
-                ✦ &nbsp; Your name has been duly inscribed. &nbsp; ✦<br />
-                <em>A verification seal has been dispatched to your correspondence address.<br />Directing you to confirm your identity...</em>
+                ✦ &nbsp; Your account has been created. &nbsp; ✦<br />
+                <em>A verification code has been sent to your email address.<br />Directing you to verify your account...</em>
               </div>
             ) : (
               <>
@@ -244,8 +245,8 @@ export default function SignupPage() {
 
                 <div className="field-row">
                   {[
-                    { name:"password",        label:"Secret Passphrase",      show:showPassword,        setShow:setShowPassword        },
-                    { name:"confirmPassword", label:"Re-inscribe Passphrase", show:showConfirmPassword, setShow:setShowConfirmPassword },
+                    { name:"password",        label:"Password",         show:showPassword,        setShow:setShowPassword        },
+                    { name:"confirmPassword", label:"Confirm Password", show:showConfirmPassword, setShow:setShowConfirmPassword },
                   ].map((f) => (
                     <div key={f.name}>
                       <label className="field-label">{f.label}<span className="req"> *</span></label>
@@ -255,7 +256,7 @@ export default function SignupPage() {
                           <input type={f.show?"text":"password"} name={f.name} placeholder="··········" className="ink-field"
                             value={form[f.name]} onChange={handleChange}
                             onFocus={()=>setInkFocus(f.name)} onBlur={()=>setInkFocus(null)} autoComplete="new-password" />
-                          <button type="button" className="pw-toggle" onClick={()=>f.setShow(v=>!v)} tabIndex={-1} title={f.show?"Conceal passphrase":"Reveal passphrase"}>
+                          <button type="button" className="pw-toggle" onClick={()=>f.setShow(v=>!v)} tabIndex={-1} title={f.show?"Hide password":"Show password"}>
                             {f.show ? (
                               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                                 <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
@@ -275,14 +276,13 @@ export default function SignupPage() {
                   ))}
                 </div>
 
-                <p className="consent-note">By inscribing your name herein, you consent to the estate's terms of hospitality and our solemn privacy charter.</p>
+                <p className="consent-note">By creating your account, you consent to the estate's terms of hospitality and our solemn privacy charter.</p>
                 <button className="seal-btn" onClick={handleSignup} disabled={loading}>
-                  {loading ? "Recording in the register..." : "✦  Inscribe My Name  ✦"}
+                  {loading ? "Creating Account..." : "Create Account"}
                 </button>
                 <div className="letter-ps">
-                  <em>P.S.</em> — Already a registered guest?{" "}
-                  <button onClick={()=>navigate("/login")}>Return to the entrance hall</button>
-                  &nbsp;and present your credentials.
+                  Already have an account?{" "}
+                  <button onClick={()=>navigate("/login")}>Sign in here</button>
                 </div>
               </>
             )}
