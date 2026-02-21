@@ -381,31 +381,53 @@ export default function Loginpage() {
         }
         .seal-btn:disabled { opacity: 0.65; cursor: not-allowed; }
 
-        .letter-ps {
-          font-family: 'IM Fell English', serif;
-          font-style: italic;
-          font-size: 0.78rem;
-          color: var(--ink-faded);
-          margin-top: 18px;
-          text-align: center;
+        /* Sign-up section */
+        .signup-divider {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          margin: 20px 0 14px;
           position: relative;
           z-index: 1;
-          line-height: 1.6;
         }
-        .letter-ps button {
-          background: none; border: none;
-          color: var(--seal-red);
+        .signup-divider-rule {
+          flex: 1; height: 1px;
+          background: linear-gradient(90deg, transparent, #a0784444, transparent);
+        }
+        .signup-divider-text {
           font-family: 'IM Fell English', serif;
           font-style: italic;
-          font-size: inherit;
-          cursor: pointer;
-          padding: 0;
-          text-decoration: underline;
-          text-decoration-color: #8b1a1a55;
-          text-underline-offset: 3px;
-          transition: color 0.2s;
+          font-size: 0.72rem;
+          color: #a08060aa;
+          white-space: nowrap;
+          letter-spacing: 0.05em;
         }
-        .letter-ps button:hover { color: #5a0a0a; }
+
+        .signup-btn {
+          width: 100%;
+          padding: 11px 0;
+          background: transparent;
+          color: var(--ink-faded);
+          border: 1.5px solid #a0783888;
+          border-radius: 2px;
+          font-family: 'Cinzel', serif;
+          font-size: 0.78rem;
+          letter-spacing: 0.2em;
+          cursor: pointer;
+          position: relative;
+          z-index: 1;
+          transition: all 0.2s;
+          text-transform: uppercase;
+        }
+        .signup-btn:hover {
+          background: #a0783811;
+          border-color: #a07838cc;
+          color: var(--ink);
+          transform: translateY(-1px);
+        }
+        .signup-btn:active {
+          transform: translateY(0px);
+        }
 
         .stamp-corner {
           position: absolute;
@@ -548,16 +570,22 @@ export default function Loginpage() {
               onClick={handleLogin}
               disabled={loading}
             >
-              {loading ? "Sealing the envelope..." : "✦  Present My Credentials  ✦"}
+              {loading ? "Sealing the envelope..." : "✦  Sign In  ✦"}
             </button>
 
-            <div className="letter-ps">
-              <em>P.S.</em> — A first-time visitor to our estate?{" "}
-              <button onClick={() => navigate("/signup")}>
-                Inscribe your name in our guest register
-              </button>
-              &nbsp;and join our noble company.
+            {/* Clear Sign Up section */}
+            <div className="signup-divider">
+              <div className="signup-divider-rule" />
+              <span className="signup-divider-text">Don't have an account?</span>
+              <div className="signup-divider-rule" />
             </div>
+
+            <button
+              className="signup-btn"
+              onClick={() => navigate("/signup")}
+            >
+              ✦  Sign Up  ✦
+            </button>
           </div>
 
           <div className="wax-seal">
