@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -16,30 +16,6 @@ export default function FeedbackPage() {
   const [error, setError]               = useState("");
   const [success, setSuccess]           = useState(false);
   const [submittedRef, setSubmittedRef] = useState(null);
-
-  // ✅ Auto-fill latest booking ID on mount
-  useEffect(() => {
-    const token = sessionStorage.getItem("token");
-    if (!token) return;
-    axios
-      .get(`${import.meta.env.VITE_BACKEND_URL}/api/bookings/my-bookings`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((res) => {
-        const bookings = res.data.result || res.data.bookings || res.data || [];
-        if (bookings.length > 0) {
-          // Sort by most recent and pick the latest
-          const sorted = [...bookings].sort(
-            (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-          );
-          const latestId = sorted[0].bookingId || sorted[0]._id || sorted[0].id;
-          setForm(prev => ({ ...prev, bookingId: String(latestId) }));
-        }
-      })
-      .catch(() => {
-        // silently fail — user can type it manually
-      });
-  }, []);
 
   function handleChange(e) {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -82,6 +58,7 @@ export default function FeedbackPage() {
       .catch((err) => {
         const msg = err.response?.data?.message;
         const status = err.response?.status;
+
         if (status === 401 || status === 403) {
           setError("Your session has expired — pray sign in once more.");
         } else if (status === 404) {
