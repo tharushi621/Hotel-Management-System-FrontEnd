@@ -1,10 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 export default function FeedbackPage() {
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
 
   const [form, setForm] = useState({
     bookingId: "",
@@ -18,16 +17,13 @@ export default function FeedbackPage() {
   const [success, setSuccess]           = useState(false);
   const [submittedRef, setSubmittedRef] = useState(null);
 
-  useEffect(() => {
-    if (!token || token === "null") navigate("/login");
-  }, [token, navigate]);
-
   function handleChange(e) {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
   }
 
   function handleSubmit() {
     setError("");
+    const token = sessionStorage.getItem("token");
 
     if (!form.bookingId || isNaN(Number(form.bookingId))) {
       setError("Please enter a valid Booking ID from your reservation.");
@@ -44,7 +40,6 @@ export default function FeedbackPage() {
 
     setLoading(true);
 
-    // POST /api/feedbacks — matches feedbackRouter.post("/", protect, createFeedback)
     axios
       .post(
         `${import.meta.env.VITE_BACKEND_URL}/api/feedbacks`,
@@ -198,7 +193,6 @@ export default function FeedbackPage() {
         .fb-textarea { resize: vertical; min-height: 100px; border: 1.5px solid #a07838bb; border-radius: 1px; padding: 8px 10px; }
         .fb-textarea::placeholder { color: #a0845566; font-style: italic; font-size: 0.83rem; }
 
-        /* Star rating */
         .star-row { display: flex; align-items: center; gap: 6px; margin-bottom: 18px; position: relative; z-index: 1; }
         .star-btn { background: none; border: none; cursor: pointer; padding: 2px; font-size: 1.6rem; transition: transform 0.15s; line-height: 1; }
         .star-btn:hover { transform: scale(1.2); }
@@ -223,7 +217,6 @@ export default function FeedbackPage() {
         .fb-nav-back { position: fixed; top: 20px; left: 20px; font-family: 'IM Fell English', serif; font-style: italic; font-size: 0.76rem; color: #f4e4c166; background: rgba(10,22,12,0.7); backdrop-filter: blur(8px); border: 1px solid #f4e4c122; border-radius: 2px; cursor: pointer; padding: 8px 16px; display: flex; align-items: center; gap: 6px; transition: color 0.2s, border-color 0.2s; z-index: 50; }
         .fb-nav-back:hover { color: #f4e4c1cc; border-color: #f4e4c144; }
 
-        /* Success */
         .fb-success { position: relative; z-index: 1; animation: fadeIn 0.8s ease; text-align: center; }
         .fb-success-icon { font-size: 3.4rem; display: block; margin: 0 auto 14px; animation: iconFloat 0.6s cubic-bezier(.34,1.56,.64,1) 0.2s both; }
         @keyframes iconFloat {
@@ -295,7 +288,6 @@ export default function FeedbackPage() {
             </div>
 
             {success ? (
-              /* ── SUCCESS ──────────────────────────────────────────── */
               <div className="fb-success">
                 <span className="fb-success-icon">🌿</span>
                 <div className="fb-success-title">Your Testimony is Received</div>
@@ -333,7 +325,6 @@ export default function FeedbackPage() {
                 </button>
               </div>
             ) : (
-              /* ── FORM ──────────────────────────────────────────────── */
               <>
                 <p className="fb-intro">
                   Dear Honoured Guest, your account of the stay is of great value
@@ -342,7 +333,6 @@ export default function FeedbackPage() {
 
                 {error && <div className="fb-error">⚠ &nbsp;{error}</div>}
 
-                {/* Booking ID */}
                 <label className="fb-label">
                   Booking Reference Number <span className="req">*</span>
                 </label>
@@ -360,7 +350,6 @@ export default function FeedbackPage() {
                   />
                 </div>
 
-                {/* Star Rating */}
                 <label className="fb-label" style={{ position: "relative", zIndex: 1 }}>
                   Your Rating <span className="req">*</span>
                 </label>
@@ -375,9 +364,7 @@ export default function FeedbackPage() {
                       onClick={() => setForm(p => ({ ...p, rating: star }))}
                       title={STAR_LABELS[star]}
                     >
-                      <span className={star <= displayRating ? "star-filled" : "star-empty"}>
-                        ★
-                      </span>
+                      <span className={star <= displayRating ? "star-filled" : "star-empty"}>★</span>
                     </button>
                   ))}
                   <span className={`star-label ${displayRating ? "has-rating" : ""}`}>
@@ -385,7 +372,6 @@ export default function FeedbackPage() {
                   </span>
                 </div>
 
-                {/* Comment */}
                 <label className="fb-label" style={{ position: "relative", zIndex: 1 }}>
                   Account of Your Stay <span className="req">*</span>
                 </label>
@@ -412,7 +398,6 @@ export default function FeedbackPage() {
             )}
           </div>
 
-          {/* Wax seal */}
           <div className="fb-wax-seal">
             <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
               <circle cx="40" cy="40" r="38" fill="url(#fbseal)"/>
