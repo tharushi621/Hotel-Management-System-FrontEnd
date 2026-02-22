@@ -1,9 +1,10 @@
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export default function Loginpage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPass, setShowPass] = useState(false);
@@ -20,8 +21,12 @@ export default function Loginpage() {
         sessionStorage.setItem("token", res.data.token);
         sessionStorage.setItem("user", JSON.stringify(res.data.user));
         setLoading(false);
-        if (res.data.user.type === "admin") navigate("/admin");
-        else navigate("/");
+        if (res.data.user.type === "admin") {
+          navigate("/admin");
+        } else {
+          const redirectTo = location.state?.from || "/";
+          navigate(redirectTo);
+        }
       })
       .catch((err) => {
         setError(err.response?.data?.message || "Login failed. Please try again.");
