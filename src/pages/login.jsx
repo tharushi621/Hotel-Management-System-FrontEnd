@@ -25,6 +25,7 @@ export default function Loginpage() {
           navigate("/admin");
         } else {
           const redirectTo = location.state?.from || "/";
+          console.log("STATE:", location.state, "REDIRECT:", redirectTo);
           navigate(redirectTo);
         }
       })
