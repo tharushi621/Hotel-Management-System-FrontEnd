@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -16,6 +16,33 @@ export default function FeedbackPage() {
   const [error, setError]               = useState("");
   const [success, setSuccess]           = useState(false);
   const [submittedRef, setSubmittedRef] = useState(null);
+
+ useEffect(() => {
+  const token = sessionStorage.getItem("token");
+  if (!token) return;
+  axios
+    .get(`${import.meta.env.VITE_BACKEND_URL}/api/bookings`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    .then((res) => {
+      console.log("BOOKINGS RESPONSE:", res.data);
+      const bookings = res.data.result || res.data.bookings || res.data || [];
+      const arr = Array.isArray(bookings) ? bookings : [];
+      if (arr.length > 0) {
+        const sorted = [...arr].sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+        const latest = sorted[0];
+        const latestId = latest.bookingId || latest._id || latest.id;
+        console.log("LATEST BOOKING:", latest);
+        console.log("LATEST ID:", latestId);
+        setForm(prev => ({ ...prev, bookingId: String(latestId) }));
+      }
+    })
+    .catch((err) => {
+      console.log("BOOKINGS ERROR:", err.response?.status, err.response?.data);
+    });
+}, []);
 
   function handleChange(e) {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -58,7 +85,6 @@ export default function FeedbackPage() {
       .catch((err) => {
         const msg = err.response?.data?.message;
         const status = err.response?.status;
-
         if (status === 401 || status === 403) {
           setError("Your session has expired — pray sign in once more.");
         } else if (status === 404) {
