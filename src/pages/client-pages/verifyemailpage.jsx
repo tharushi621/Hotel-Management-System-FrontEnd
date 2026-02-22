@@ -5,11 +5,13 @@ import { useNavigate, useLocation } from "react-router-dom";
 export default function VerifyEmailPage() {
   const navigate = useNavigate();
   const location = useLocation();
-  // Email passed from SignupPage via router state
-  const emailFromSignup = location.state?.email || "";
+const emailFromSignup = location.state?.email || "";
+const otpFromSignup = location.state?.otp || "";
 
   const [email, setEmail] = useState(emailFromSignup);
-  const [otp, setOtp] = useState(["", "", "", ""]);
+  const [otp, setOtp] = useState(
+  otpFromSignup ? String(otpFromSignup).split("") : ["", "", "", ""]
+);
   const [loading, setLoading] = useState(false);
   const [resending, setResending] = useState(false);
   const [error, setError] = useState("");

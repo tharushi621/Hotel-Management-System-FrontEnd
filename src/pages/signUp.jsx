@@ -48,10 +48,12 @@ export default function SignupPage() {
         phone: form.phone,
         whatsApp: form.whatsApp,
       })
-      .then(() => {
-        setSuccess(true);
-        setTimeout(() => navigate("/verify-email", { state: { email: form.email } }), 2000);
-      })
+      .then((response) => {
+  setSuccess(true);
+  setTimeout(() => navigate("/verify-email", { 
+    state: { email: form.email, otp: response.data.otp } 
+  }), 2000);
+})
       .catch((err) => {
         setError(err.response?.data?.message || "The quill has faltered — please try again presently.");
         setLoading(false);
