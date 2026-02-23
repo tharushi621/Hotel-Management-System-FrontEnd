@@ -22,25 +22,28 @@ export default function GalleryPage() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close lightbox on Escape, navigate with arrow keys
   useEffect(() => {
     const handleKey = (e) => {
       if (lightbox === null) return;
       if (e.key === "Escape") setLightbox(null);
-      if (e.key === "ArrowRight") setLightbox((p) => (p + 1) % filteredItems.length);
-      if (e.key === "ArrowLeft") setLightbox((p) => (p - 1 + filteredItems.length) % filteredItems.length);
+      if (e.key === "ArrowRight")
+        setLightbox((p) => (p + 1) % filteredItems.length);
+      if (e.key === "ArrowLeft")
+        setLightbox(
+          (p) => (p - 1 + filteredItems.length) % filteredItems.length,
+        );
     };
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
   }, [lightbox]);
 
-  // Lock body scroll when lightbox open
   useEffect(() => {
     document.body.style.overflow = lightbox !== null ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [lightbox]);
 
-  // Fetch gallery items from backend ONLY
   useEffect(() => {
     window.scrollTo({ top: 0 });
     setLoading(true);
@@ -59,7 +62,6 @@ export default function GalleryPage() {
       });
   }, []);
 
-  // Derive unique filter tags from the data
   const allCategories = [
     "All",
     ...Array.from(new Set(galleryItems.map((i) => i.category).filter(Boolean))),
@@ -70,14 +72,20 @@ export default function GalleryPage() {
       : galleryItems.filter((i) => i.category === filter);
 
   const navItems = [
-    { label: "Home",     action: () => navigate("/") },
+    { label: "Home", action: () => navigate("/") },
     { label: "Retreats", action: () => navigate("/retreats") },
-    { label: "Gallery",  action: () => navigate("/gallery") },
+    { label: "Gallery", action: () => navigate("/gallery") },
     {
       label: "Contact",
       action: () => {
         navigate("/");
-        setTimeout(() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" }), 100);
+        setTimeout(
+          () =>
+            document
+              .getElementById("contact")
+              ?.scrollIntoView({ behavior: "smooth" }),
+          100,
+        );
       },
     },
   ];
@@ -90,7 +98,8 @@ export default function GalleryPage() {
 
   const openLightbox = (index) => setLightbox(index);
   const closeLightbox = () => setLightbox(null);
-  const prevImage = () => setLightbox((p) => (p - 1 + filteredItems.length) % filteredItems.length);
+  const prevImage = () =>
+    setLightbox((p) => (p - 1 + filteredItems.length) % filteredItems.length);
   const nextImage = () => setLightbox((p) => (p + 1) % filteredItems.length);
 
   return (
@@ -228,15 +237,30 @@ export default function GalleryPage() {
         }
       `}</style>
 
-      {/* ── NAVIGATION ── */}
-      <nav className={`fixed top-0 w-full z-50 transition-all duration-700 ${scrolled ? "nav-carved py-3" : "py-5 bg-transparent"}`}>
+      <nav
+        className={`fixed top-0 w-full z-50 transition-all duration-700 ${scrolled ? "nav-carved py-3" : "py-5 bg-transparent"}`}
+      >
         <div className="max-w-screen-xl mx-auto px-6 flex items-center justify-between">
-          <div className="flex flex-col items-start cursor-pointer" onClick={() => navigate("/")}>
+          <div
+            className="flex flex-col items-start cursor-pointer"
+            onClick={() => navigate("/")}
+          >
             <div className="flex items-center gap-2">
-              <img src="/logo.png" alt="Leonine" className="w-[44px] h-[44px] object-contain" onError={(e) => { e.target.style.display = "none"; }} />
-              <span className="font-display text-2xl font-medium tracking-widest text-amber-100 hover:text-yellow-400 transition-colors duration-300">LEONINE</span>
+              <img
+                src="/logo.png"
+                alt="Leonine"
+                className="w-[44px] h-[44px] object-contain"
+                onError={(e) => {
+                  e.target.style.display = "none";
+                }}
+              />
+              <span className="font-display text-2xl font-medium tracking-widest text-amber-100 hover:text-yellow-400 transition-colors duration-300">
+                LEONINE
+              </span>
             </div>
-            <span className="font-body text-xs tracking-[0.4em] text-yellow-600/70 ml-14 uppercase">Villa & Sanctuary</span>
+            <span className="font-body text-xs tracking-[0.4em] text-yellow-600/70 ml-14 uppercase">
+              Villa & Sanctuary
+            </span>
           </div>
 
           <ul className="hidden lg:flex items-center gap-8">
@@ -262,11 +286,20 @@ export default function GalleryPage() {
             </button>
           </div>
 
-          <button className="lg:hidden text-stone-300 hover:text-yellow-400 transition-colors" onClick={() => setMenuOpen(!menuOpen)}>
+          <button
+            className="lg:hidden text-stone-300 hover:text-yellow-400 transition-colors"
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
             <div className="flex flex-col gap-1.5 w-6">
-              <span className={`block h-px bg-current transition-all duration-300 ${menuOpen ? "rotate-45 translate-y-2" : ""}`}></span>
-              <span className={`block h-px bg-current transition-all duration-300 ${menuOpen ? "opacity-0" : ""}`}></span>
-              <span className={`block h-px bg-current transition-all duration-300 ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`}></span>
+              <span
+                className={`block h-px bg-current transition-all duration-300 ${menuOpen ? "rotate-45 translate-y-2" : ""}`}
+              ></span>
+              <span
+                className={`block h-px bg-current transition-all duration-300 ${menuOpen ? "opacity-0" : ""}`}
+              ></span>
+              <span
+                className={`block h-px bg-current transition-all duration-300 ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`}
+              ></span>
             </div>
           </button>
         </div>
@@ -285,7 +318,10 @@ export default function GalleryPage() {
             ))}
             <button
               className="mt-4 w-full btn-gold font-body text-xs tracking-widest uppercase px-6 py-3 rounded-full text-stone-900 font-medium"
-              onClick={() => { setMenuOpen(false); navigate("/booking"); }}
+              onClick={() => {
+                setMenuOpen(false);
+                navigate("/booking");
+              }}
             >
               Reserve Now
             </button>
@@ -293,14 +329,16 @@ export default function GalleryPage() {
         )}
       </nav>
 
-      {/* ── HERO ── */}
       <section className="relative h-[70vh] min-h-[520px] flex items-end overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img
             src="/n2.jpg"
             alt="Leonine Gallery"
             className="w-full h-full object-cover"
-            style={{ transform: `translateY(${scrollY * 0.22}px)`, transformOrigin: "center top" }}
+            style={{
+              transform: `translateY(${scrollY * 0.22}px)`,
+              transformOrigin: "center top",
+            }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/45 to-stone-950/20"></div>
           <div className="absolute inset-0 bg-gradient-to-r from-stone-950/30 to-transparent"></div>
@@ -309,74 +347,117 @@ export default function GalleryPage() {
         <div className="relative z-10 w-full max-w-screen-xl mx-auto px-6 pb-20">
           <div className="anim-in delay-1 flex items-center gap-4 mb-5">
             <div className="gold-line w-14"></div>
-            <span className="font-body text-xs tracking-[0.4em] uppercase text-yellow-400/90">Leonine Life · Captured</span>
+            <span className="font-body text-xs tracking-[0.4em] uppercase text-yellow-400/90">
+              Leonine Life · Captured
+            </span>
           </div>
           <h1 className="font-display leading-none mb-4">
-            <span className="anim-in delay-2 block text-6xl md:text-8xl xl:text-9xl font-medium hero-text-mask">Moments</span>
-            <span className="anim-in delay-3 block text-5xl md:text-7xl xl:text-8xl font-light italic anim-shimmer mt-1">& Memories</span>
+            <span className="anim-in delay-2 block text-6xl md:text-8xl xl:text-9xl font-medium hero-text-mask">
+              Moments
+            </span>
+            <span className="anim-in delay-3 block text-5xl md:text-7xl xl:text-8xl font-light italic anim-shimmer mt-1">
+              & Memories
+            </span>
           </h1>
           <p className="anim-in delay-4 font-serif-light text-xl md:text-2xl text-stone-300 italic font-light max-w-xl mt-5 leading-relaxed">
-            Every image a whisper from the jungle — light through canopy, stone worn by sacred rivers, lives transformed.
+            Every image a whisper from the jungle — light through canopy, stone
+            worn by sacred rivers, lives transformed.
           </p>
         </div>
 
         <div className="absolute bottom-0 left-0 w-full z-10">
-          <svg viewBox="0 0 1440 60" preserveAspectRatio="none" className="w-full h-12">
-            <path d="M0,0 C360,60 1080,0 1440,50 L1440,60 L0,60 Z" fill="#060e07"/>
+          <svg
+            viewBox="0 0 1440 60"
+            preserveAspectRatio="none"
+            className="w-full h-12"
+          >
+            <path
+              d="M0,0 C360,60 1080,0 1440,50 L1440,60 L0,60 Z"
+              fill="#060e07"
+            />
           </svg>
         </div>
       </section>
 
-      {/* ── FILTER BAR — only shown when items exist ── */}
       {!loading && !error && galleryItems.length > 0 && (
         <section
-          style={{ background: "linear-gradient(135deg, #060e07 0%, #0d1a10 100%)" }}
+          style={{
+            background: "linear-gradient(135deg, #060e07 0%, #0d1a10 100%)",
+          }}
           className="sticky top-[56px] z-40 py-5 px-6 border-b border-yellow-900/20"
         >
           <div className="max-w-screen-xl mx-auto flex items-center gap-3 overflow-x-auto pb-1">
-            <span className="font-body text-xs tracking-[0.3em] uppercase text-stone-500 whitespace-nowrap mr-2">Filter</span>
+            <span className="font-body text-xs tracking-[0.3em] uppercase text-stone-500 whitespace-nowrap mr-2">
+              Filter
+            </span>
             {allCategories.map((cat) => (
               <button
                 key={cat}
                 className={`filter-pill ${filter === cat ? "active" : ""}`}
-                onClick={() => { setFilter(cat); setLightbox(null); }}
+                onClick={() => {
+                  setFilter(cat);
+                  setLightbox(null);
+                }}
               >
                 {cat}
               </button>
             ))}
             <span className="ml-auto font-body text-xs text-stone-600 whitespace-nowrap tracking-wider">
-              {filteredItems.length} {filteredItems.length === 1 ? "image" : "images"}
+              {filteredItems.length}{" "}
+              {filteredItems.length === 1 ? "image" : "images"}
             </span>
           </div>
         </section>
       )}
 
-      {/* ── GALLERY GRID ── */}
-      <main style={{ background: "linear-gradient(180deg, #060e07 0%, #0a160c 100%)" }} className="relative min-h-screen">
+      <main
+        style={{
+          background: "linear-gradient(180deg, #060e07 0%, #0a160c 100%)",
+        }}
+        className="relative min-h-screen"
+      >
         <div className="batik-pattern absolute inset-0 pointer-events-none opacity-40"></div>
 
-        {/* Loading state */}
         {loading && (
           <div className="flex flex-col items-center justify-center py-48 gap-6">
             <div className="flex gap-3">
               {[0, 1, 2].map((i) => (
-                <div key={i} className="loading-dot w-3 h-3 rounded-full bg-yellow-500" style={{ animationDelay: `${i * 0.2}s` }}></div>
+                <div
+                  key={i}
+                  className="loading-dot w-3 h-3 rounded-full bg-yellow-500"
+                  style={{ animationDelay: `${i * 0.2}s` }}
+                ></div>
               ))}
             </div>
-            <p className="font-body text-xs tracking-[0.3em] uppercase text-stone-500">Curating your gallery…</p>
+            <p className="font-body text-xs tracking-[0.3em] uppercase text-stone-500">
+              Curating your gallery…
+            </p>
           </div>
         )}
 
-        {/* Error state */}
         {!loading && error && (
           <div className="max-w-xl mx-auto px-6 py-40 text-center">
-            <div className="text-5xl mb-6">🌿</div>
-            <h3 className="font-display text-3xl text-amber-100 mb-3">Gallery Unavailable</h3>
+            <h3 className="font-display text-3xl text-amber-100 mb-3">
+              Gallery Unavailable
+            </h3>
             <p className="font-serif-light text-lg italic text-stone-400 mb-6">
               We couldn't reach the gallery right now. Please try again shortly.
             </p>
             <button
-              onClick={() => { setError(false); setLoading(true); axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/gallery`).then((res) => { setGalleryItems(res.data.list || res.data || []); setLoading(false); }).catch(() => { setError(true); setLoading(false); }); }}
+              onClick={() => {
+                setError(false);
+                setLoading(true);
+                axios
+                  .get(`${import.meta.env.VITE_BACKEND_URL}/api/gallery`)
+                  .then((res) => {
+                    setGalleryItems(res.data.list || res.data || []);
+                    setLoading(false);
+                  })
+                  .catch(() => {
+                    setError(true);
+                    setLoading(false);
+                  });
+              }}
               className="font-body text-xs tracking-widest uppercase text-yellow-500 border border-yellow-700/40 px-6 py-3 rounded-full hover:bg-yellow-900/10 transition-all"
             >
               Try Again
@@ -384,35 +465,37 @@ export default function GalleryPage() {
           </div>
         )}
 
-        {/* Empty state — backend responded but no items */}
         {!loading && !error && galleryItems.length === 0 && (
           <div className="max-w-xl mx-auto px-6 py-40 text-center">
-            <div className="text-5xl mb-6">🌿</div>
-            <h3 className="font-display text-3xl text-amber-100 mb-3">Gallery Coming Soon</h3>
+            <h3 className="font-display text-3xl text-amber-100 mb-3">
+              Gallery Coming Soon
+            </h3>
             <p className="font-serif-light text-lg italic text-stone-400">
-              Our curators are preparing something beautiful. Please check back soon.
+              Our curators are preparing something beautiful. Please check back
+              soon.
             </p>
           </div>
         )}
+        {!loading &&
+          !error &&
+          galleryItems.length > 0 &&
+          filteredItems.length === 0 && (
+            <div className="max-w-xl mx-auto px-6 py-40 text-center">
+              <h3 className="font-display text-3xl text-amber-100 mb-3">
+                No Images Found
+              </h3>
+              <p className="font-serif-light text-lg italic text-stone-400">
+                No images in the "{filter}" collection yet.
+              </p>
+              <button
+                onClick={() => setFilter("All")}
+                className="mt-6 font-body text-xs tracking-widest uppercase text-yellow-500 border border-yellow-700/40 px-6 py-3 rounded-full hover:bg-yellow-900/10 transition-all"
+              >
+                View All
+              </button>
+            </div>
+          )}
 
-        {/* Empty state — items exist but filter yields nothing */}
-        {!loading && !error && galleryItems.length > 0 && filteredItems.length === 0 && (
-          <div className="max-w-xl mx-auto px-6 py-40 text-center">
-            <div className="text-5xl mb-6">🌿</div>
-            <h3 className="font-display text-3xl text-amber-100 mb-3">No Images Found</h3>
-            <p className="font-serif-light text-lg italic text-stone-400">
-              No images in the "{filter}" collection yet.
-            </p>
-            <button
-              onClick={() => setFilter("All")}
-              className="mt-6 font-body text-xs tracking-widest uppercase text-yellow-500 border border-yellow-700/40 px-6 py-3 rounded-full hover:bg-yellow-900/10 transition-all"
-            >
-              View All
-            </button>
-          </div>
-        )}
-
-        {/* Masonry gallery */}
         {!loading && !error && filteredItems.length > 0 && (
           <div className="relative z-10 max-w-screen-xl mx-auto px-6 py-12">
             <div className="masonry-grid">
@@ -428,27 +511,38 @@ export default function GalleryPage() {
                       alt={item.name}
                       loading="lazy"
                       onError={(e) => {
-                        e.target.src = "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=600&q=80";
+                        e.target.src =
+                          "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=600&q=80";
                       }}
                     />
 
-                    {/* Zoom icon */}
                     <div className="gallery-card-zoom-icon">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c9a84c" strokeWidth="2">
-                        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35M11 8v6M8 11h6"/>
+                      <svg
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="#c9a84c"
+                        strokeWidth="2"
+                      >
+                        <circle cx="11" cy="11" r="8" />
+                        <path d="m21 21-4.35-4.35M11 8v6M8 11h6" />
                       </svg>
                     </div>
 
-                    {/* Hover overlay */}
                     <div className="gallery-card-overlay">
                       {item.category && (
                         <span className="font-body text-[10px] tracking-[0.22em] uppercase text-yellow-500/70 mb-1">
                           {item.category}
                         </span>
                       )}
-                      <h3 className="font-display text-base text-amber-100 font-medium leading-tight">{item.name}</h3>
+                      <h3 className="font-display text-base text-amber-100 font-medium leading-tight">
+                        {item.name}
+                      </h3>
                       {item.description && (
-                        <p className="font-body text-xs text-stone-400 mt-1 leading-relaxed line-clamp-2">{item.description}</p>
+                        <p className="font-body text-xs text-stone-400 mt-1 leading-relaxed line-clamp-2">
+                          {item.description}
+                        </p>
                       )}
                     </div>
                   </div>
@@ -459,10 +553,8 @@ export default function GalleryPage() {
         )}
       </main>
 
-      {/* ── LIGHTBOX ── */}
       {lightbox !== null && filteredItems[lightbox] && (
         <div className="lightbox-backdrop" onClick={closeLightbox}>
-          {/* Close */}
           <button
             className="absolute top-6 right-6 w-10 h-10 rounded-full flex items-center justify-center border border-yellow-700/40 text-stone-300 hover:text-yellow-400 hover:border-yellow-500 transition-all z-10 bg-stone-950/60 backdrop-blur-sm"
             onClick={closeLightbox}
@@ -470,15 +562,23 @@ export default function GalleryPage() {
             ✕
           </button>
 
-          {/* Prev */}
           {filteredItems.length > 1 && (
-            <button className="lb-nav-btn" style={{ left: "1rem" }} onClick={(e) => { e.stopPropagation(); prevImage(); }}>
+            <button
+              className="lb-nav-btn"
+              style={{ left: "1rem" }}
+              onClick={(e) => {
+                e.stopPropagation();
+                prevImage();
+              }}
+            >
               ←
             </button>
           )}
 
-          {/* Image container */}
-          <div className="flex flex-col items-center gap-5 px-16" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="flex flex-col items-center gap-5 px-16"
+            onClick={(e) => e.stopPropagation()}
+          >
             <img
               key={lightbox}
               src={filteredItems[lightbox].image}
@@ -491,9 +591,13 @@ export default function GalleryPage() {
                   {filteredItems[lightbox].category}
                 </span>
               )}
-              <h3 className="font-display text-xl text-amber-100">{filteredItems[lightbox].name}</h3>
+              <h3 className="font-display text-xl text-amber-100">
+                {filteredItems[lightbox].name}
+              </h3>
               {filteredItems[lightbox].description && (
-                <p className="font-body text-sm text-stone-400 mt-1 max-w-md mx-auto">{filteredItems[lightbox].description}</p>
+                <p className="font-body text-sm text-stone-400 mt-1 max-w-md mx-auto">
+                  {filteredItems[lightbox].description}
+                </p>
               )}
               <p className="font-body text-xs text-stone-600 mt-3 tracking-wider">
                 {lightbox + 1} / {filteredItems.length}
@@ -501,28 +605,51 @@ export default function GalleryPage() {
             </div>
           </div>
 
-          {/* Next */}
           {filteredItems.length > 1 && (
-            <button className="lb-nav-btn" style={{ right: "1rem" }} onClick={(e) => { e.stopPropagation(); nextImage(); }}>
+            <button
+              className="lb-nav-btn"
+              style={{ right: "1rem" }}
+              onClick={(e) => {
+                e.stopPropagation();
+                nextImage();
+              }}
+            >
               →
             </button>
           )}
         </div>
       )}
 
-      {/* ── BOOKING CTA ── */}
-      <section className="py-24 px-6 relative overflow-hidden" style={{ background: "linear-gradient(135deg, #0d1f0f, #1a3a1e, #0d1a10)" }}>
+      <section
+        className="py-24 px-6 relative overflow-hidden"
+        style={{
+          background: "linear-gradient(135deg, #0d1f0f, #1a3a1e, #0d1a10)",
+        }}
+      >
         <div className="batik-pattern absolute inset-0 pointer-events-none"></div>
         <div className="max-w-3xl mx-auto text-center relative z-10">
           <div className="flex items-center justify-center gap-4 mb-6">
             <div className="gold-line w-16"></div>
-            <img src="/logo.png" alt="Leonine" className="w-10 h-10 object-contain" style={{ filter: "drop-shadow(0 0 10px rgba(201,168,76,0.35))" }} onError={(e) => { e.target.style.display = "none"; }} />
+            <img
+              src="/logo.png"
+              alt="Leonine"
+              className="w-10 h-10 object-contain"
+              style={{ filter: "drop-shadow(0 0 10px rgba(201,168,76,0.35))" }}
+              onError={(e) => {
+                e.target.style.display = "none";
+              }}
+            />
             <div className="gold-line w-16"></div>
           </div>
-          <h2 className="font-display text-5xl md:text-6xl text-amber-50 font-medium mb-4">Live Inside</h2>
-          <h2 className="font-display text-5xl md:text-6xl font-light italic mb-8 anim-shimmer">the Picture</h2>
+          <h2 className="font-display text-5xl md:text-6xl text-amber-50 font-medium mb-4">
+            Live Inside
+          </h2>
+          <h2 className="font-display text-5xl md:text-6xl font-light italic mb-8 anim-shimmer">
+            the Picture
+          </h2>
           <p className="font-serif-light text-xl italic text-stone-400 font-light mb-12 leading-relaxed max-w-xl mx-auto">
-            These moments can be yours. Six retreats, infinite stillness, one unforgettable journey.
+            These moments can be yours. Six retreats, infinite stillness, one
+            unforgettable journey.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
@@ -533,7 +660,7 @@ export default function GalleryPage() {
             </button>
             <button
               className="font-body text-sm tracking-widest uppercase px-12 py-5 rounded-full text-amber-200 border border-yellow-700/40 hover:bg-yellow-900/10 hover:border-yellow-500 transition-all"
-              onClick={() => window.location.href = "tel:+94812204455"}
+              onClick={() => (window.location.href = "tel:+94812204455")}
             >
               Speak to a Curator
             </button>
@@ -541,25 +668,52 @@ export default function GalleryPage() {
         </div>
       </section>
 
-      {/* ── FOOTER ── */}
-      <footer id="contact" className="pt-16 pb-8 px-6" style={{ background: "#060e07", borderTop: "1px solid rgba(201,168,76,0.12)" }}>
+      <footer
+        id="contact"
+        className="pt-16 pb-8 px-6"
+        style={{
+          background: "#060e07",
+          borderTop: "1px solid rgba(201,168,76,0.12)",
+        }}
+      >
         <div className="max-w-screen-xl mx-auto">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-8">
             <div className="flex items-center gap-3">
-              <img src="/logo.png" alt="Leonine" className="w-9 h-9 object-contain" onError={(e) => { e.target.style.display = "none"; }} />
+              <img
+                src="/logo.png"
+                alt="Leonine"
+                className="w-9 h-9 object-contain"
+                onError={(e) => {
+                  e.target.style.display = "none";
+                }}
+              />
               <div>
-                <div className="font-display text-xl text-amber-100 tracking-widest">LEONINE</div>
-                <div className="font-body text-xs tracking-[0.3em] text-yellow-700 uppercase">Villa & Sanctuary · Sri Lanka</div>
+                <div className="font-display text-xl text-amber-100 tracking-widest">
+                  LEONINE
+                </div>
+                <div className="font-body text-xs tracking-[0.3em] text-yellow-700 uppercase">
+                  Villa & Sanctuary · Sri Lanka
+                </div>
               </div>
             </div>
             <div className="flex gap-6 flex-wrap justify-center">
-              {["Privacy Policy", "Terms of Service", "Cookie Policy"].map((l) => (
-                <a key={l} href="#" className="font-body text-xs text-stone-600 hover:text-yellow-600 transition-colors">{l}</a>
-              ))}
+              {["Privacy Policy", "Terms of Service", "Cookie Policy"].map(
+                (l) => (
+                  <a
+                    key={l}
+                    href="#"
+                    className="font-body text-xs text-stone-600 hover:text-yellow-600 transition-colors"
+                  >
+                    {l}
+                  </a>
+                ),
+              )}
             </div>
           </div>
           <div className="gold-line mb-6"></div>
-          <p className="font-body text-xs text-stone-600 text-center">© 2026 Leonine Villa & Sanctuary. All rights reserved.</p>
+          <p className="font-body text-xs text-stone-600 text-center">
+            © 2026 Leonine Villa & Sanctuary. All rights reserved.
+          </p>
         </div>
       </footer>
     </div>
