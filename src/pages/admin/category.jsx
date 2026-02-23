@@ -39,9 +39,12 @@ export default function AdminCategory() {
   const handleDelete = async (id) => {
     if (!window.confirm("Delete this category? This cannot be undone.")) return;
     try {
-      await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/categories/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axios.delete(
+        `${import.meta.env.VITE_BACKEND_URL}/api/categories/${id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
       toast.success("Category deleted.");
       setCategories((prev) => prev.filter((cat) => cat._id !== id));
     } catch {
@@ -50,24 +53,31 @@ export default function AdminCategory() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col" style={{ fontFamily: "'Inter', sans-serif" }}>
-
-      {/* Header */}
+    <div
+      className="min-h-screen bg-slate-50 flex flex-col"
+      style={{ fontFamily: "'Inter', sans-serif" }}
+    >
       <div className="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between gap-4 flex-wrap">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-xl bg-[#1e2d16] flex items-center justify-center shadow-sm">
             <FaTags className="text-white text-sm" />
           </div>
           <div>
-            <h1 className="text-base font-bold text-slate-800 leading-tight">Category Management</h1>
-            <p className="text-xs text-slate-400">Manage room categories and pricing</p>
+            <h1 className="text-base font-bold text-slate-800 leading-tight">
+              Category Management
+            </h1>
+            <p className="text-xs text-slate-400">
+              Manage room categories and pricing
+            </p>
           </div>
         </div>
 
         <div className="flex items-center gap-3 ml-auto">
           <div className="flex items-center gap-2 bg-teal-50 border border-teal-100 rounded-xl px-4 py-2">
             <span className="text-xs text-[#1e2d16] font-medium">Total</span>
-            <span className="text-xl font-black text-[#1e2d16] leading-none">{categories.length}</span>
+            <span className="text-xl font-black text-[#1e2d16] leading-none">
+              {categories.length}
+            </span>
           </div>
           <button
             onClick={() => navigate("/admin/add-category")}
@@ -78,10 +88,7 @@ export default function AdminCategory() {
         </div>
       </div>
 
-      {/* Content */}
       <div className="flex-1 overflow-auto px-4 py-3">
-
-        {/* Loading */}
         {!isLoaded && (
           <div className="bg-white rounded-xl border border-slate-200 p-16 text-center">
             <div className="w-7 h-7 border-2 border-[#1e2d16] border-t-transparent rounded-full animate-spin mx-auto" />
@@ -89,14 +96,17 @@ export default function AdminCategory() {
           </div>
         )}
 
-        {/* Empty */}
         {isLoaded && categories.length === 0 && (
           <div className="bg-white rounded-xl border border-slate-200 p-16 text-center">
             <div className="w-16 h-16 bg-teal-50 border border-teal-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
               <FaTags className="text-[#1e2e16] text-2xl" />
             </div>
-            <h3 className="text-sm font-semibold text-slate-700 mb-1">No categories yet</h3>
-            <p className="text-xs text-slate-400 mb-4">Add your first category to get started.</p>
+            <h3 className="text-sm font-semibold text-slate-700 mb-1">
+              No categories yet
+            </h3>
+            <p className="text-xs text-slate-400 mb-4">
+              Add your first category to get started.
+            </p>
             <button
               onClick={() => navigate("/admin/add-category")}
               className="inline-flex items-center gap-2 bg-[#1e2d16] hover:bg-[#1e2d15] text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition-all"
@@ -106,7 +116,6 @@ export default function AdminCategory() {
           </div>
         )}
 
-        {/* List */}
         {isLoaded && categories.length > 0 && (
           <div className="flex flex-col gap-3 pb-4">
             {categories.map((cat, index) => (
@@ -115,8 +124,6 @@ export default function AdminCategory() {
                 className="bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md hover:border-slate-300 transition-all overflow-hidden"
               >
                 <div className="flex flex-col md:flex-row">
-
-                  {/* Image */}
                   <div className="md:w-48 shrink-0 bg-slate-100 flex items-center justify-center">
                     {cat.image ? (
                       <img
@@ -124,7 +131,8 @@ export default function AdminCategory() {
                         alt={cat.name}
                         className="w-full h-40 md:h-full object-cover"
                         onError={(e) => {
-                          e.target.src = "https://via.placeholder.com/400x300?text=Not+Found";
+                          e.target.src =
+                            "https://via.placeholder.com/400x300?text=Not+Found";
                         }}
                       />
                     ) : (
@@ -134,7 +142,6 @@ export default function AdminCategory() {
                     )}
                   </div>
 
-                  {/* Content */}
                   <div className="flex-1 p-5 flex flex-col justify-between">
                     <div>
                       <div className="flex items-start justify-between gap-3 mb-2">
@@ -143,17 +150,19 @@ export default function AdminCategory() {
                             {String(index + 1).padStart(3, "0")}
                           </span>
                           <div>
-                            <h2 className="text-sm font-semibold text-slate-800">{cat.name}</h2>
+                            <h2 className="text-sm font-semibold text-slate-800">
+                              {cat.name}
+                            </h2>
                             <span className="inline-block mt-1 text-xs font-semibold text-[#1e2d16] bg-teal-50 border border-teal-100 px-2 py-0.5 rounded-full">
                               $ {cat.price}
                             </span>
                           </div>
                         </div>
-
-                        {/* Actions */}
                         <div className="flex items-center gap-1 shrink-0">
                           <button
-                            onClick={() => navigate("/admin/update-category", { state: cat })}
+                            onClick={() =>
+                              navigate("/admin/update-category", { state: cat })
+                            }
                             title="Edit category"
                             className="w-7 h-7 flex items-center justify-center rounded-lg bg-sky-50 text-[#1e2d16] hover:bg-sky-100 border border-sky-100 transition-all text-xs"
                           >
@@ -173,7 +182,6 @@ export default function AdminCategory() {
                         {cat.description}
                       </p>
 
-                      {/* Features */}
                       {cat.features?.length > 0 && (
                         <div className="flex flex-wrap gap-1.5">
                           {cat.features.map((f, i) => (
