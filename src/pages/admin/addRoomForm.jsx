@@ -33,24 +33,42 @@ export default function AddRoomForm() {
     if (!file) return;
     setPhotoUploading(true);
     const url = await uploadMedia(file, `rooms/${roomId || "temp"}`);
-    if (url) { setPhotos((prev) => [...prev, url]); toast.success("Photo uploaded!"); }
-    else toast.error("Photo upload failed");
+    if (url) {
+      setPhotos((prev) => [...prev, url]);
+      toast.success("Photo uploaded!");
+    } else toast.error("Photo upload failed");
     setPhotoUploading(false);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!roomId || !category) { toast.error("Room ID and Category are required"); return; }
+    if (!roomId || !category) {
+      toast.error("Room ID and Category are required");
+      return;
+    }
     setIsLoading(true);
     try {
       await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/rooms`,
-        { roomId: Number(roomId), category, maxGuests: Number(maxGuests), available, photos, specialDescription, notes },
-        { headers: { Authorization: "Bearer " + token } }
+        {
+          roomId: Number(roomId),
+          category,
+          maxGuests: Number(maxGuests),
+          available,
+          photos,
+          specialDescription,
+          notes,
+        },
+        { headers: { Authorization: "Bearer " + token } },
       );
       toast.success("Room created successfully");
-      setRoomId(""); setCategory(""); setMaxGuests(3); setAvailable(true);
-      setPhotos([]); setSpecialDescription(""); setNotes("");
+      setRoomId("");
+      setCategory("");
+      setMaxGuests(3);
+      setAvailable(true);
+      setPhotos([]);
+      setSpecialDescription("");
+      setNotes("");
     } catch (err) {
       toast.error(err.response?.data?.message || "Failed to create room");
     } finally {
@@ -104,67 +122,183 @@ export default function AddRoomForm() {
       `}</style>
 
       <div className="lv-add-page">
-        <div style={{ maxWidth: 680, margin: "0 auto", padding: "40px 16px 60px" }}>
-
-          {/* Page header */}
+        <div
+          style={{ maxWidth: 680, margin: "0 auto", padding: "40px 16px 60px" }}
+        >
           <div style={{ marginBottom: 28 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
-              <div style={{ height: 1, width: 28, background: "linear-gradient(90deg,#c9a84c,#d4891a)" }}></div>
-              <span style={{ fontSize: "0.6rem", letterSpacing: "0.35em", textTransform: "uppercase", color: "#9a7c3c", fontFamily: "'Jost',sans-serif" }}>Admin · Room Management</span>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 10,
+                marginBottom: 6,
+              }}
+            >
+              <div
+                style={{
+                  height: 1,
+                  width: 28,
+                  background: "linear-gradient(90deg,#c9a84c,#d4891a)",
+                }}
+              ></div>
+              <span
+                style={{
+                  fontSize: "0.6rem",
+                  letterSpacing: "0.35em",
+                  textTransform: "uppercase",
+                  color: "#9a7c3c",
+                  fontFamily: "'Jost',sans-serif",
+                }}
+              >
+                Admin · Room Management
+              </span>
             </div>
-            <h1 className="lv-add-display" style={{ fontSize: "1.9rem", color: "#1a3a1e", fontWeight: 500, margin: 0 }}>Add New Room</h1>
-            <p style={{ color: "#7a8c7a", fontSize: "0.83rem", marginTop: 5, fontFamily: "'Jost',sans-serif" }}>Register a new retreat space at Leonine Villa.</p>
+            <h1
+              className="lv-add-display"
+              style={{
+                fontSize: "1.9rem",
+                color: "#1a3a1e",
+                fontWeight: 500,
+                margin: 0,
+              }}
+            >
+              Add New Room
+            </h1>
+            <p
+              style={{
+                color: "#7a8c7a",
+                fontSize: "0.83rem",
+                marginTop: 5,
+                fontFamily: "'Jost',sans-serif",
+              }}
+            >
+              Register a new retreat space at Leonine Villa.
+            </p>
           </div>
 
-          {/* Card */}
-          <div style={{ background: "#fff", border: "1px solid #e2d9c8", borderRadius: 14, boxShadow: "0 2px 20px rgba(26,58,30,0.07)", overflow: "hidden" }}>
-
-            {/* Card top strip */}
-            <div style={{ background: "linear-gradient(135deg,#1a3a1e 0%,#2e5c35 100%)", padding: "18px 26px", display: "flex", alignItems: "center", gap: 12 }}>
+          <div
+            style={{
+              background: "#fff",
+              border: "1px solid #e2d9c8",
+              borderRadius: 14,
+              boxShadow: "0 2px 20px rgba(26,58,30,0.07)",
+              overflow: "hidden",
+            }}
+          >
+            <div
+              style={{
+                background: "linear-gradient(135deg,#1a3a1e 0%,#2e5c35 100%)",
+                padding: "18px 26px",
+                display: "flex",
+                alignItems: "center",
+                gap: 12,
+              }}
+            >
               <span style={{ fontSize: "1.2rem" }}>🛏️</span>
               <div>
-                <div className="lv-add-display" style={{ color: "#f5f0e8", fontSize: "1rem", fontWeight: 500 }}>Room Details</div>
-                <div style={{ color: "rgba(201,168,76,0.7)", fontSize: "0.62rem", letterSpacing: "0.22em", textTransform: "uppercase", fontFamily: "'Jost',sans-serif" }}>Leonine Villa & Sanctuary</div>
+                <div
+                  className="lv-add-display"
+                  style={{
+                    color: "#f5f0e8",
+                    fontSize: "1rem",
+                    fontWeight: 500,
+                  }}
+                >
+                  Room Details
+                </div>
+                <div
+                  style={{
+                    color: "rgba(201,168,76,0.7)",
+                    fontSize: "0.62rem",
+                    letterSpacing: "0.22em",
+                    textTransform: "uppercase",
+                    fontFamily: "'Jost',sans-serif",
+                  }}
+                >
+                  Leonine Villa & Sanctuary
+                </div>
               </div>
             </div>
 
             <form onSubmit={handleSubmit} style={{ padding: "26px 28px" }}>
-
-              {/* Room ID + Category */}
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 16 }}>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr",
+                  gap: 14,
+                  marginBottom: 16,
+                }}
+              >
                 <div>
-                  <label className="lv-add-label">Room ID <span style={{ color: "#c0392b" }}>*</span></label>
-                  <input type="number" value={roomId} onChange={(e) => setRoomId(e.target.value)}
-                    placeholder="e.g. 101" className="lv-add-input" required />
+                  <label className="lv-add-label">
+                    Room ID <span style={{ color: "#c0392b" }}>*</span>
+                  </label>
+                  <input
+                    type="number"
+                    value={roomId}
+                    onChange={(e) => setRoomId(e.target.value)}
+                    placeholder="e.g. 101"
+                    className="lv-add-input"
+                    required
+                  />
                 </div>
                 <div>
-                  <label className="lv-add-label">Category <span style={{ color: "#c0392b" }}>*</span></label>
-                  <select value={category} onChange={(e) => setCategory(e.target.value)} className="lv-add-input" required>
+                  <label className="lv-add-label">
+                    Category <span style={{ color: "#c0392b" }}>*</span>
+                  </label>
+                  <select
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
+                    className="lv-add-input"
+                    required
+                  >
                     <option value="">Select category</option>
                     {categories.map((cat) => (
-                      <option key={cat._id} value={cat.name}>{cat.name}</option>
+                      <option key={cat._id} value={cat.name}>
+                        {cat.name}
+                      </option>
                     ))}
                   </select>
                 </div>
               </div>
-
-              {/* Max Guests + Availability */}
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 16 }}>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr",
+                  gap: 14,
+                  marginBottom: 16,
+                }}
+              >
                 <div>
                   <label className="lv-add-label">Max Guests</label>
-                  <input type="number" value={maxGuests} onChange={(e) => setMaxGuests(e.target.value)}
-                    min={1} className="lv-add-input" />
+                  <input
+                    type="number"
+                    value={maxGuests}
+                    onChange={(e) => setMaxGuests(e.target.value)}
+                    min={1}
+                    className="lv-add-input"
+                  />
                 </div>
                 <div>
                   <label className="lv-add-label">Availability</label>
-                  <button type="button" onClick={() => setAvailable(!available)} style={{
-                    width: "100%", padding: "10px 14px", borderRadius: 8, border: "1px solid",
-                    fontFamily: "'Jost',sans-serif", fontSize: "0.83rem", fontWeight: 500, cursor: "pointer",
-                    transition: "all 0.2s",
-                    background: available ? "#edf7ee" : "#fff5f5",
-                    borderColor: available ? "#7cad7a" : "#f5c6c6",
-                    color: available ? "#2e5c35" : "#b91c1c",
-                  }}>
+                  <button
+                    type="button"
+                    onClick={() => setAvailable(!available)}
+                    style={{
+                      width: "100%",
+                      padding: "10px 14px",
+                      borderRadius: 8,
+                      border: "1px solid",
+                      fontFamily: "'Jost',sans-serif",
+                      fontSize: "0.83rem",
+                      fontWeight: 500,
+                      cursor: "pointer",
+                      transition: "all 0.2s",
+                      background: available ? "#edf7ee" : "#fff5f5",
+                      borderColor: available ? "#7cad7a" : "#f5c6c6",
+                      color: available ? "#2e5c35" : "#b91c1c",
+                    }}
+                  >
                     {available ? "✓  Available" : "✗  Unavailable"}
                   </button>
                 </div>
@@ -172,31 +306,112 @@ export default function AddRoomForm() {
 
               <div className="lv-add-divider"></div>
 
-              {/* Photos */}
               <div style={{ marginBottom: 16 }}>
                 <label className="lv-add-label">Room Photos</label>
-                <label className="lv-add-upload-zone" style={{
-                  display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-                  border: "2px dashed #d4c9b0", borderRadius: 10, padding: "22px", cursor: "pointer",
-                  background: "#fafaf7", transition: "all 0.2s",
-                }}>
-                  <input type="file" accept="image/*" onChange={handlePhotoUpload} style={{ display: "none" }} />
-                  <div style={{ background: "#f0ebe0", borderRadius: "50%", padding: 10, marginBottom: 8 }}>
-                    <FaUpload style={{ color: "#9a7c3c", fontSize: "0.95rem" }} />
+                <label
+                  className="lv-add-upload-zone"
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    border: "2px dashed #d4c9b0",
+                    borderRadius: 10,
+                    padding: "22px",
+                    cursor: "pointer",
+                    background: "#fafaf7",
+                    transition: "all 0.2s",
+                  }}
+                >
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handlePhotoUpload}
+                    style={{ display: "none" }}
+                  />
+                  <div
+                    style={{
+                      background: "#f0ebe0",
+                      borderRadius: "50%",
+                      padding: 10,
+                      marginBottom: 8,
+                    }}
+                  >
+                    <FaUpload
+                      style={{ color: "#9a7c3c", fontSize: "0.95rem" }}
+                    />
                   </div>
-                  <p style={{ color: "#5a7a5c", fontWeight: 500, fontSize: "0.82rem", margin: 0 }}>
+                  <p
+                    style={{
+                      color: "#5a7a5c",
+                      fontWeight: 500,
+                      fontSize: "0.82rem",
+                      margin: 0,
+                    }}
+                  >
                     {photoUploading ? "Uploading…" : "Click to upload a photo"}
                   </p>
-                  <p style={{ color: "#b0a890", fontSize: "0.7rem", marginTop: 3 }}>PNG, JPG or WEBP</p>
+                  <p
+                    style={{
+                      color: "#b0a890",
+                      fontSize: "0.7rem",
+                      marginTop: 3,
+                    }}
+                  >
+                    PNG, JPG or WEBP
+                  </p>
                 </label>
 
                 {photos.length > 0 && (
-                  <div style={{ display: "flex", gap: 10, marginTop: 12, flexWrap: "wrap" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: 10,
+                      marginTop: 12,
+                      flexWrap: "wrap",
+                    }}
+                  >
                     {photos.map((p, idx) => (
-                      <div key={idx} style={{ position: "relative", width: 84, height: 84, borderRadius: 8, overflow: "hidden", border: "1px solid #d4c9b0" }}>
-                        <img src={p} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                        <button type="button" onClick={() => setPhotos((prev) => prev.filter((_, i) => i !== idx))}
-                          style={{ position: "absolute", top: 3, right: 3, background: "rgba(180,30,30,0.85)", border: "none", borderRadius: "50%", padding: "3px 5px", cursor: "pointer", color: "#fff", lineHeight: 1 }}>
+                      <div
+                        key={idx}
+                        style={{
+                          position: "relative",
+                          width: 84,
+                          height: 84,
+                          borderRadius: 8,
+                          overflow: "hidden",
+                          border: "1px solid #d4c9b0",
+                        }}
+                      >
+                        <img
+                          src={p}
+                          alt=""
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                          }}
+                        />
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setPhotos((prev) =>
+                              prev.filter((_, i) => i !== idx),
+                            )
+                          }
+                          style={{
+                            position: "absolute",
+                            top: 3,
+                            right: 3,
+                            background: "rgba(180,30,30,0.85)",
+                            border: "none",
+                            borderRadius: "50%",
+                            padding: "3px 5px",
+                            cursor: "pointer",
+                            color: "#fff",
+                            lineHeight: 1,
+                          }}
+                        >
                           <FaTimes style={{ fontSize: "0.55rem" }} />
                         </button>
                       </div>
@@ -205,59 +420,101 @@ export default function AddRoomForm() {
                 )}
               </div>
 
-              {/* Special Description */}
               <div style={{ marginBottom: 16 }}>
                 <label className="lv-add-label">Special Description</label>
-                <textarea value={specialDescription} onChange={(e) => setSpecialDescription(e.target.value)}
-                  rows={3} placeholder="Describe what makes this retreat special…"
-                  className="lv-add-input" style={{ resize: "none" }} />
+                <textarea
+                  value={specialDescription}
+                  onChange={(e) => setSpecialDescription(e.target.value)}
+                  rows={3}
+                  placeholder="Describe what makes this retreat special…"
+                  className="lv-add-input"
+                  style={{ resize: "none" }}
+                />
               </div>
 
-              {/* Notes */}
               <div style={{ marginBottom: 8 }}>
                 <label className="lv-add-label">Internal Notes</label>
-                <textarea value={notes} onChange={(e) => setNotes(e.target.value)}
-                  rows={2} placeholder="Notes for admin reference only…"
-                  className="lv-add-input" style={{ resize: "none" }} />
+                <textarea
+                  value={notes}
+                  onChange={(e) => setNotes(e.target.value)}
+                  rows={2}
+                  placeholder="Notes for admin reference only…"
+                  className="lv-add-input"
+                  style={{ resize: "none" }}
+                />
               </div>
 
               <div className="lv-add-divider"></div>
 
-              {/* Actions */}
               <div style={{ display: "flex", gap: 10 }}>
-                <button type="button" onClick={() => navigate("/admin/rooms")}
+                <button
+                  type="button"
+                  onClick={() => navigate("/admin/rooms")}
                   className="lv-add-cancel-btn"
                   style={{
-                    flex: 1, padding: "11px", borderRadius: 8,
-                    border: "1px solid #d4c9b0", background: "#fff",
-                    color: "#5a7a5c", fontFamily: "'Jost',sans-serif",
-                    fontSize: "0.72rem", letterSpacing: "0.12em", textTransform: "uppercase",
-                    cursor: "pointer", fontWeight: 500, transition: "all 0.2s"
-                  }}>
+                    flex: 1,
+                    padding: "11px",
+                    borderRadius: 8,
+                    border: "1px solid #d4c9b0",
+                    background: "#fff",
+                    color: "#5a7a5c",
+                    fontFamily: "'Jost',sans-serif",
+                    fontSize: "0.72rem",
+                    letterSpacing: "0.12em",
+                    textTransform: "uppercase",
+                    cursor: "pointer",
+                    fontWeight: 500,
+                    transition: "all 0.2s",
+                  }}
+                >
                   Cancel
                 </button>
-                <button type="submit" disabled={isLoading || photoUploading}
+                <button
+                  type="submit"
+                  disabled={isLoading || photoUploading}
                   className="lv-add-submit-btn"
                   style={{
-                    flex: 2, padding: "11px", borderRadius: 8,
-                    background: isLoading || photoUploading ? "#a8c8a0" : "linear-gradient(135deg,#1a3a1e 0%,#2e5c35 100%)",
-                    border: "none", color: "#f5f0e8",
-                    fontFamily: "'Jost',sans-serif", fontSize: "0.72rem",
-                    letterSpacing: "0.12em", textTransform: "uppercase",
-                    cursor: isLoading || photoUploading ? "not-allowed" : "pointer",
-                    fontWeight: 600, display: "flex", alignItems: "center",
-                    justifyContent: "center", gap: 8, transition: "opacity 0.2s",
-                    boxShadow: "0 3px 14px rgba(26,58,30,0.22)"
-                  }}>
+                    flex: 2,
+                    padding: "11px",
+                    borderRadius: 8,
+                    background:
+                      isLoading || photoUploading
+                        ? "#a8c8a0"
+                        : "linear-gradient(135deg,#1a3a1e 0%,#2e5c35 100%)",
+                    border: "none",
+                    color: "#f5f0e8",
+                    fontFamily: "'Jost',sans-serif",
+                    fontSize: "0.72rem",
+                    letterSpacing: "0.12em",
+                    textTransform: "uppercase",
+                    cursor:
+                      isLoading || photoUploading ? "not-allowed" : "pointer",
+                    fontWeight: 600,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: 8,
+                    transition: "opacity 0.2s",
+                    boxShadow: "0 3px 14px rgba(26,58,30,0.22)",
+                  }}
+                >
                   <FaPlusCircle style={{ fontSize: "0.8rem" }} />
                   {isLoading || photoUploading ? "Saving…" : "Add Room"}
                 </button>
               </div>
-
             </form>
           </div>
 
-          <p style={{ textAlign: "center", color: "#c0b090", fontSize: "0.65rem", marginTop: 18, letterSpacing: "0.12em", fontFamily: "'Jost',sans-serif" }}>
+          <p
+            style={{
+              textAlign: "center",
+              color: "#c0b090",
+              fontSize: "0.65rem",
+              marginTop: 18,
+              letterSpacing: "0.12em",
+              fontFamily: "'Jost',sans-serif",
+            }}
+          >
             LEONINE VILLA & SANCTUARY · Admin Panel
           </p>
         </div>
