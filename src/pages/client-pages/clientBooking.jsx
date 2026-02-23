@@ -3,9 +3,24 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const ROOMS = [
-  { id: "treetop",   category: "TREETOP LUXURY",    label: "Treetop Luxury Suite",     icon: "🌿", price: "from $480 / night" },
-  { id: "waterside", category: "WATERSIDE RETREAT",  label: "Waterside Retreat Villa",  icon: "💧", price: "from $380 / night" },
-  { id: "cultural",  category: "CULTURAL SANCTUARY", label: "Cultural Sanctuary Lodge", icon: "🏛️", price: "from $320 / night" },
+  {
+    id: "treetop",
+    category: "TREETOP LUXURY",
+    label: "Treetop Luxury Suite",
+    price: "from $480 / night",
+  },
+  {
+    id: "waterside",
+    category: "WATERSIDE RETREAT",
+    label: "Waterside Retreat Villa",
+    price: "from $380 / night",
+  },
+  {
+    id: "cultural",
+    category: "CULTURAL SANCTUARY",
+    label: "Cultural Sanctuary Lodge",
+    price: "from $320 / night",
+  },
 ];
 
 const GUESTS = ["1 Guest", "2 Guests", "3 Guests", "4 Guests", "5+ Guests"];
@@ -14,25 +29,28 @@ export default function BookingPage() {
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
-    name: "", email: "", phone: "",
-    checkIn: "", checkOut: "",
-    room: "", guests: "",
+    name: "",
+    email: "",
+    phone: "",
+    checkIn: "",
+    checkOut: "",
+    room: "",
+    guests: "",
     requests: "",
   });
-  const [inkFocus, setInkFocus]     = useState(null);
-  const [loading, setLoading]       = useState(false);
-  const [error, setError]           = useState("");
-  const [success, setSuccess]       = useState(false);
+  const [inkFocus, setInkFocus] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
   const [bookingRef, setBookingRef] = useState(null);
 
   function handleChange(e) {
-    setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   }
 
   function handleSubmit() {
     setError("");
 
-    // Read token from sessionStorage — requires login every new browser session
     const token = sessionStorage.getItem("token");
     if (!token || token === "null" || token.trim() === "") {
       navigate("/login", { state: { from: "/booking" } });
@@ -42,16 +60,20 @@ export default function BookingPage() {
     const required = ["name", "email", "checkIn", "checkOut", "room", "guests"];
     for (const key of required) {
       if (!form[key]) {
-        setError("Pray complete all marked fields before presenting your reservation.");
+        setError(
+          "Pray complete all marked fields before presenting your reservation.",
+        );
         return;
       }
     }
     if (new Date(form.checkOut) <= new Date(form.checkIn)) {
-      setError("Your departure must follow your arrival — please verify the dates.");
+      setError(
+        "Your departure must follow your arrival — please verify the dates.",
+      );
       return;
     }
 
-    const chosenRoom = ROOMS.find(r => r.id === form.room);
+    const chosenRoom = ROOMS.find((r) => r.id === form.room);
     if (!chosenRoom) {
       setError("Please select a sanctuary before proceeding.");
       return;
@@ -65,18 +87,19 @@ export default function BookingPage() {
         {
           category: chosenRoom.category,
           start: form.checkIn,
-          end:   form.checkOut,
-          // Pass the guest email from the form so the backend can send confirmation to it
+          end: form.checkOut,
           guestEmail: form.email,
           notes: [
             `Name: ${form.name}`,
-            form.phone    ? `Phone: ${form.phone}`       : null,
+            form.phone ? `Phone: ${form.phone}` : null,
             `Email: ${form.email}`,
             `Guests: ${form.guests}`,
             form.requests ? `Requests: ${form.requests}` : null,
-          ].filter(Boolean).join(" | "),
+          ]
+            .filter(Boolean)
+            .join(" | "),
         },
-        { headers: { Authorization: `Bearer ${token}` } }
+        { headers: { Authorization: `Bearer ${token}` } },
       )
       .then((res) => {
         setBookingRef(res.data.result);
@@ -85,21 +108,28 @@ export default function BookingPage() {
       })
       .catch((err) => {
         const status = err.response?.status;
-        const msg    = err.response?.data?.message;
+        const msg = err.response?.data?.message;
 
         if (status === 409) {
-          setError("No rooms are available for your selected dates in this sanctuary. Please try different dates or choose another.");
+          setError(
+            "No rooms are available for your selected dates in this sanctuary. Please try different dates or choose another.",
+          );
         } else if (status === 401 || status === 403) {
           setError("Your session has expired — please sign in once more.");
-          setTimeout(() => navigate("/login", { state: { from: "/booking" } }), 1500);
+          setTimeout(
+            () => navigate("/login", { state: { from: "/booking" } }),
+            1500,
+          );
         } else {
-          setError(msg || "The courier has faltered — please try again presently.");
+          setError(
+            msg || "The courier has faltered — please try again presently.",
+          );
         }
         setLoading(false);
       });
   }
 
-  const chosenRoomLabel = ROOMS.find(r => r.id === form.room)?.label || "—";
+  const chosenRoomLabel = ROOMS.find((r) => r.id === form.room)?.label || "—";
 
   return (
     <>
@@ -299,7 +329,8 @@ export default function BookingPage() {
             <div className="b-cf b-cf-br">❧</div>
 
             <div className="b-ref">
-              Reservation Form<br />
+              Reservation Form
+              <br />
               {bookingRef
                 ? `Ref. ${String(bookingRef.bookingId).padStart(4, "0")} / 2026`
                 : "Ref. _ _ _ _ / 2026"}
@@ -317,26 +348,33 @@ export default function BookingPage() {
             <h1 className="b-heading">
               {success ? "Welcome to Leonine" : "Reservation of Sanctuary"}
             </h1>
-            <p className="b-subheading">Leonine Villa Natura Resort — Kandy, Sri Lanka</p>
+            <p className="b-subheading">
+              Leonine Villa Natura Resort — Kandy, Sri Lanka
+            </p>
 
             <div className="b-divider">
-              <div className="b-rule" /><div className="b-dia" /><div className="b-dia" /><div className="b-dia" /><div className="b-rule" />
+              <div className="b-rule" />
+              <div className="b-dia" />
+              <div className="b-dia" />
+              <div className="b-dia" />
+              <div className="b-rule" />
             </div>
 
             {success ? (
-              /* ── SUCCESS STATE ── */
               <div className="b-welcome">
-                <span className="b-welcome-icon">🌿</span>
                 <div className="b-welcome-title">Your Sanctuary Awaits</div>
                 <div className="b-welcome-sub">
-                  Honoured {form.name}, your reservation has been duly received at the estate.
+                  Honoured {form.name}, your reservation has been duly received
+                  at the estate.
                 </div>
 
                 {bookingRef && (
                   <div className="b-welcome-card">
                     <div className="b-wc-row">
                       <span className="b-wc-label">Booking Reference</span>
-                      <span className="b-wc-value">#{bookingRef.bookingId}</span>
+                      <span className="b-wc-value">
+                        #{bookingRef.bookingId}
+                      </span>
                     </div>
                     <div className="b-wc-row">
                       <span className="b-wc-label">Room Assigned</span>
@@ -349,16 +387,23 @@ export default function BookingPage() {
                     <div className="b-wc-row">
                       <span className="b-wc-label">Arrival</span>
                       <span className="b-wc-value">
-                        {new Date(bookingRef.start).toLocaleDateString("en-GB", {
-                          day: "numeric", month: "long", year: "numeric",
-                        })}
+                        {new Date(bookingRef.start).toLocaleDateString(
+                          "en-GB",
+                          {
+                            day: "numeric",
+                            month: "long",
+                            year: "numeric",
+                          },
+                        )}
                       </span>
                     </div>
                     <div className="b-wc-row">
                       <span className="b-wc-label">Departure</span>
                       <span className="b-wc-value">
                         {new Date(bookingRef.end).toLocaleDateString("en-GB", {
-                          day: "numeric", month: "long", year: "numeric",
+                          day: "numeric",
+                          month: "long",
+                          year: "numeric",
                         })}
                       </span>
                     </div>
@@ -372,93 +417,171 @@ export default function BookingPage() {
                 )}
 
                 <div className="b-welcome-note">
-                  A confirmation has been dispatched to your correspondence address.<br />
-                  Our butler shall correspond with thee shortly to confirm your sanctuary.<br />
-                  A deposit of 30% will be requested upon confirmation.<br />
+                  A confirmation has been dispatched to your correspondence
+                  address.
+                  <br />
+                  Our butler shall correspond with thee shortly to confirm your
+                  sanctuary.
+                  <br />
+                  A deposit of 30% will be requested upon confirmation.
+                  <br />
                   We await your arrival with the warmest anticipation.
                 </div>
 
-                <button className="b-btn b-btn-red" onClick={() => navigate("/")}>
+                <button
+                  className="b-btn b-btn-red"
+                  onClick={() => navigate("/")}
+                >
                   ✦ &nbsp; Return to the Estate &nbsp; ✦
                 </button>
               </div>
-
             ) : (
-              /* ── BOOKING FORM ── */
               <>
                 <p className="b-intro">
-                  Dear Honoured Guest, pray inscribe your details in the form below
-                  that we may prepare your sanctuary with all the care it deserves.
+                  Dear Honoured Guest, pray inscribe your details in the form
+                  below that we may prepare your sanctuary with all the care it
+                  deserves.
                 </p>
 
                 {error && <div className="b-error">⚠ &nbsp;{error}</div>}
 
                 <div className="form-grid">
                   <div>
-                    <label className="b-label">Full Name &amp; Title <span className="req">*</span></label>
-                    <div className={`b-wrap ${inkFocus === "name" ? "focused" : ""}`}>
+                    <label className="b-label">
+                      Full Name &amp; Title <span className="req">*</span>
+                    </label>
+                    <div
+                      className={`b-wrap ${inkFocus === "name" ? "focused" : ""}`}
+                    >
                       <div className="b-dot" />
-                      <input name="name" type="text" placeholder="e.g. Mr. James Perera"
-                        className="b-input" value={form.name} onChange={handleChange}
-                        onFocus={() => setInkFocus("name")} onBlur={() => setInkFocus(null)} />
+                      <input
+                        name="name"
+                        type="text"
+                        placeholder="e.g. Mr. James Perera"
+                        className="b-input"
+                        value={form.name}
+                        onChange={handleChange}
+                        onFocus={() => setInkFocus("name")}
+                        onBlur={() => setInkFocus(null)}
+                      />
                     </div>
                   </div>
 
                   <div>
                     <label className="b-label">Calling Number</label>
-                    <div className={`b-wrap ${inkFocus === "phone" ? "focused" : ""}`}>
+                    <div
+                      className={`b-wrap ${inkFocus === "phone" ? "focused" : ""}`}
+                    >
                       <div className="b-dot" />
-                      <input name="phone" type="tel" placeholder="+94 77 000 0000"
-                        className="b-input" value={form.phone} onChange={handleChange}
-                        onFocus={() => setInkFocus("phone")} onBlur={() => setInkFocus(null)} />
+                      <input
+                        name="phone"
+                        type="tel"
+                        placeholder="+94 77 000 0000"
+                        className="b-input"
+                        value={form.phone}
+                        onChange={handleChange}
+                        onFocus={() => setInkFocus("phone")}
+                        onBlur={() => setInkFocus(null)}
+                      />
                     </div>
                   </div>
 
                   <div className="form-full">
                     <label className="b-label">
                       Electronic Correspondence <span className="req">*</span>
-                      <em style={{ fontSize: "0.65rem", marginLeft: 6, opacity: 0.7 }}>
+                      <em
+                        style={{
+                          fontSize: "0.65rem",
+                          marginLeft: 6,
+                          opacity: 0.7,
+                        }}
+                      >
                         — booking confirmation will be sent here
                       </em>
                     </label>
-                    <div className={`b-wrap ${inkFocus === "email" ? "focused" : ""}`}>
+                    <div
+                      className={`b-wrap ${inkFocus === "email" ? "focused" : ""}`}
+                    >
                       <div className="b-dot" />
-                      <input name="email" type="email" placeholder="your.name@correspondence.com"
-                        className="b-input" value={form.email} onChange={handleChange}
-                        onFocus={() => setInkFocus("email")} onBlur={() => setInkFocus(null)} />
+                      <input
+                        name="email"
+                        type="email"
+                        placeholder="your.name@correspondence.com"
+                        className="b-input"
+                        value={form.email}
+                        onChange={handleChange}
+                        onFocus={() => setInkFocus("email")}
+                        onBlur={() => setInkFocus(null)}
+                      />
                     </div>
                   </div>
 
                   <div>
-                    <label className="b-label">Arrival Date <span className="req">*</span></label>
-                    <div className={`b-wrap ${inkFocus === "checkIn" ? "focused" : ""}`}>
+                    <label className="b-label">
+                      Arrival Date <span className="req">*</span>
+                    </label>
+                    <div
+                      className={`b-wrap ${inkFocus === "checkIn" ? "focused" : ""}`}
+                    >
                       <div className="b-dot" />
-                      <input name="checkIn" type="date"
+                      <input
+                        name="checkIn"
+                        type="date"
                         min={new Date().toISOString().split("T")[0]}
-                        className="b-input" value={form.checkIn} onChange={handleChange}
-                        onFocus={() => setInkFocus("checkIn")} onBlur={() => setInkFocus(null)} />
+                        className="b-input"
+                        value={form.checkIn}
+                        onChange={handleChange}
+                        onFocus={() => setInkFocus("checkIn")}
+                        onBlur={() => setInkFocus(null)}
+                      />
                     </div>
                   </div>
 
                   <div>
-                    <label className="b-label">Departure Date <span className="req">*</span></label>
-                    <div className={`b-wrap ${inkFocus === "checkOut" ? "focused" : ""}`}>
+                    <label className="b-label">
+                      Departure Date <span className="req">*</span>
+                    </label>
+                    <div
+                      className={`b-wrap ${inkFocus === "checkOut" ? "focused" : ""}`}
+                    >
                       <div className="b-dot" />
-                      <input name="checkOut" type="date"
-                        min={form.checkIn || new Date().toISOString().split("T")[0]}
-                        className="b-input" value={form.checkOut} onChange={handleChange}
-                        onFocus={() => setInkFocus("checkOut")} onBlur={() => setInkFocus(null)} />
+                      <input
+                        name="checkOut"
+                        type="date"
+                        min={
+                          form.checkIn || new Date().toISOString().split("T")[0]
+                        }
+                        className="b-input"
+                        value={form.checkOut}
+                        onChange={handleChange}
+                        onFocus={() => setInkFocus("checkOut")}
+                        onBlur={() => setInkFocus(null)}
+                      />
                     </div>
                   </div>
 
                   <div className="form-full">
-                    <label className="b-label">Number of Guests <span className="req">*</span></label>
-                    <div className={`b-wrap ${inkFocus === "guests" ? "focused" : ""}`}>
+                    <label className="b-label">
+                      Number of Guests <span className="req">*</span>
+                    </label>
+                    <div
+                      className={`b-wrap ${inkFocus === "guests" ? "focused" : ""}`}
+                    >
                       <div className="b-dot" />
-                      <select name="guests" className="b-select" value={form.guests} onChange={handleChange}
-                        onFocus={() => setInkFocus("guests")} onBlur={() => setInkFocus(null)}>
+                      <select
+                        name="guests"
+                        className="b-select"
+                        value={form.guests}
+                        onChange={handleChange}
+                        onFocus={() => setInkFocus("guests")}
+                        onBlur={() => setInkFocus(null)}
+                      >
                         <option value="">— Select party size —</option>
-                        {GUESTS.map(g => <option key={g} value={g}>{g}</option>)}
+                        {GUESTS.map((g) => (
+                          <option key={g} value={g}>
+                            {g}
+                          </option>
+                        ))}
                       </select>
                     </div>
                   </div>
@@ -468,10 +591,12 @@ export default function BookingPage() {
                       Choose Your Sanctuary <span className="req">*</span>
                     </label>
                     <div className="room-cards">
-                      {ROOMS.map(r => (
-                        <div key={r.id}
+                      {ROOMS.map((r) => (
+                        <div
+                          key={r.id}
                           className={`room-card ${form.room === r.id ? "selected" : ""}`}
-                          onClick={() => setForm(p => ({ ...p, room: r.id }))}>
+                          onClick={() => setForm((p) => ({ ...p, room: r.id }))}
+                        >
                           <div className="rc-icon">{r.icon}</div>
                           <div className="rc-name">{r.label}</div>
                           <div className="rc-price">{r.price}</div>
@@ -481,47 +606,109 @@ export default function BookingPage() {
                   </div>
 
                   <div className="form-full">
-                    <label className="b-label">Special Requests &amp; Arrangements</label>
-                    <div className={`b-wrap ${inkFocus === "requests" ? "focused" : ""}`}>
-                      <textarea name="requests" placeholder="Dietary requirements, special occasions, accessibility needs..."
-                        className="b-textarea" value={form.requests} onChange={handleChange}
-                        onFocus={() => setInkFocus("requests")} onBlur={() => setInkFocus(null)} />
+                    <label className="b-label">
+                      Special Requests &amp; Arrangements
+                    </label>
+                    <div
+                      className={`b-wrap ${inkFocus === "requests" ? "focused" : ""}`}
+                    >
+                      <textarea
+                        name="requests"
+                        placeholder="Dietary requirements, special occasions, accessibility needs..."
+                        className="b-textarea"
+                        value={form.requests}
+                        onChange={handleChange}
+                        onFocus={() => setInkFocus("requests")}
+                        onBlur={() => setInkFocus(null)}
+                      />
                     </div>
                   </div>
                 </div>
 
                 <p className="b-terms">
-                  By submitting this form, you acknowledge our reservation policy. A deposit of 30% shall be requested upon confirmation. Full cancellation permitted up to 7 days prior to arrival.
+                  By submitting this form, you acknowledge our reservation
+                  policy. A deposit of 30% shall be requested upon confirmation.
+                  Full cancellation permitted up to 7 days prior to arrival.
                 </p>
 
-                <button className="b-btn" onClick={handleSubmit} disabled={loading}>
-                  {loading ? "Dispatching your reservation..." : "✦  Submit Reservation Request  ✦"}
+                <button
+                  className="b-btn"
+                  onClick={handleSubmit}
+                  disabled={loading}
+                >
+                  {loading
+                    ? "Dispatching your reservation..."
+                    : "✦  Submit Reservation Request  ✦"}
                 </button>
 
                 <div className="b-back">
                   Changed your mind?{" "}
-                  <button onClick={() => navigate("/")}>Return to the estate</button>
+                  <button onClick={() => navigate("/")}>
+                    Return to the estate
+                  </button>
                 </div>
               </>
             )}
           </div>
 
-          {/* Wax seal */}
           <div className="b-wax-seal">
-            <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="40" cy="40" r="38" fill="url(#bseal)"/>
-              <circle cx="40" cy="40" r="34" fill="none" stroke="#f4e4c188" strokeWidth="1"/>
-              <circle cx="40" cy="40" r="28" fill="none" stroke="#f4e4c133" strokeWidth="0.5"/>
-              <text x="40" y="47" textAnchor="middle" fontFamily="Cinzel,serif" fontSize="19" fontWeight="700" fill="#f4e4c1cc">R</text>
-              <path id="bsr" d="M40 40 m-28,0 a28,28 0 1,1 56,0 a28,28 0 1,1 -56,0" fill="none"/>
-              <text fontSize="5.8" fontFamily="Cinzel,serif" fill="#f4e4c188" letterSpacing="0.16em">
+            <svg
+              viewBox="0 0 80 80"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle cx="40" cy="40" r="38" fill="url(#bseal)" />
+              <circle
+                cx="40"
+                cy="40"
+                r="34"
+                fill="none"
+                stroke="#f4e4c188"
+                strokeWidth="1"
+              />
+              <circle
+                cx="40"
+                cy="40"
+                r="28"
+                fill="none"
+                stroke="#f4e4c133"
+                strokeWidth="0.5"
+              />
+              <text
+                x="40"
+                y="47"
+                textAnchor="middle"
+                fontFamily="Cinzel,serif"
+                fontSize="19"
+                fontWeight="700"
+                fill="#f4e4c1cc"
+              >
+                R
+              </text>
+              <path
+                id="bsr"
+                d="M40 40 m-28,0 a28,28 0 1,1 56,0 a28,28 0 1,1 -56,0"
+                fill="none"
+              />
+              <text
+                fontSize="5.8"
+                fontFamily="Cinzel,serif"
+                fill="#f4e4c188"
+                letterSpacing="0.16em"
+              >
                 <textPath href="#bsr">RESERVATION · LEONINE · 2026 · </textPath>
               </text>
               <defs>
-                <radialGradient id="bseal" cx="40" cy="34" r="38" gradientUnits="userSpaceOnUse">
-                  <stop stopColor="#3a6040"/>
-                  <stop offset="0.55" stopColor="#1a3d20"/>
-                  <stop offset="1" stopColor="#0a1a0c"/>
+                <radialGradient
+                  id="bseal"
+                  cx="40"
+                  cy="34"
+                  r="38"
+                  gradientUnits="userSpaceOnUse"
+                >
+                  <stop stopColor="#3a6040" />
+                  <stop offset="0.55" stopColor="#1a3d20" />
+                  <stop offset="1" stopColor="#0a1a0c" />
                 </radialGradient>
               </defs>
             </svg>
