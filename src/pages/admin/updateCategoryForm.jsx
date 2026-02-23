@@ -29,21 +29,20 @@ export default function UpdateCategoryForm() {
       let imageUrl = form.image;
 
       if (imageFile) {
-        imageUrl = await uploadMedia(
-          imageFile,
-          `categories/${state.name}`
-        );
+        imageUrl = await uploadMedia(imageFile, `categories/${state.name}`);
       }
 
       const token = localStorage.getItem("token");
       const payload = {
         price: Number(form.price),
-        features: form.features.split(",").map((f) => f.trim()).filter(Boolean),
+        features: form.features
+          .split(",")
+          .map((f) => f.trim())
+          .filter(Boolean),
         description: form.description,
         image: imageUrl,
       };
 
-      // ✅ FIXED: was /api/category/:name (singular), now /api/categories/name/:name (plural, correct route)
       const res = await fetch(
         `${import.meta.env.VITE_API_URL}/api/categories/name/${state.name}`,
         {
@@ -53,7 +52,7 @@ export default function UpdateCategoryForm() {
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify(payload),
-        }
+        },
       );
 
       const data = await res.json();
@@ -74,7 +73,6 @@ export default function UpdateCategoryForm() {
           Update Category
         </h2>
 
-        {/* Category name is locked */}
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-500 mb-1">
             Category Name (locked)
@@ -149,9 +147,7 @@ export default function UpdateCategoryForm() {
             />
           </div>
 
-          {error && (
-            <p className="text-red-500 text-sm">{error}</p>
-          )}
+          {error && <p className="text-red-500 text-sm">{error}</p>}
 
           <button
             type="submit"
