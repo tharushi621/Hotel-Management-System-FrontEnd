@@ -5,13 +5,13 @@ import { useNavigate, useLocation } from "react-router-dom";
 export default function VerifyEmailPage() {
   const navigate = useNavigate();
   const location = useLocation();
-const emailFromSignup = location.state?.email || "";
-const otpFromSignup = location.state?.otp || "";
+  const emailFromSignup = location.state?.email || "";
+  const otpFromSignup = location.state?.otp || "";
 
   const [email, setEmail] = useState(emailFromSignup);
   const [otp, setOtp] = useState(
-  otpFromSignup ? String(otpFromSignup).split("") : ["", "", "", ""]
-);
+    otpFromSignup ? String(otpFromSignup).split("") : ["", "", "", ""],
+  );
   const [loading, setLoading] = useState(false);
   const [resending, setResending] = useState(false);
   const [error, setError] = useState("");
@@ -19,13 +19,11 @@ const otpFromSignup = location.state?.otp || "";
   const [inkFocus, setInkFocus] = useState(null);
   const inputRefs = useRef([]);
 
-  // Handle each OTP digit box
   function handleOtpChange(index, value) {
-    if (!/^\d?$/.test(value)) return; // digits only
+    if (!/^\d?$/.test(value)) return;
     const updated = [...otp];
     updated[index] = value;
     setOtp(updated);
-    // Auto-advance to next box
     if (value && index < 3) {
       inputRefs.current[index + 1]?.focus();
     }
@@ -38,7 +36,10 @@ const otpFromSignup = location.state?.otp || "";
   }
 
   function handleOtpPaste(e) {
-    const pasted = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 4);
+    const pasted = e.clipboardData
+      .getData("text")
+      .replace(/\D/g, "")
+      .slice(0, 4);
     if (pasted.length === 4) {
       setOtp(pasted.split(""));
       inputRefs.current[3]?.focus();
@@ -49,8 +50,16 @@ const otpFromSignup = location.state?.otp || "";
   function handleVerify() {
     setError("");
     const otpString = otp.join("");
-    if (!email) { setError("No correspondence address found — please return to the register."); return; }
-    if (otpString.length < 4) { setError("Pray enter all four digits of your verification seal."); return; }
+    if (!email) {
+      setError(
+        "No correspondence address found — please return to the register.",
+      );
+      return;
+    }
+    if (otpString.length < 4) {
+      setError("Pray enter all four digits of your verification seal.");
+      return;
+    }
 
     setLoading(true);
     axios
@@ -63,7 +72,10 @@ const otpFromSignup = location.state?.otp || "";
         setTimeout(() => navigate("/login"), 2500);
       })
       .catch((err) => {
-        setError(err.response?.data?.message || "The seal could not be verified — please try again.");
+        setError(
+          err.response?.data?.message ||
+            "The seal could not be verified — please try again.",
+        );
         setLoading(false);
       });
   }
@@ -72,14 +84,19 @@ const otpFromSignup = location.state?.otp || "";
     setError("");
     setResending(true);
     axios
-      .post(import.meta.env.VITE_BACKEND_URL + "/api/users/resend-otp", { email })
+      .post(import.meta.env.VITE_BACKEND_URL + "/api/users/resend-otp", {
+        email,
+      })
       .then(() => {
         setOtp(["", "", "", ""]);
         inputRefs.current[0]?.focus();
         setResending(false);
       })
       .catch((err) => {
-        setError(err.response?.data?.message || "Unable to dispatch a new seal at this time.");
+        setError(
+          err.response?.data?.message ||
+            "Unable to dispatch a new seal at this time.",
+        );
         setResending(false);
       });
   }
@@ -230,42 +247,67 @@ const otpFromSignup = location.state?.otp || "";
       `}</style>
 
       <div className="verify-bg">
-        <button className="back-home" onClick={() => navigate("/signup")}>← Return to Register</button>
+        <button className="back-home" onClick={() => navigate("/signup")}>
+          ← Return to Register
+        </button>
         <div className="jungle-mist" />
 
         <div className="letter-outer">
           <div className="letter-shadow" />
           <div className="parchment">
-            <div className="fold-line" /><div className="fold-shadow" />
+            <div className="fold-line" />
+            <div className="fold-shadow" />
             <div className="envelope-mark">· Verification Dispatch ·</div>
 
-            <div className="ornament" style={{marginTop:"14px"}}>✦ &nbsp;·&nbsp; ✦</div>
+            <div className="ornament" style={{ marginTop: "14px" }}>
+              ✦ &nbsp;·&nbsp; ✦
+            </div>
             <h1 className="letter-heading">Confirm Your Identity</h1>
-            <div className="quill-divider"><div className="divider-rule" /><div className="divider-diamond" /><div className="divider-rule" /></div>
+            <div className="quill-divider">
+              <div className="divider-rule" />
+              <div className="divider-diamond" />
+              <div className="divider-rule" />
+            </div>
 
             {success ? (
               <div className="success-msg">
                 ✦ &nbsp; Your identity has been duly confirmed. &nbsp; ✦<br />
-                <em>Welcome to the estate. Directing you to the entrance hall...</em>
+                <em>
+                  Welcome to the estate. Directing you to the entrance hall...
+                </em>
               </div>
             ) : (
               <>
                 <p className="dispatch-note">
-                  A four-digit verification seal has been dispatched to your correspondence address.
-                  Pray enter it below to complete your inscription.
+                  A four-digit verification seal has been dispatched to your
+                  correspondence address. Pray enter it below to complete your
+                  inscription.
                 </p>
 
-                {/* Show email — editable only if not passed via state */}
                 {emailFromSignup ? (
                   <p className="dispatch-email">{email}</p>
                 ) : (
                   <>
-                    <label className="field-label">Correspondence Address<span style={{color:"var(--seal-red)",marginLeft:2}}> *</span></label>
-                    <div className={`field-wrap ${inkFocus==="email"?"focused":""}`}>
+                    <label className="field-label">
+                      Correspondence Address
+                      <span style={{ color: "var(--seal-red)", marginLeft: 2 }}>
+                        {" "}
+                        *
+                      </span>
+                    </label>
+                    <div
+                      className={`field-wrap ${inkFocus === "email" ? "focused" : ""}`}
+                    >
                       <div className="ink-dot" />
-                      <input type="email" placeholder="your.name@correspondence.com" className="ink-field"
-                        value={email} onChange={e=>setEmail(e.target.value)}
-                        onFocus={()=>setInkFocus("email")} onBlur={()=>setInkFocus(null)} />
+                      <input
+                        type="email"
+                        placeholder="your.name@correspondence.com"
+                        className="ink-field"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        onFocus={() => setInkFocus("email")}
+                        onBlur={() => setInkFocus(null)}
+                      />
                     </div>
                   </>
                 )}
@@ -276,26 +318,40 @@ const otpFromSignup = location.state?.otp || "";
                 <div className="otp-row" onPaste={handleOtpPaste}>
                   {otp.map((digit, i) => (
                     <div key={i} className="otp-box-wrap">
-                      <span className="otp-numeral">{["I","II","III","IV"][i]}</span>
+                      <span className="otp-numeral">
+                        {["I", "II", "III", "IV"][i]}
+                      </span>
                       <input
-                        ref={el => inputRefs.current[i] = el}
-                        type="text" inputMode="numeric" maxLength={1}
+                        ref={(el) => (inputRefs.current[i] = el)}
+                        type="text"
+                        inputMode="numeric"
+                        maxLength={1}
                         className={`otp-box ${digit ? "filled" : ""}`}
                         value={digit}
-                        onChange={e => handleOtpChange(i, e.target.value)}
-                        onKeyDown={e => handleOtpKeyDown(i, e)}
+                        onChange={(e) => handleOtpChange(i, e.target.value)}
+                        onKeyDown={(e) => handleOtpKeyDown(i, e)}
                       />
                     </div>
                   ))}
                 </div>
 
-                <button className="seal-btn" onClick={handleVerify} disabled={loading}>
-                  {loading ? "Verifying the seal..." : "✦  Confirm Verification  ✦"}
+                <button
+                  className="seal-btn"
+                  onClick={handleVerify}
+                  disabled={loading}
+                >
+                  {loading
+                    ? "Verifying the seal..."
+                    : "✦  Confirm Verification  ✦"}
                 </button>
 
                 <div className="resend-row">
                   <span>Did not receive the seal? &nbsp;</span>
-                  <button className="resend-btn" onClick={handleResend} disabled={resending}>
+                  <button
+                    className="resend-btn"
+                    onClick={handleResend}
+                    disabled={resending}
+                  >
                     {resending ? "Dispatching..." : "Dispatch a new one"}
                   </button>
                 </div>
@@ -304,17 +360,57 @@ const otpFromSignup = location.state?.otp || "";
           </div>
 
           <div className="wax-seal">
-            <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg
+              viewBox="0 0 80 80"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
               <circle cx="40" cy="40" r="38" fill="url(#sealGradV)" />
-              <circle cx="40" cy="40" r="34" fill="none" stroke="#f4e4c188" strokeWidth="1" />
-              <text x="40" y="47" textAnchor="middle" fontFamily="Cinzel, serif" fontSize="22" fontWeight="700" fill="#f4e4c1cc">L</text>
-              <path id="sealRingV" d="M40 40 m-28,0 a28,28 0 1,1 56,0 a28,28 0 1,1 -56,0" fill="none"/>
-              <text fontSize="6" fontFamily="Cinzel, serif" fill="#f4e4c188" letterSpacing="0.18em">
-                <textPath href="#sealRingV">LEONINE VILLA · SRI LANKA · </textPath>
+              <circle
+                cx="40"
+                cy="40"
+                r="34"
+                fill="none"
+                stroke="#f4e4c188"
+                strokeWidth="1"
+              />
+              <text
+                x="40"
+                y="47"
+                textAnchor="middle"
+                fontFamily="Cinzel, serif"
+                fontSize="22"
+                fontWeight="700"
+                fill="#f4e4c1cc"
+              >
+                L
+              </text>
+              <path
+                id="sealRingV"
+                d="M40 40 m-28,0 a28,28 0 1,1 56,0 a28,28 0 1,1 -56,0"
+                fill="none"
+              />
+              <text
+                fontSize="6"
+                fontFamily="Cinzel, serif"
+                fill="#f4e4c188"
+                letterSpacing="0.18em"
+              >
+                <textPath href="#sealRingV">
+                  LEONINE VILLA · SRI LANKA ·{" "}
+                </textPath>
               </text>
               <defs>
-                <radialGradient id="sealGradV" cx="40" cy="35" r="38" gradientUnits="userSpaceOnUse">
-                  <stop stopColor="#a02020" /><stop offset="0.6" stopColor="#7a1010" /><stop offset="1" stopColor="#4a0808" />
+                <radialGradient
+                  id="sealGradV"
+                  cx="40"
+                  cy="35"
+                  r="38"
+                  gradientUnits="userSpaceOnUse"
+                >
+                  <stop stopColor="#a02020" />
+                  <stop offset="0.6" stopColor="#7a1010" />
+                  <stop offset="1" stopColor="#4a0808" />
                 </radialGradient>
               </defs>
             </svg>
