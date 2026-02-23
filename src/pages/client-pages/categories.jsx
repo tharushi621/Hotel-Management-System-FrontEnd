@@ -10,11 +10,9 @@ export default function CategoriesPage() {
   const [scrollY, setScrollY] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
 
-  // ─── ALL local images — no Unsplash ───
   const categoryVisuals = {
     treetop: {
       image: "/z1.jpg",
-      icon: "🌿",
       accent: "#4a7c52",
       tag: "Most Requested",
       badge: "Elevated Jungle Living",
@@ -22,7 +20,6 @@ export default function CategoriesPage() {
     },
     luxury: {
       image: "/z1.jpg",
-      icon: "🌿",
       accent: "#4a7c52",
       tag: "Most Requested",
       badge: "Elevated Jungle Living",
@@ -30,7 +27,6 @@ export default function CategoriesPage() {
     },
     canopy: {
       image: "/z1.jpg",
-      icon: "🌿",
       accent: "#4a7c52",
       tag: "Treetop Escape",
       badge: "Above the Jungle",
@@ -38,7 +34,6 @@ export default function CategoriesPage() {
     },
     waterside: {
       image: "/t2.jpg",
-      icon: "💧",
       accent: "#2e6b8a",
       tag: "Romantic Escape",
       badge: "River & Birdsong",
@@ -46,7 +41,6 @@ export default function CategoriesPage() {
     },
     waterfall: {
       image: "/t2.jpg",
-      icon: "💧",
       accent: "#2e6b8a",
       tag: "Romantic Escape",
       badge: "River & Birdsong",
@@ -54,7 +48,6 @@ export default function CategoriesPage() {
     },
     river: {
       image: "/t2.jpg",
-      icon: "💧",
       accent: "#2e6b8a",
       tag: "Waterside Retreat",
       badge: "Sacred Waters",
@@ -62,7 +55,6 @@ export default function CategoriesPage() {
     },
     cultural: {
       image: "/t3.jpg",
-      icon: "🏛️",
       accent: "#8b4513",
       tag: "Cultural Immersion",
       badge: "Kandyan Heritage",
@@ -70,7 +62,6 @@ export default function CategoriesPage() {
     },
     heritage: {
       image: "/c5.jpg",
-      icon: "🏛️",
       accent: "#8b4513",
       tag: "Cultural Immersion",
       badge: "Kandyan Heritage",
@@ -78,7 +69,6 @@ export default function CategoriesPage() {
     },
     forest: {
       image: "/h2.jpg",
-      icon: "🌲",
       accent: "#2e5c35",
       tag: "Forest Escape",
       badge: "Ancient Canopy",
@@ -86,7 +76,6 @@ export default function CategoriesPage() {
     },
     lodge: {
       image: "/h2.jpg",
-      icon: "🌲",
       accent: "#2e5c35",
       tag: "Forest Lodge",
       badge: "Ancient Canopy",
@@ -94,7 +83,6 @@ export default function CategoriesPage() {
     },
     sanctuary: {
       image: "/t3.jpg",
-      icon: "🕊️",
       accent: "#6b5c3e",
       tag: "Sacred Sanctuary",
       badge: "Pure Stillness",
@@ -109,7 +97,6 @@ export default function CategoriesPage() {
     }
     return {
       image: "/h1.jpg",
-      icon: "🦁",
       accent: "#c9a84c",
       tag: "Signature Retreat",
       badge: "Curated Luxury",
@@ -136,7 +123,6 @@ export default function CategoriesPage() {
         setLoading(false);
       })
       .catch(() => {
-        // Static fallback — names match what's stored in Room.category
         setCategories([
           {
             _id: "1",
@@ -144,7 +130,13 @@ export default function CategoriesPage() {
             price: 42000,
             description:
               "Rise above the jungle canopy in our most elevated retreat. Ancient jak-wood ceilings, hand-beaten copper tubs, and a private rain terrace where mist rolls in at dawn.",
-            features: ["Private Plunge Pool", "Open-Air Rain Bath", "Forest Terrace", "Stargazing Deck", "Butler Service"],
+            features: [
+              "Private Plunge Pool",
+              "Open-Air Rain Bath",
+              "Forest Terrace",
+              "Stargazing Deck",
+              "Butler Service",
+            ],
           },
           {
             _id: "2",
@@ -152,7 +144,13 @@ export default function CategoriesPage() {
             price: 38000,
             description:
               "Perched above a singing river, this villa wraps you in the sound of water and birdsong. Step-stone baths, woven rattan terraces, and sunrise over the sacred hills.",
-            features: ["River View Deck", "Step-Stone Bath", "Rattan Terrace", "Sunrise Yoga Platform", "Private Boat"],
+            features: [
+              "River View Deck",
+              "Step-Stone Bath",
+              "Rattan Terrace",
+              "Sunrise Yoga Platform",
+              "Private Boat",
+            ],
           },
           {
             _id: "3",
@@ -160,23 +158,22 @@ export default function CategoriesPage() {
             price: 35000,
             description:
               "Inspired by the royal pavilions of Kandy — traditional clay walls, Batik draperies, hand-painted murals, and a meditation sala open to the ancient forest.",
-            features: ["Meditation Sala", "Batik Draperies", "Hand-Painted Murals", "Artisan Workshops", "Heritage Tours"],
+            features: [
+              "Meditation Sala",
+              "Batik Draperies",
+              "Hand-Painted Murals",
+              "Artisan Workshops",
+              "Heritage Tours",
+            ],
           },
         ]);
         setLoading(false);
       });
   }, []);
-
-  // ─────────────────────────────────────────────────────────────
-  //  KEY FIX: navigate by category NAME (not _id)
-  //  Because Room schema stores category as a string name,
-  //  not a reference to Category._id.
-  //  getRooms does: Room.find({ category: req.query.category })
-  //  So we pass the name string, not the ObjectId.
-  // ─────────────────────────────────────────────────────────────
   const goToRooms = (cat) => {
-    // Pass name as BOTH the category filter AND the display name
-    navigate(`/rooms?category=${encodeURIComponent(cat.name)}&name=${encodeURIComponent(cat.name)}`);
+    navigate(
+      `/rooms?category=${encodeURIComponent(cat.name)}&name=${encodeURIComponent(cat.name)}`,
+    );
   };
 
   const amenityIcons = {
@@ -247,15 +244,30 @@ export default function CategoriesPage() {
         .hero-text-mask { background: linear-gradient(180deg,rgba(255,255,255,0.95),rgba(245,235,210,0.9)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
       `}</style>
 
-      {/* NAVIGATION */}
-      <nav className={`fixed top-0 w-full z-50 transition-all duration-700 ${scrolled ? "nav-carved py-3" : "py-5 bg-transparent"}`}>
+      <nav
+        className={`fixed top-0 w-full z-50 transition-all duration-700 ${scrolled ? "nav-carved py-3" : "py-5 bg-transparent"}`}
+      >
         <div className="max-w-screen-xl mx-auto px-6 flex items-center justify-between">
-          <div className="flex flex-col items-start cursor-pointer" onClick={() => navigate("/")}>
+          <div
+            className="flex flex-col items-start cursor-pointer"
+            onClick={() => navigate("/")}
+          >
             <div className="flex items-center gap-2">
-              <img src="/logo.png" alt="Leonine" className="w-[44px] h-[44px]" onError={(e) => { e.target.style.display="none"; }} />
-              <span className="font-display text-2xl font-medium tracking-widest text-amber-100 hover:text-yellow-400 transition-colors duration-300">LEONINE</span>
+              <img
+                src="/logo.png"
+                alt="Leonine"
+                className="w-[44px] h-[44px]"
+                onError={(e) => {
+                  e.target.style.display = "none";
+                }}
+              />
+              <span className="font-display text-2xl font-medium tracking-widest text-amber-100 hover:text-yellow-400 transition-colors duration-300">
+                LEONINE
+              </span>
             </div>
-            <span className="font-body text-xs tracking-[0.4em] text-yellow-600/70 ml-10 uppercase">Villa & Sanctuary</span>
+            <span className="font-body text-xs tracking-[0.4em] text-yellow-600/70 ml-10 uppercase">
+              Villa & Sanctuary
+            </span>
           </div>
 
           <ul className="hidden lg:flex items-center gap-8">
@@ -268,7 +280,10 @@ export default function CategoriesPage() {
               <li key={item.label}>
                 <a
                   href={item.href}
-                  onClick={(e) => { e.preventDefault(); navigate(item.href); }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigate(item.href);
+                  }}
                   className={`nav-link font-body text-xs tracking-widest uppercase transition-colors duration-300 ${item.label === "Retreats" ? "text-yellow-400" : "text-stone-300 hover:text-yellow-400"}`}
                 >
                   {item.label}
@@ -278,16 +293,28 @@ export default function CategoriesPage() {
           </ul>
 
           <div className="hidden lg:flex items-center gap-3">
-            <button className="btn-gold font-body text-xs tracking-widest uppercase px-6 py-3 rounded-full text-stone-900 font-medium" onClick={() => navigate("/booking")}>
+            <button
+              className="btn-gold font-body text-xs tracking-widest uppercase px-6 py-3 rounded-full text-stone-900 font-medium"
+              onClick={() => navigate("/booking")}
+            >
               Reserve Now
             </button>
           </div>
 
-          <button className="lg:hidden text-stone-300 hover:text-yellow-400 transition-colors" onClick={() => setMenuOpen(!menuOpen)}>
+          <button
+            className="lg:hidden text-stone-300 hover:text-yellow-400 transition-colors"
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
             <div className="flex flex-col gap-1.5 w-6">
-              <span className={`block h-px bg-current transition-all duration-300 ${menuOpen ? "rotate-45 translate-y-2" : ""}`}></span>
-              <span className={`block h-px bg-current transition-all duration-300 ${menuOpen ? "opacity-0" : ""}`}></span>
-              <span className={`block h-px bg-current transition-all duration-300 ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`}></span>
+              <span
+                className={`block h-px bg-current transition-all duration-300 ${menuOpen ? "rotate-45 translate-y-2" : ""}`}
+              ></span>
+              <span
+                className={`block h-px bg-current transition-all duration-300 ${menuOpen ? "opacity-0" : ""}`}
+              ></span>
+              <span
+                className={`block h-px bg-current transition-all duration-300 ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`}
+              ></span>
             </div>
           </button>
         </div>
@@ -295,22 +322,41 @@ export default function CategoriesPage() {
         {menuOpen && (
           <div className="lg:hidden nav-carved border-t border-yellow-900/30 py-6 px-6">
             {["Home", "Retreats", "Gallery", "Contact"].map((item) => (
-              <a key={item} href={item === "Home" ? "/" : `/${item.toLowerCase()}`} className="block font-body text-xs tracking-widest uppercase text-stone-300 hover:text-yellow-400 py-3 border-b border-stone-800/50 transition-colors" onClick={() => setMenuOpen(false)}>{item}</a>
+              <a
+                key={item}
+                href={item === "Home" ? "/" : `/${item.toLowerCase()}`}
+                className="block font-body text-xs tracking-widest uppercase text-stone-300 hover:text-yellow-400 py-3 border-b border-stone-800/50 transition-colors"
+                onClick={() => setMenuOpen(false)}
+              >
+                {item}
+              </a>
             ))}
-            <button className="mt-4 w-full btn-gold font-body text-xs tracking-widest uppercase px-6 py-3 rounded-full text-stone-900 font-medium" onClick={() => { setMenuOpen(false); navigate("/booking"); }}>Reserve Now</button>
+            <button
+              className="mt-4 w-full btn-gold font-body text-xs tracking-widest uppercase px-6 py-3 rounded-full text-stone-900 font-medium"
+              onClick={() => {
+                setMenuOpen(false);
+                navigate("/booking");
+              }}
+            >
+              Reserve Now
+            </button>
           </div>
         )}
       </nav>
 
-      {/* HERO — local image only */}
       <section className="relative h-[75vh] min-h-[560px] flex items-end overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img
             src="/h1.jpg"
             alt="Leonine Retreats"
             className="w-full h-full object-cover"
-            style={{ transform: `translateY(${scrollY * 0.25}px)`, transformOrigin: "center top" }}
-            onError={(e) => { e.currentTarget.src = "/h2.jpg"; }}
+            style={{
+              transform: `translateY(${scrollY * 0.25}px)`,
+              transformOrigin: "center top",
+            }}
+            onError={(e) => {
+              e.currentTarget.src = "/h2.jpg";
+            }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/40 to-stone-950/20"></div>
           <div className="absolute inset-0 bg-gradient-to-r from-stone-950/30 to-transparent"></div>
@@ -319,26 +365,44 @@ export default function CategoriesPage() {
         <div className="relative z-10 w-full max-w-screen-xl mx-auto px-6 pb-20">
           <div className="anim-in delay-1 flex items-center gap-4 mb-5">
             <div className="gold-line w-14"></div>
-            <span className="font-body text-xs tracking-[0.4em] uppercase text-yellow-400/90">Sacred Retreats · Sri Lanka</span>
+            <span className="font-body text-xs tracking-[0.4em] uppercase text-yellow-400/90">
+              Sacred Retreats · Sri Lanka
+            </span>
           </div>
           <h1 className="font-display leading-none mb-4">
-            <span className="anim-in delay-2 block text-6xl md:text-8xl xl:text-9xl font-medium hero-text-mask">Curated</span>
-            <span className="anim-in delay-3 block text-5xl md:text-7xl xl:text-8xl font-light italic anim-shimmer mt-1">Sanctuaries</span>
+            <span className="anim-in delay-2 block text-6xl md:text-8xl xl:text-9xl font-medium hero-text-mask">
+              Curated
+            </span>
+            <span className="anim-in delay-3 block text-5xl md:text-7xl xl:text-8xl font-light italic anim-shimmer mt-1">
+              Sanctuaries
+            </span>
           </h1>
           <p className="anim-in delay-4 font-serif-light text-xl md:text-2xl text-stone-300 italic font-light max-w-xl mt-6 leading-relaxed">
-            Three retreats. Three worlds. Each a living poem of nature, heritage, and absolute stillness.
+            Three retreats. Three worlds. Each a living poem of nature,
+            heritage, and absolute stillness.
           </p>
         </div>
 
         <div className="absolute bottom-0 left-0 w-full z-10">
-          <svg viewBox="0 0 1440 60" preserveAspectRatio="none" className="w-full h-12">
-            <path d="M0,0 C360,60 1080,0 1440,50 L1440,60 L0,60 Z" fill="#0a160c"/>
+          <svg
+            viewBox="0 0 1440 60"
+            preserveAspectRatio="none"
+            className="w-full h-12"
+          >
+            <path
+              d="M0,0 C360,60 1080,0 1440,50 L1440,60 L0,60 Z"
+              fill="#0a160c"
+            />
           </svg>
         </div>
       </section>
 
-      {/* INTRO STRIP */}
-      <section style={{ background: "linear-gradient(135deg, #0a160c 0%, #142018 100%)" }} className="py-10 px-6">
+      <section
+        style={{
+          background: "linear-gradient(135deg, #0a160c 0%, #142018 100%)",
+        }}
+        className="py-10 px-6"
+      >
         <div className="max-w-screen-xl mx-auto flex flex-wrap items-center justify-between gap-6">
           {[
             { num: "3", label: "Retreat Categories" },
@@ -347,204 +411,312 @@ export default function CategoriesPage() {
             { num: "24/7", label: "Dedicated Butlers" },
           ].map((s, i) => (
             <div key={i} className="text-center flex-1 min-w-[120px]">
-              <div className="font-display text-4xl font-bold anim-shimmer">{s.num}</div>
-              <div className="font-body text-xs tracking-widest uppercase text-stone-400 mt-1">{s.label}</div>
+              <div className="font-display text-4xl font-bold anim-shimmer">
+                {s.num}
+              </div>
+              <div className="font-body text-xs tracking-widest uppercase text-stone-400 mt-1">
+                {s.label}
+              </div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* CATEGORIES */}
-      <main style={{ background: "linear-gradient(180deg, #0a160c 0%, #0d1a10 100%)" }} className="relative pb-24">
+      <main
+        style={{
+          background: "linear-gradient(180deg, #0a160c 0%, #0d1a10 100%)",
+        }}
+        className="relative pb-24"
+      >
         <div className="batik-pattern absolute inset-0 pointer-events-none opacity-50"></div>
 
         {loading && (
           <div className="flex flex-col items-center justify-center py-40 gap-6">
             <div className="flex gap-3">
               {[0, 1, 2].map((i) => (
-                <div key={i} className="loading-dot w-3 h-3 rounded-full bg-yellow-500" style={{ animationDelay: `${i * 0.2}s` }}></div>
+                <div
+                  key={i}
+                  className="loading-dot w-3 h-3 rounded-full bg-yellow-500"
+                  style={{ animationDelay: `${i * 0.2}s` }}
+                ></div>
               ))}
             </div>
-            <p className="font-body text-xs tracking-[0.3em] uppercase text-stone-500">Preparing your sanctuaries…</p>
+            <p className="font-body text-xs tracking-[0.3em] uppercase text-stone-500">
+              Preparing your sanctuaries…
+            </p>
           </div>
         )}
 
-        {!loading && categories.map((cat, index) => {
-          const visual = getVisual(cat.name);
+        {!loading &&
+          categories.map((cat, index) => {
+            const visual = getVisual(cat.name);
 
-          return (
-            <div key={cat._id}>
-              {index > 0 && <div className="section-divider"></div>}
+            return (
+              <div key={cat._id}>
+                {index > 0 && <div className="section-divider"></div>}
 
-              <article className="max-w-screen-xl mx-auto px-6">
-                {/* Header */}
-                <div className="text-center mb-14 anim-in" style={{ animationDelay: `${index * 0.1}s` }}>
-                  <div className="ornament-line text-yellow-600/50 text-sm mb-6">
-                    <span className="font-body text-xs tracking-[0.5em] uppercase text-yellow-600/70">Retreat {String(index + 1).padStart(2, "0")}</span>
-                  </div>
-                  <div className="text-5xl mb-4">{visual.icon}</div>
-                  <div className="inline-block px-4 py-1.5 rounded-full mb-4 font-body text-xs tracking-widest uppercase text-stone-900 font-medium" style={{ background: "linear-gradient(135deg, #c9a84c, #f0d080)" }}>
-                    {visual.tag}
-                  </div>
-                  <h2 className="font-display text-5xl md:text-6xl font-medium text-amber-50 leading-tight">{cat.name}</h2>
-                  <div className="flex items-center justify-center gap-3 mt-3">
-                    <div className="w-8 h-px" style={{ background: "#c9a84c" }}></div>
-                    <span className="font-serif-light text-lg italic text-yellow-400/80">{visual.badge}</span>
-                    <div className="w-8 h-px" style={{ background: "#c9a84c" }}></div>
-                  </div>
-                </div>
-
-                {/* Card */}
-                <div className="category-card rounded-3xl overflow-hidden relative group" style={{ border: "1px solid rgba(201,168,76,0.12)", boxShadow: "0 30px 80px rgba(0,0,0,0.5)" }}>
-                  {/* Hero image */}
-                  <div className="img-zoom relative h-[55vh] min-h-[380px] overflow-hidden">
-                    <img
-                      src={cat.image || visual.image}
-                      alt={cat.name}
-                      className="w-full h-full object-cover"
-                      onError={(e) => { e.currentTarget.src = visual.image; }}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/30 to-transparent"></div>
-                    <div className="absolute inset-0 bg-gradient-to-r from-stone-950/40 via-transparent to-transparent"></div>
-
-                    {/* Price badge */}
-                    {cat.price && (
-                      <div className="absolute top-6 right-6 price-tag rounded-2xl px-5 py-3 text-center">
-                        <div className="font-body text-xs tracking-widest uppercase text-stone-400 mb-1">From</div>
-                        <div className="font-display text-2xl font-bold anim-shimmer">$ {cat.price?.toLocaleString()}</div>
-                        <div className="font-body text-xs text-stone-500 mt-1">per night</div>
-                      </div>
-                    )}
-
-                    {/* Quote */}
-                    <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12">
-                      <p className="font-serif-light text-2xl md:text-3xl italic text-stone-200 font-light leading-relaxed max-w-2xl opacity-90">
-                        "{visual.poem}"
-                      </p>
+                <article className="max-w-screen-xl mx-auto px-6">
+                  <div
+                    className="text-center mb-14 anim-in"
+                    style={{ animationDelay: `${index * 0.1}s` }}
+                  >
+                    <div className="ornament-line text-yellow-600/50 text-sm mb-6">
+                      <span className="font-body text-xs tracking-[0.5em] uppercase text-yellow-600/70">
+                        Retreat {String(index + 1).padStart(2, "0")}
+                      </span>
+                    </div>
+                    <div className="text-5xl mb-4">{visual.icon}</div>
+                    <div
+                      className="inline-block px-4 py-1.5 rounded-full mb-4 font-body text-xs tracking-widest uppercase text-stone-900 font-medium"
+                      style={{
+                        background: "linear-gradient(135deg, #c9a84c, #f0d080)",
+                      }}
+                    >
+                      {visual.tag}
+                    </div>
+                    <h2 className="font-display text-5xl md:text-6xl font-medium text-amber-50 leading-tight">
+                      {cat.name}
+                    </h2>
+                    <div className="flex items-center justify-center gap-3 mt-3">
+                      <div
+                        className="w-8 h-px"
+                        style={{ background: "#c9a84c" }}
+                      ></div>
+                      <span className="font-serif-light text-lg italic text-yellow-400/80">
+                        {visual.badge}
+                      </span>
+                      <div
+                        className="w-8 h-px"
+                        style={{ background: "#c9a84c" }}
+                      ></div>
                     </div>
                   </div>
+                  <div
+                    className="category-card rounded-3xl overflow-hidden relative group"
+                    style={{
+                      border: "1px solid rgba(201,168,76,0.12)",
+                      boxShadow: "0 30px 80px rgba(0,0,0,0.5)",
+                    }}
+                  >
+                    <div className="img-zoom relative h-[55vh] min-h-[380px] overflow-hidden">
+                      <img
+                        src={cat.image || visual.image}
+                        alt={cat.name}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.currentTarget.src = visual.image;
+                        }}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/30 to-transparent"></div>
+                      <div className="absolute inset-0 bg-gradient-to-r from-stone-950/40 via-transparent to-transparent"></div>
 
-                  {/* Content panel */}
-                  <div className="p-8 md:p-12" style={{ background: "linear-gradient(135deg, rgba(13,26,16,0.98), rgba(10,22,12,0.98))" }}>
-                    <div className="grid md:grid-cols-2 gap-10 items-start">
-
-                      {/* Left */}
-                      <div>
-                        <div className="flex items-center gap-3 mb-5">
-                          <div className="w-8 h-px" style={{ background: "#c9a84c" }}></div>
-                          <span className="font-body text-xs tracking-[0.4em] uppercase text-yellow-600/80">About this Retreat</span>
-                        </div>
-                        <p className="font-serif-light text-lg md:text-xl text-stone-300 leading-relaxed font-light italic mb-8">
-                          {cat.description || "A living sanctuary where luxury and nature exist in perfect balance."}
-                        </p>
-                        {cat.features?.length > 0 && (
-                          <div className="flex flex-wrap gap-2 mb-8">
-                            {cat.features.map((f, fi) => (
-                              <span key={fi} className="feature-pill font-body text-xs tracking-wider text-stone-300 px-4 py-2 rounded-full flex items-center gap-1.5">
-                                <span>{amenityIcons[f] || "✦"}</span> {f}
-                              </span>
-                            ))}
+                      {cat.price && (
+                        <div className="absolute top-6 right-6 price-tag rounded-2xl px-5 py-3 text-center">
+                          <div className="font-body text-xs tracking-widest uppercase text-stone-400 mb-1">
+                            From
                           </div>
-                        )}
-                      </div>
-
-                      {/* Right */}
-                      <div className="flex flex-col gap-6">
-                        <div className="rounded-2xl p-6" style={{ background: "rgba(201,168,76,0.04)", border: "1px solid rgba(201,168,76,0.12)" }}>
-                          <h4 className="font-display text-sm text-amber-200 tracking-wider uppercase mb-4">What's Included</h4>
-                          <ul className="space-y-2.5">
-                            {["Daily Ayurvedic Breakfast", "Evening Jungle Walk", "24/7 Butler Concierge", "Welcome Ceremony", "Private Transfer"].map((item) => (
-                              <li key={item} className="flex items-center gap-3 font-body text-sm text-stone-400">
-                                <span className="text-yellow-600 text-xs">✦</span> {item}
-                              </li>
-                            ))}
-                          </ul>
+                          <div className="font-display text-2xl font-bold anim-shimmer">
+                            $ {cat.price?.toLocaleString()}
+                          </div>
+                          <div className="font-body text-xs text-stone-500 mt-1">
+                            per night
+                          </div>
                         </div>
-
-                        <div className="flex flex-col sm:flex-row gap-3">
-                          {/*
-                            ── KEY FIX ──────────────────────────────────────────────────
-                            Navigate using cat.name (not cat._id) because Room.category
-                            is stored as a plain string name, not a MongoDB ObjectId ref.
-                            getRooms does: Room.find({ category: req.query.category })
-                            So we must pass the name string to match.
-                            ─────────────────────────────────────────────────────────────
-                          */}
-                          <button
-                            className="btn-gold flex-1 font-body text-xs tracking-widest uppercase py-4 rounded-full text-stone-900 font-medium text-center"
-                            onClick={() => goToRooms(cat)}
-                          >
-                            View Rooms →
-                          </button>
-                          <button
-                            className="btn-outline-gold flex-1 font-body text-xs tracking-widest uppercase py-4 rounded-full text-yellow-400 text-center"
-                            onClick={() => navigate("/booking")}
-                          >
-                            Book Now
-                          </button>
-                        </div>
-                        <p className="font-body text-xs text-stone-600 text-center tracking-wider">
-                          Free cancellation · No hidden fees · Private transfer included
+                      )}
+                      <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12">
+                        <p className="font-serif-light text-2xl md:text-3xl italic text-stone-200 font-light leading-relaxed max-w-2xl opacity-90">
+                          "{visual.poem}"
                         </p>
                       </div>
                     </div>
+
+                    <div
+                      className="p-8 md:p-12"
+                      style={{
+                        background:
+                          "linear-gradient(135deg, rgba(13,26,16,0.98), rgba(10,22,12,0.98))",
+                      }}
+                    >
+                      <div className="grid md:grid-cols-2 gap-10 items-start">
+                        <div>
+                          <div className="flex items-center gap-3 mb-5">
+                            <div
+                              className="w-8 h-px"
+                              style={{ background: "#c9a84c" }}
+                            ></div>
+                            <span className="font-body text-xs tracking-[0.4em] uppercase text-yellow-600/80">
+                              About this Retreat
+                            </span>
+                          </div>
+                          <p className="font-serif-light text-lg md:text-xl text-stone-300 leading-relaxed font-light italic mb-8">
+                            {cat.description ||
+                              "A living sanctuary where luxury and nature exist in perfect balance."}
+                          </p>
+                          {cat.features?.length > 0 && (
+                            <div className="flex flex-wrap gap-2 mb-8">
+                              {cat.features.map((f, fi) => (
+                                <span
+                                  key={fi}
+                                  className="feature-pill font-body text-xs tracking-wider text-stone-300 px-4 py-2 rounded-full flex items-center gap-1.5"
+                                >
+                                  <span>{amenityIcons[f] || "✦"}</span> {f}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="flex flex-col gap-6">
+                          <div
+                            className="rounded-2xl p-6"
+                            style={{
+                              background: "rgba(201,168,76,0.04)",
+                              border: "1px solid rgba(201,168,76,0.12)",
+                            }}
+                          >
+                            <h4 className="font-display text-sm text-amber-200 tracking-wider uppercase mb-4">
+                              What's Included
+                            </h4>
+                            <ul className="space-y-2.5">
+                              {[
+                                "Daily Ayurvedic Breakfast",
+                                "Evening Jungle Walk",
+                                "24/7 Butler Concierge",
+                                "Welcome Ceremony",
+                                "Private Transfer",
+                              ].map((item) => (
+                                <li
+                                  key={item}
+                                  className="flex items-center gap-3 font-body text-sm text-stone-400"
+                                >
+                                  <span className="text-yellow-600 text-xs">
+                                    ✦
+                                  </span>{" "}
+                                  {item}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+
+                          <div className="flex flex-col sm:flex-row gap-3">
+                            <button
+                              className="btn-gold flex-1 font-body text-xs tracking-widest uppercase py-4 rounded-full text-stone-900 font-medium text-center"
+                              onClick={() => goToRooms(cat)}
+                            >
+                              View Rooms →
+                            </button>
+                            <button
+                              className="btn-outline-gold flex-1 font-body text-xs tracking-widest uppercase py-4 rounded-full text-yellow-400 text-center"
+                              onClick={() => navigate("/booking")}
+                            >
+                              Book Now
+                            </button>
+                          </div>
+                          <p className="font-body text-xs text-stone-600 text-center tracking-wider">
+                            Free cancellation · No hidden fees · Private
+                            transfer included
+                          </p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </article>
-            </div>
-          );
-        })}
+                </article>
+              </div>
+            );
+          })}
 
         {!loading && categories.length === 0 && (
           <div className="max-w-screen-xl mx-auto px-6 py-32 text-center">
-            <div className="text-5xl mb-6">🌿</div>
-            <h3 className="font-display text-3xl text-amber-100 mb-3">Sanctuaries Coming Soon</h3>
-            <p className="font-serif-light text-lg italic text-stone-400">Our retreat categories are being curated. Please check back soon.</p>
+            <h3 className="font-display text-3xl text-amber-100 mb-3">
+              Sanctuaries Coming Soon
+            </h3>
+            <p className="font-serif-light text-lg italic text-stone-400">
+              Our retreat categories are being curated. Please check back soon.
+            </p>
           </div>
         )}
       </main>
 
-      {/* BOOKING CTA */}
-      <section className="py-24 px-6 relative overflow-hidden" style={{ background: "linear-gradient(135deg, #0d1f0f, #1a3a1e, #0d1a10)" }}>
+      <section
+        className="py-24 px-6 relative overflow-hidden"
+        style={{
+          background: "linear-gradient(135deg, #0d1f0f, #1a3a1e, #0d1a10)",
+        }}
+      >
         <div className="batik-pattern absolute inset-0 pointer-events-none"></div>
         <div className="max-w-3xl mx-auto text-center">
-          
-
-          <h2 className="font-display text-5xl md:text-6xl text-amber-50 font-medium mb-4">Find Your</h2>
-          <h2 className="font-display text-5xl md:text-6xl font-light italic mb-8 anim-shimmer">Perfect Sanctuary</h2>
+          <h2 className="font-display text-5xl md:text-6xl text-amber-50 font-medium mb-4">
+            Find Your
+          </h2>
+          <h2 className="font-display text-5xl md:text-6xl font-light italic mb-8 anim-shimmer">
+            Perfect Sanctuary
+          </h2>
           <p className="font-serif-light text-xl italic text-stone-400 font-light mb-12 leading-relaxed max-w-xl mx-auto">
-            Only 6 retreats at any one time. Each stay is individually curated. Begin with one conversation.
+            Only 6 retreats at any one time. Each stay is individually curated.
+            Begin with one conversation.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="btn-gold font-body text-sm tracking-widest uppercase px-12 py-5 rounded-full text-stone-900 font-medium" onClick={() => navigate("/booking")}>
+            <button
+              className="btn-gold font-body text-sm tracking-widest uppercase px-12 py-5 rounded-full text-stone-900 font-medium"
+              onClick={() => navigate("/booking")}
+            >
               Begin Your Journey →
             </button>
-            <button className="btn-outline-gold font-body text-sm tracking-widest uppercase px-12 py-5 rounded-full text-amber-200" onClick={() => window.location.href = "tel:+94812204455"}>
+            <button
+              className="btn-outline-gold font-body text-sm tracking-widest uppercase px-12 py-5 rounded-full text-amber-200"
+              onClick={() => (window.location.href = "tel:+94812204455")}
+            >
               Speak to a Curator
             </button>
           </div>
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="pt-16 pb-8 px-6" style={{ background: "#060e07", borderTop: "1px solid rgba(201,168,76,0.12)" }}>
+      <footer
+        className="pt-16 pb-8 px-6"
+        style={{
+          background: "#060e07",
+          borderTop: "1px solid rgba(201,168,76,0.12)",
+        }}
+      >
         <div className="max-w-screen-xl mx-auto">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-8">
             <div className="flex items-center gap-3">
-              <img src="/logo.png" alt="Leonine" className="w-9 h-9 object-contain" onError={(e) => { e.target.style.display="none"; }} />
+              <img
+                src="/logo.png"
+                alt="Leonine"
+                className="w-9 h-9 object-contain"
+                onError={(e) => {
+                  e.target.style.display = "none";
+                }}
+              />
               <div>
-                <div className="font-display text-xl text-amber-100 tracking-widest">LEONINE</div>
-                <div className="font-body text-xs tracking-[0.3em] text-yellow-700 uppercase">Villa & Sanctuary · Sri Lanka</div>
+                <div className="font-display text-xl text-amber-100 tracking-widest">
+                  LEONINE
+                </div>
+                <div className="font-body text-xs tracking-[0.3em] text-yellow-700 uppercase">
+                  Villa & Sanctuary · Sri Lanka
+                </div>
               </div>
             </div>
             <div className="flex gap-6 flex-wrap justify-center">
-              {["Privacy Policy", "Terms of Service", "Cookie Policy"].map((l) => (
-                <a key={l} href="#" className="font-body text-xs text-stone-600 hover:text-yellow-600 transition-colors">{l}</a>
-              ))}
+              {["Privacy Policy", "Terms of Service", "Cookie Policy"].map(
+                (l) => (
+                  <a
+                    key={l}
+                    href="#"
+                    className="font-body text-xs text-stone-600 hover:text-yellow-600 transition-colors"
+                  >
+                    {l}
+                  </a>
+                ),
+              )}
             </div>
           </div>
           <div className="gold-line mb-6"></div>
-          <p className="font-body text-xs text-stone-600 text-center">© 2026 Leonine Villa & Sanctuary. All rights reserved.</p>
+          <p className="font-body text-xs text-stone-600 text-center">
+            © 2026 Leonine Villa & Sanctuary. All rights reserved.
+          </p>
         </div>
       </footer>
     </div>
