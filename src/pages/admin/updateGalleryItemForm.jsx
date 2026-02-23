@@ -9,22 +9,21 @@ export default function UpdateGalleryForm() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Redirect if no state is passed
   if (!location.state) {
     navigate("/admin/gallery");
   }
 
-  // Pre-fill form with existing gallery item data
   const [name, setName] = useState(location.state?.name || "");
-  const [description, setDescription] = useState(location.state?.description || "");
-  const [image, setImage] = useState(null); 
+  const [description, setDescription] = useState(
+    location.state?.description || "",
+  );
+  const [image, setImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [imageUploading, setImageUploading] = useState(false);
 
   const token = localStorage.getItem("token");
   if (!token) window.location.href = "/login";
 
-  // Remove selected new image
   const removeImage = () => setImage(null);
 
   const handleSubmit = async (e) => {
@@ -32,8 +31,7 @@ export default function UpdateGalleryForm() {
     setIsLoading(true);
 
     try {
-      // If a new image is selected, upload it
-      let imageUrl = location.state.image; // default to existing image
+      let imageUrl = location.state.image;
       if (image) {
         setImageUploading(true);
         const folderName = `gallery/${name}`;
@@ -53,7 +51,6 @@ export default function UpdateGalleryForm() {
         image: imageUrl,
       };
 
-      // Use PUT request to update gallery item
       await axios.put(
         `${import.meta.env.VITE_BACKEND_URL}/api/gallery/${location.state._id}`,
         formData,
@@ -61,12 +58,12 @@ export default function UpdateGalleryForm() {
           headers: {
             Authorization: "Bearer " + token,
           },
-        }
+        },
       );
 
       toast.success("Gallery item updated successfully");
 
-      navigate("/admin/gallery"); // redirect back to gallery list
+      navigate("/admin/gallery");
     } catch (error) {
       console.error(error);
       toast.error("Something went wrong");
@@ -79,10 +76,11 @@ export default function UpdateGalleryForm() {
   return (
     <div className="w-full min-h-screen flex justify-center items-center bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50 p-6">
       <div className="w-full max-w-2xl">
-        {/* Header */}
         <div className="bg-gradient-to-r from-emerald-600 to-green-600 rounded-t-2xl shadow-xl p-6">
           <h2 className="text-3xl font-bold text-white flex items-center gap-3">
-            <span className="bg-white/20 p-3 rounded-lg backdrop-blur-sm">✏️</span>
+            <span className="bg-white/20 p-3 rounded-lg backdrop-blur-sm">
+              ✏️
+            </span>
             Update Gallery Item
           </h2>
           <p className="text-emerald-100 mt-2">
@@ -90,12 +88,10 @@ export default function UpdateGalleryForm() {
           </p>
         </div>
 
-        {/* Form */}
         <form
           onSubmit={handleSubmit}
           className="bg-white rounded-b-2xl shadow-xl p-8 space-y-6"
         >
-          {/* Name */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
               Item Name <span className="text-red-500 ml-1">*</span>
@@ -109,8 +105,6 @@ export default function UpdateGalleryForm() {
               required
             />
           </div>
-
-          {/* Description */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
               Description
@@ -124,7 +118,6 @@ export default function UpdateGalleryForm() {
             />
           </div>
 
-          {/* Image Upload */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
               Gallery Image
@@ -167,7 +160,6 @@ export default function UpdateGalleryForm() {
             )}
           </div>
 
-          {/* Submit */}
           <button
             type="submit"
             disabled={isLoading || imageUploading}
@@ -176,7 +168,9 @@ export default function UpdateGalleryForm() {
             {isLoading || imageUploading ? (
               <>
                 <div className="border-t-2 border-white w-5 h-5 rounded-full animate-spin"></div>
-                <span>{imageUploading ? "Uploading Image..." : "Updating..."}</span>
+                <span>
+                  {imageUploading ? "Uploading Image..." : "Updating..."}
+                </span>
               </>
             ) : (
               <>
