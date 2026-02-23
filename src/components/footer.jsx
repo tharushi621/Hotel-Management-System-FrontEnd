@@ -82,7 +82,6 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Floating Feedback Button */}
       <style>{`
         .fb-float {
           position: fixed; bottom: 36px; right: 36px; z-index: 9999;
