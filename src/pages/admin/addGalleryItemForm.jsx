@@ -27,7 +27,6 @@ export default function AddGalleryItemForm() {
         return;
       }
 
-      // Upload image to Cloudinary with folder "gallery/<ItemName>"
       setImageUploading(true);
       const folderName = `gallery/${name}`;
       const imageUrl = await uploadMedia(image, folderName);
@@ -57,7 +56,7 @@ export default function AddGalleryItemForm() {
       setName("");
       setDescription("");
       setImage(null);
-      navigate("/admin/gallery"); // Redirect to gallery list after adding
+      navigate("/admin/gallery"); 
     } catch (error) {
       console.error(error);
       toast.error("Something went wrong");
@@ -74,7 +73,7 @@ export default function AddGalleryItemForm() {
   return (
     <div className="w-full min-h-screen flex justify-center items-center bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50 p-6">
       <div className="w-full max-w-2xl">
-        {/* Header Card */}
+    
         <div className="bg-gradient-to-r from-emerald-600 to-green-600 rounded-t-2xl shadow-xl p-6">
           <h2 className="text-3xl font-bold text-white flex items-center gap-3">
             <span className="bg-white/20 p-3 rounded-lg backdrop-blur-sm">➕</span>
@@ -83,12 +82,10 @@ export default function AddGalleryItemForm() {
           <p className="text-emerald-100 mt-2">Fill in the details to create a new gallery item</p>
         </div>
 
-        {/* Form Card */}
         <form
           onSubmit={handleSubmit}
           className="bg-white rounded-b-2xl shadow-xl p-8 space-y-6"
         >
-          {/* Name */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
               Name
@@ -103,8 +100,6 @@ export default function AddGalleryItemForm() {
               required
             />
           </div>
-
-          {/* Description */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
               Description
@@ -119,8 +114,6 @@ export default function AddGalleryItemForm() {
               required
             />
           </div>
-
-          {/* Image Upload */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
               Image
@@ -164,8 +157,6 @@ export default function AddGalleryItemForm() {
               </div>
             )}
           </div>
-
-          {/* Submit Button */}
           <button
             type="submit"
             disabled={isLoading || imageUploading}
@@ -184,7 +175,6 @@ export default function AddGalleryItemForm() {
             )}
           </button>
 
-          {/* Info Message */}
           {(isLoading || imageUploading) && (
             <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-4">
               <p className="text-emerald-700 text-sm text-center">
