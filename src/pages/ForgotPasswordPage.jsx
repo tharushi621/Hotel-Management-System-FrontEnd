@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function ForgotPasswordPage() {
   const navigate = useNavigate();
-  const [step, setStep] = useState(1); // 1=email, 2=otp+newpass
+  const [step, setStep] = useState(1);
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState(["", "", "", ""]);
   const [newPassword, setNewPassword] = useState("");
@@ -30,7 +30,10 @@ export default function ForgotPasswordPage() {
   }
 
   function handleOtpPaste(e) {
-    const pasted = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 4);
+    const pasted = e.clipboardData
+      .getData("text")
+      .replace(/\D/g, "")
+      .slice(0, 4);
     if (pasted.length === 4) {
       setOtp(pasted.split(""));
       inputRefs.current[3]?.focus();
@@ -40,12 +43,24 @@ export default function ForgotPasswordPage() {
 
   function handleSendCode() {
     setError("");
-    if (!email) { setError("Please enter your email address."); return; }
+    if (!email) {
+      setError("Please enter your email address.");
+      return;
+    }
     setLoading(true);
-    axios.post(import.meta.env.VITE_BACKEND_URL + "/api/users/forgot-password", { email })
-      .then(() => { setStep(2); setLoading(false); })
+    axios
+      .post(import.meta.env.VITE_BACKEND_URL + "/api/users/forgot-password", {
+        email,
+      })
+      .then(() => {
+        setStep(2);
+        setLoading(false);
+      })
       .catch((err) => {
-        setError(err.response?.data?.message || "Could not send reset code. Please try again.");
+        setError(
+          err.response?.data?.message ||
+            "Could not send reset code. Please try again.",
+        );
         setLoading(false);
       });
   }
@@ -53,17 +68,39 @@ export default function ForgotPasswordPage() {
   function handleReset() {
     setError("");
     const otpString = otp.join("");
-    if (otpString.length < 4) { setError("Please enter the 4-digit code sent to your email."); return; }
-    if (!newPassword) { setError("Please enter a new password."); return; }
-    if (newPassword.length < 6) { setError("Password must be at least 6 characters."); return; }
-    if (newPassword !== confirmPassword) { setError("Passwords do not match."); return; }
+    if (otpString.length < 4) {
+      setError("Please enter the 4-digit code sent to your email.");
+      return;
+    }
+    if (!newPassword) {
+      setError("Please enter a new password.");
+      return;
+    }
+    if (newPassword.length < 6) {
+      setError("Password must be at least 6 characters.");
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
     setLoading(true);
-    axios.post(import.meta.env.VITE_BACKEND_URL + "/api/users/reset-password", {
-      email, otp: otpString, newPassword,
-    })
-      .then(() => { setSuccess(true); setLoading(false); setTimeout(() => navigate("/login"), 2500); })
+    axios
+      .post(import.meta.env.VITE_BACKEND_URL + "/api/users/reset-password", {
+        email,
+        otp: otpString,
+        newPassword,
+      })
+      .then(() => {
+        setSuccess(true);
+        setLoading(false);
+        setTimeout(() => navigate("/login"), 2500);
+      })
       .catch((err) => {
-        setError(err.response?.data?.message || "Could not reset password. Please try again.");
+        setError(
+          err.response?.data?.message ||
+            "Could not reset password. Please try again.",
+        );
         setLoading(false);
       });
   }
@@ -171,7 +208,9 @@ export default function ForgotPasswordPage() {
       `}</style>
 
       <div className="fp-bg">
-        <button className="back-home" onClick={() => navigate("/login")}>← Back to Sign In</button>
+        <button className="back-home" onClick={() => navigate("/login")}>
+          ← Back to Sign In
+        </button>
         <div className="fp-mist" />
 
         <div className="fp-outer">
@@ -188,43 +227,88 @@ export default function ForgotPasswordPage() {
               <div className={`step-dot ${step === 2 ? "active" : ""}`} />
             </div>
 
-            <div className="quill-div"><div className="div-rule" /><div className="div-dia" /><div className="div-rule" /></div>
+            <div className="quill-div">
+              <div className="div-rule" />
+              <div className="div-dia" />
+              <div className="div-rule" />
+            </div>
 
             {success ? (
               <div className="success-msg">
-                ✦ &nbsp; Your password has been reset successfully. &nbsp; ✦<br />
+                ✦ &nbsp; Your password has been reset successfully. &nbsp; ✦
+                <br />
                 <em>Directing you to the sign in page...</em>
               </div>
             ) : step === 1 ? (
               <>
-                <p style={{ fontStyle: "italic", fontSize: "0.8rem", color: "var(--ink-faded)", marginBottom: "18px", lineHeight: 1.6, position: "relative", zIndex: 1 }}>
-                  Enter the email address associated with your account and we will send you a verification code to reset your password.
+                <p
+                  style={{
+                    fontStyle: "italic",
+                    fontSize: "0.8rem",
+                    color: "var(--ink-faded)",
+                    marginBottom: "18px",
+                    lineHeight: 1.6,
+                    position: "relative",
+                    zIndex: 1,
+                  }}
+                >
+                  Enter the email address associated with your account and we
+                  will send you a verification code to reset your password.
                 </p>
 
                 {error && <div className="error-msg">⚠ &nbsp;{error}</div>}
 
-                <label className="field-label">Email Address <span style={{ color: "var(--seal-red)" }}>*</span></label>
-                <div className={`field-wrap ${inkFocus === "email" ? "focused" : ""}`}>
+                <label className="field-label">
+                  Email Address{" "}
+                  <span style={{ color: "var(--seal-red)" }}>*</span>
+                </label>
+                <div
+                  className={`field-wrap ${inkFocus === "email" ? "focused" : ""}`}
+                >
                   <div className="ink-dot" />
-                  <input type="email" placeholder="your.name@email.com" className="ink-field"
-                    value={email} onChange={e => setEmail(e.target.value)}
-                    onFocus={() => setInkFocus("email")} onBlur={() => setInkFocus(null)}
-                    onKeyDown={e => e.key === "Enter" && handleSendCode()} />
+                  <input
+                    type="email"
+                    placeholder="your.name@email.com"
+                    className="ink-field"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    onFocus={() => setInkFocus("email")}
+                    onBlur={() => setInkFocus(null)}
+                    onKeyDown={(e) => e.key === "Enter" && handleSendCode()}
+                  />
                 </div>
 
-                <button className="seal-btn" onClick={handleSendCode} disabled={loading}>
+                <button
+                  className="seal-btn"
+                  onClick={handleSendCode}
+                  disabled={loading}
+                >
                   {loading ? "Sending code..." : "Send Reset Code"}
                 </button>
 
                 <div className="note">
                   Remember your password?{" "}
-                  <button onClick={() => navigate("/login")}>Sign in here</button>
+                  <button onClick={() => navigate("/login")}>
+                    Sign in here
+                  </button>
                 </div>
               </>
             ) : (
               <>
-                <p style={{ fontStyle: "italic", fontSize: "0.8rem", color: "var(--ink-faded)", marginBottom: "6px", lineHeight: 1.6, position: "relative", zIndex: 1 }}>
-                  A 4-digit code has been sent to <strong style={{ color: "var(--ink)" }}>{email}</strong>. Enter it below along with your new password.
+                <p
+                  style={{
+                    fontStyle: "italic",
+                    fontSize: "0.8rem",
+                    color: "var(--ink-faded)",
+                    marginBottom: "6px",
+                    lineHeight: 1.6,
+                    position: "relative",
+                    zIndex: 1,
+                  }}
+                >
+                  A 4-digit code has been sent to{" "}
+                  <strong style={{ color: "var(--ink)" }}>{email}</strong>.
+                  Enter it below along with your new password.
                 </p>
 
                 {error && <div className="error-msg">⚠ &nbsp;{error}</div>}
@@ -232,45 +316,85 @@ export default function ForgotPasswordPage() {
                 <div className="otp-row" onPaste={handleOtpPaste}>
                   {otp.map((digit, i) => (
                     <div key={i} className="otp-box-wrap">
-                      <span className="otp-numeral">{["I", "II", "III", "IV"][i]}</span>
+                      <span className="otp-numeral">
+                        {["I", "II", "III", "IV"][i]}
+                      </span>
                       <input
-                        ref={el => inputRefs.current[i] = el}
-                        type="text" inputMode="numeric" maxLength={1}
+                        ref={(el) => (inputRefs.current[i] = el)}
+                        type="text"
+                        inputMode="numeric"
+                        maxLength={1}
                         className={`otp-box ${digit ? "filled" : ""}`}
                         value={digit}
-                        onChange={e => handleOtpChange(i, e.target.value)}
-                        onKeyDown={e => handleOtpKeyDown(i, e)}
+                        onChange={(e) => handleOtpChange(i, e.target.value)}
+                        onKeyDown={(e) => handleOtpKeyDown(i, e)}
                       />
                     </div>
                   ))}
                 </div>
 
-                <label className="field-label">New Password <span style={{ color: "var(--seal-red)" }}>*</span></label>
-                <div className={`field-wrap pass-wrap ${inkFocus === "np" ? "focused" : ""}`}>
+                <label className="field-label">
+                  New Password{" "}
+                  <span style={{ color: "var(--seal-red)" }}>*</span>
+                </label>
+                <div
+                  className={`field-wrap pass-wrap ${inkFocus === "np" ? "focused" : ""}`}
+                >
                   <div className="ink-dot" />
-                  <input type={showPass ? "text" : "password"} placeholder="Minimum 6 characters" className="ink-field"
-                    value={newPassword} onChange={e => setNewPassword(e.target.value)}
-                    onFocus={() => setInkFocus("np")} onBlur={() => setInkFocus(null)} />
-                  <button type="button" className="pass-eye" onClick={() => setShowPass(p => !p)}>
+                  <input
+                    type={showPass ? "text" : "password"}
+                    placeholder="Minimum 6 characters"
+                    className="ink-field"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    onFocus={() => setInkFocus("np")}
+                    onBlur={() => setInkFocus(null)}
+                  />
+                  <button
+                    type="button"
+                    className="pass-eye"
+                    onClick={() => setShowPass((p) => !p)}
+                  >
                     {showPass ? "🙈" : "👁"}
                   </button>
                 </div>
 
-                <label className="field-label">Confirm New Password <span style={{ color: "var(--seal-red)" }}>*</span></label>
-                <div className={`field-wrap ${inkFocus === "cp" ? "focused" : ""}`}>
+                <label className="field-label">
+                  Confirm New Password{" "}
+                  <span style={{ color: "var(--seal-red)" }}>*</span>
+                </label>
+                <div
+                  className={`field-wrap ${inkFocus === "cp" ? "focused" : ""}`}
+                >
                   <div className="ink-dot" />
-                  <input type={showPass ? "text" : "password"} placeholder="Repeat your new password" className="ink-field"
-                    value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)}
-                    onFocus={() => setInkFocus("cp")} onBlur={() => setInkFocus(null)} />
+                  <input
+                    type={showPass ? "text" : "password"}
+                    placeholder="Repeat your new password"
+                    className="ink-field"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    onFocus={() => setInkFocus("cp")}
+                    onBlur={() => setInkFocus(null)}
+                  />
                 </div>
 
-                <button className="seal-btn" onClick={handleReset} disabled={loading}>
+                <button
+                  className="seal-btn"
+                  onClick={handleReset}
+                  disabled={loading}
+                >
                   {loading ? "Resetting password..." : "Reset Password"}
                 </button>
 
                 <div className="note">
                   Did not receive the code?{" "}
-                  <button onClick={() => { setStep(1); setOtp(["","","",""]); setError(""); }}>
+                  <button
+                    onClick={() => {
+                      setStep(1);
+                      setOtp(["", "", "", ""]);
+                      setError("");
+                    }}
+                  >
                     Try again
                   </button>
                 </div>
@@ -279,17 +403,55 @@ export default function ForgotPasswordPage() {
           </div>
 
           <div className="wax-seal">
-            <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg
+              viewBox="0 0 80 80"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
               <circle cx="40" cy="40" r="38" fill="url(#fpSeal)" />
-              <circle cx="40" cy="40" r="34" fill="none" stroke="#f4e4c188" strokeWidth="1" />
-              <text x="40" y="47" textAnchor="middle" fontFamily="Cinzel, serif" fontSize="20" fontWeight="700" fill="#f4e4c1cc">L</text>
-              <path id="fpRing" d="M40 40 m-28,0 a28,28 0 1,1 56,0 a28,28 0 1,1 -56,0" fill="none" />
-              <text fontSize="5.5" fontFamily="Cinzel, serif" fill="#f4e4c188" letterSpacing="0.18em">
+              <circle
+                cx="40"
+                cy="40"
+                r="34"
+                fill="none"
+                stroke="#f4e4c188"
+                strokeWidth="1"
+              />
+              <text
+                x="40"
+                y="47"
+                textAnchor="middle"
+                fontFamily="Cinzel, serif"
+                fontSize="20"
+                fontWeight="700"
+                fill="#f4e4c1cc"
+              >
+                L
+              </text>
+              <path
+                id="fpRing"
+                d="M40 40 m-28,0 a28,28 0 1,1 56,0 a28,28 0 1,1 -56,0"
+                fill="none"
+              />
+              <text
+                fontSize="5.5"
+                fontFamily="Cinzel, serif"
+                fill="#f4e4c188"
+                letterSpacing="0.18em"
+              >
                 <textPath href="#fpRing">LEONINE VILLA · SRI LANKA · </textPath>
               </text>
               <defs>
-                <radialGradient id="fpSeal" cx="40" cy="35" r="38" gradientUnits="userSpaceOnUse">
-                  <stop stopColor="#a02020" /><stop offset="0.6" stopColor="#7a1010" /><stop offset="1" stopColor="#4a0808" />
+                <radialGradient
+                  id="fpSeal"
+                  cx="40"
+                  cy="35"
+                  r="38"
+                  gradientUnits="userSpaceOnUse"
+                >
+                  <stop stopColor="#a02020" />
+                  <stop offset="0.6" stopColor="#7a1010" />
+                  <stop offset="1" stopColor="#4a0808" />
                 </radialGradient>
               </defs>
             </svg>
